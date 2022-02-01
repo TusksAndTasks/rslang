@@ -1,0 +1,76 @@
+@import "~normalize.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --blue: #304fb6;
+  --green: #3a8140;
+  --grey: #dedede;
+  --orange: #f04c0b;
+  --disabled: #787873;
+  --overlay: #00000077;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+
+  @media (max-width: 1750px) {
+    width: 10px;
+  }
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: var(--white);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--black);
+  border: 2px solid var(--white);
+}
+
+*,
+*::after,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+  overflow-y: overlay;
+  overflow-y: -moz-overlay;
+}
+
+html,
+body {
+  color: var(--black);
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.15;
+  overflow-x: hidden;
+  background-color: var(--grey);
+  height: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1 {
+  color: var(--black);
+  text-align: center;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
+
