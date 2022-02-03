@@ -12,8 +12,8 @@ import { Footer } from "../components/footer";
 import { Auth } from "../pages/auth";
 import { Main } from "../pages/main";
 import { ElectronBook } from "../pages/electronBook";
-import { AudioCall } from "../pages/audiocall";
-import { Sprint } from "../pages/sprint";
+import { AudioCall } from '../games/audiocall/audiocall';
+import { Sprint } from '../games/sprint/sprint';
 
 const view = new View(
   Header,
