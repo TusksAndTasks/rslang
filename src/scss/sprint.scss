@@ -1,0 +1,56 @@
+.sprint {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    &__word-box {
+        width: 50%;
+        height: 50%;
+        border: solid 2px black;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__word {
+        height: 10%;
+        margin-bottom: 20px;
+    }
+
+    &__translation {
+        height: 10%;
+    }
+
+    &__answer-box {
+        display: flex;
+        flex-flow: row;
+        margin-top: 5vh;
+        justify-content: space-around;
+        align-items: center;
+        width: 50%;
+        height: 10%;
+    }
+    
+    &__wrong-answer {
+        border: solid 2px red;
+        height: 50%;
+        width: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__right-answer {
+        border: solid 2px green;
+        height: 50%;
+        width: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+}

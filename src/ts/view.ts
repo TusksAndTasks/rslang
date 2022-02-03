@@ -1,4 +1,4 @@
-import { EPage, ITemplate } from "../types/types";
+import { EPage, ISprint, ITemplate } from "../types/types";
 
 export class View {
   private header: ITemplate;
@@ -7,9 +7,9 @@ export class View {
   private main: ITemplate;
   private electronBook: ITemplate;
   private audiocall: ITemplate;
-  private sprint: ITemplate;
+  private sprint: ISprint;
 
-  constructor(header: ITemplate, footer: ITemplate, auth: ITemplate, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
+  constructor(header: ITemplate, footer: ITemplate, auth: ITemplate, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -68,6 +68,7 @@ export class View {
 
       case EPage.sprint:
         contentEl!.innerHTML = this.sprint.getHTML();
+        this.sprint.setCheckListeners();
         break;
 
       default:
