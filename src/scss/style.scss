@@ -75,17 +75,11 @@ input {
   &__body {
     position: absolute;
     width: 500px;
-    height: 200px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--white);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 20px;
     z-index: 10;
-    padding: 5px;
   }
 
   &__overlay {

@@ -1,5 +1,6 @@
 import '../scss/global.scss';
 import '../scss/style.scss';
+import '../scss/auth.scss';
 
 import 'airbnb-browser-shims/browser-only';
 
@@ -15,7 +16,7 @@ import { ElectronBook } from '../pages/electronBook';
 import { AudioCall } from '../pages/audiocall';
 import { Sprint } from '../pages/sprint';
 
-const view = new View(Header, Footer, Auth, Main, ElectronBook, AudioCall, Sprint);
+const view = new View(Header, Footer, new Auth, Main, ElectronBook, AudioCall, Sprint);
 const model = new Model();
 
 const controller = new Controller(view, model)

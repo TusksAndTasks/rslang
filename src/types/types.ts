@@ -2,6 +2,12 @@ export interface ITemplate {
   getHTML: () => string;
 }
 
+export interface IAuth {
+  getHTML: () => string;
+  init: () => void;
+  addListeners: () => void;
+}
+
 
 export interface IView {
   renderApp: () => void;

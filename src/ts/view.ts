@@ -1,15 +1,15 @@
-import { EPage, ITemplate } from "../types/types";
+import { EPage, IAuth, ITemplate } from "../types/types";
 
 export class View {
   private header: ITemplate;
   private footer: ITemplate;
-  private auth: ITemplate;
+  private auth: IAuth;
   private main: ITemplate;
   private electronBook: ITemplate;
   private audiocall: ITemplate;
   private sprint: ITemplate;
 
-  constructor(header: ITemplate, footer: ITemplate, auth: ITemplate, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
+  constructor(header: ITemplate, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -52,6 +52,7 @@ export class View {
     switch (activePage) {
       case EPage.auth:
         contentEl!.innerHTML = this.auth.getHTML();
+        this.auth.init();
         break;
 
       case EPage.main:
