@@ -1,3 +1,4 @@
+import { addAudioCallListeners } from "../games/audioCall/game-audioCall-listeners";
 import { EPage, IModel, IView } from "../types/types";
 
 export class Controller {
@@ -19,33 +20,38 @@ export class Controller {
 
   // Header
   private addHeaderListeners(): void {
-    const authBtn = document.querySelector('#auth-btn') as HTMLElement;
-    const mainBtn = document.querySelector('#main-btn') as HTMLElement;
-    const electronBookBtn = document.querySelector('#electron-book-btn') as HTMLElement;
-    const audioCallBtn = document.querySelector('#audio-call-btn') as HTMLElement;
-    const sprintBtn = document.querySelector('#sprint-btn') as HTMLElement;
+    const authBtn = document.querySelector("#auth-btn") as HTMLElement;
+    const mainBtn = document.querySelector("#main-btn") as HTMLElement;
+    const electronBookBtn = document.querySelector(
+      "#electron-book-btn"
+    ) as HTMLElement;
+    const audioCallBtn = document.querySelector(
+      "#audio-call-btn"
+    ) as HTMLElement;
+    const sprintBtn = document.querySelector("#sprint-btn") as HTMLElement;
 
-    authBtn.addEventListener('click', (): void => {
+    authBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.auth;
       this.view.renderContent(this.model.activePage);
-    })
+    });
 
-    mainBtn.addEventListener('click', (): void => {
+    mainBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
     });
 
-    electronBookBtn.addEventListener('click', (): void => {
+    electronBookBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
     });
 
-    audioCallBtn.addEventListener('click', (): void => {
-      this.model.activePage = EPage.audiocall;
+    audioCallBtn.addEventListener("click", (): void => {
+      this.model.activePage = EPage.audioCallLevels;
       this.view.renderContent(this.model.activePage);
+      addAudioCallListeners(this.view, this.model);
     });
 
-    sprintBtn.addEventListener('click', (): void => {
+    sprintBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.sprint;
       this.view.renderContent(this.model.activePage);
     });

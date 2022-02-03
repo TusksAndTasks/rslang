@@ -2,7 +2,6 @@ export interface ITemplate {
   getHTML: () => string;
 }
 
-
 export interface IView {
   renderApp: () => void;
   renderHeader: () => void;
@@ -11,13 +10,13 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string
+  activePage: string;
 }
 
 export enum EPage {
-  auth = 'auth',
-  main = 'main',
-  electronBook = 'electronBook',
-  audiocall = 'audiocall',
-  sprint = 'sprint'
+  auth = "auth",
+  main = "main",
+  electronBook = "electronBook",
+  audioCallLevels = "audioCallLevels",
+  sprint = "sprint",
 }
