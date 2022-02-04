@@ -1,7 +1,8 @@
-import { EPage, IAuth, ITemplate } from "../types/types";
+import { model } from ".";
+import { EPage, IAuth, IHeader, ITemplate } from "../types/types";
 
 export class View {
-  private header: ITemplate;
+  private header: IHeader;
   private footer: ITemplate;
   private auth: IAuth;
   private main: ITemplate;
@@ -9,7 +10,7 @@ export class View {
   private audiocall: ITemplate;
   private sprint: ITemplate;
 
-  constructor(header: ITemplate, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -38,7 +39,7 @@ export class View {
 
   public renderHeader(): void {
     const headerEl = document.querySelector('#header') as HTMLElement;
-    headerEl!.innerHTML = this.header.getHTML();
+    headerEl!.innerHTML = this.header.getHTML(model.auth);
   }
 
   public renderFooter(): void {
@@ -51,7 +52,6 @@ export class View {
 
     switch (activePage) {
       case EPage.auth:
-        contentEl!.innerHTML = this.auth.getHTML();
         this.auth.init();
         break;
 

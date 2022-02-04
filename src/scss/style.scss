@@ -32,8 +32,17 @@
   color: var(--black);
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 
-  &-green {
+  &-login, &-logout {
+    margin: 0 0 0 auto;
+  }
+
+  &-success {
     background: var(--green);
+    color: var(--white);
+  }
+
+  &-error {
+    background: var(--error);
     color: var(--white);
   }
 
@@ -101,4 +110,72 @@
 
 .content {
   flex: 1 1 auto;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(2000px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-30px);
+  }
+  80% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceOutRight {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(2000px);
+  }
+}
+
+@keyframes bounceInOutRight {
+  0% {
+    opacity: 0;
+    transform: translateX(2000px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-30px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  60% {
+    transform: translateX(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(2000px);
+  }
 }

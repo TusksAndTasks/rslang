@@ -1,11 +1,11 @@
-import { ILogin, INewUser } from "../types/types";
+import { IAuthObject, IUser } from "../types/types";
 
-export class API {
+class API {
   private baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
 
-  public createUser = async (name: string, email: string, password: string): Promise<INewUser> | never => {
+  public createUser = async (name: string, email: string, password: string): Promise<IUser> | never => {
     const response: Response = await fetch(this.users, {
       method: 'POST',
       headers: {
@@ -18,10 +18,14 @@ export class API {
       })
     })
 
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
     return await response.json();
   }
 
-  public signIn = async (email: string, password: string): Promise<ILogin> | never => {
+  public signIn = async (email: string, password: string): Promise<IAuthObject> | never => {
     const response: Response = await fetch(this.signin, {
       method: 'POST',
       headers: {
@@ -33,6 +37,12 @@ export class API {
       })
     })
 
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
     return await response.json();
   }
 }
+
+export const api = new API();

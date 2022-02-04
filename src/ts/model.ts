@@ -1,8 +1,8 @@
-import { EPage } from "../types/types";
+import { EPage, IAuthObject } from "../types/types";
 
 export class Model {
   private _activePage: string = EPage.main;
-  private _isAuth: boolean = false;
+  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
 
   get activePage() {
     return this._activePage;
@@ -12,11 +12,19 @@ export class Model {
     this._activePage = page;
   }
 
-  get isAuth() {
-    return this._isAuth;
+  get auth() {
+    return this._auth;
   }
 
-  set isAuth(status: boolean) {
-    this._isAuth = status;
+  set auth(loginObj: IAuthObject | null) {
+    this._auth = loginObj;
+  }
+
+  private getAuthObjectFromLocalStorage() {
+    if (localStorage.getItem('authObject')) {
+      return JSON.parse(localStorage.getItem('auth') as string) as IAuthObject;
+    }
+
+    return null;
   }
 }

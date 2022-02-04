@@ -2,10 +2,23 @@ export interface ITemplate {
   getHTML: () => string;
 }
 
+export interface IHeader {
+  getHTML: (auth: IAuthObject | null) => string;
+}
+
 export interface IAuth {
   getHTML: () => string;
   init: () => void;
-  addListeners: () => void;
+  openAuthModal: () => void;
+  registrateUser: (name: string, email: string, password: string) => void;
+  loginUser: (email: string, password: string) => void;
+  validateEmail: (email: string) => RegExpMatchArray | null;
+  showError: (input: HTMLInputElement) => void;
+  backToMainPage: () => void;
+  showAuthStatusMessage: (status: string, isSuccess: boolean) => void;
+  setLogoutButton: () => void;
+  setLoginButton: () => void;
+  logoutUser: () => void;
 }
 
 
@@ -18,6 +31,7 @@ export interface IView {
 
 export interface IModel {
   activePage: string
+  auth: IAuthObject | null
 }
 
 export enum EPage {
@@ -28,14 +42,13 @@ export enum EPage {
   sprint = 'sprint'
 }
 
-export interface INewUser {
-  id: string,
+export interface IUser {
   name: string,
   email: string,
   password: string
 }
 
-export interface ILogin {
+export interface IAuthObject {
   message: string,
   token: string,
   refreshToken: string,
