@@ -34,7 +34,7 @@ export class Auth {
       loginToggleBtn.classList.add('active');
       registrationToggleBtn.classList.remove('active');
       formWrapper.innerHTML = /*html*/`
-        <form id="auth-form" class="row auth__content">
+        <div class="row auth__content">
           <div id="login-content" class="auth__login-content active">
             <input id="login-email" type="email" placeholder="Почта" required/>
             <input id="login-password" type="password" placeholder="Пароль" required minlength="8" />
@@ -43,17 +43,21 @@ export class Auth {
               <button id="login-btn" class="btn btn-blue" type="submit">Вход</button>
             </div>
           </div>
-        </form>
+        </div>
       `;
 
-      const authForm = document.getElementById('auth-form') as HTMLElement;
       const loginEmailInput = document.getElementById('login-email') as HTMLInputElement;
       const loginPasswordInput = document.getElementById('login-password') as HTMLInputElement;
+      const loginBtn = document.getElementById('login-btn') as HTMLInputElement;
 
-      authForm.addEventListener('submit', event => {
-        event.preventDefault();
-        this.loginUser(loginEmailInput.value, loginPasswordInput.value);
-        this.destroyModal(modalAuth);
+      loginBtn.addEventListener('click', () => {
+        if (!this.validateEmail(loginEmailInput.value)) {
+          this.showError(loginEmailInput);
+        } else if (loginPasswordInput.value.length < 8) {
+          this.showError(loginPasswordInput);
+        } else {
+          this.loginUser(loginEmailInput.value, loginPasswordInput.value);
+        }
       });
     }
 
@@ -61,9 +65,9 @@ export class Auth {
       registrationToggleBtn.classList.add('active');
       loginToggleBtn.classList.remove('active');
       formWrapper.innerHTML = /*html*/`
-        <form id="auth-form" class="row auth__content">
+        <div class="row auth__content">
           <div id="registration-content" class="auth__registration-content">
-            <input id="registration-name" type="text" placeholder="Имя" required/>
+            <input id="registration-name" type="text" placeholder="Имя" required minlength="1" />
             <input id="registration-email" type="email" placeholder="Почта" required/>
             <input id="registration-password" type="password" placeholder="Пароль" required minlength="8" />
             <div class="row auth__bottom">
@@ -71,18 +75,24 @@ export class Auth {
               <button id="registration-btn" class="btn btn-blue" type="submit">Регистрация</button>
             </div>
           </div>
-        </form>
+        </div>
       `;
-      
-      const authForm = document.getElementById('auth-form') as HTMLElement;
+
       const registrationNameInput = document.getElementById('registration-name') as HTMLInputElement;
       const registrationEmailInput = document.getElementById('registration-email') as HTMLInputElement;
       const registrationPasswordInput = document.getElementById('registration-password') as HTMLInputElement;
+      const registrationBtn = document.getElementById('registration-btn') as HTMLInputElement;
 
-      authForm.addEventListener('submit', event => {
-        event.preventDefault();
-        this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
-        this.destroyModal(modalAuth);
+      registrationBtn.addEventListener('click', () => {
+        if (registrationNameInput.value.length < 1) {
+          this.showError(registrationNameInput);
+        } else if (!this.validateEmail(registrationEmailInput.value)) {
+          this.showError(registrationEmailInput);
+        } else if (registrationPasswordInput.value.length < 8) {
+          this.showError(registrationPasswordInput);
+        } else {
+          this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
+        }
       });
     }
 
@@ -111,9 +121,37 @@ export class Auth {
 
   public registrateUser(name: string, email: string, password: string) {
     api.createUser(name, email, password)
+      .finally(() => {
+        const modalAuth = document.getElementById('modal-auth') as HTMLElement;
+        this.destroyModal(modalAuth);
+      })
   }
 
   public loginUser(email: string, password: string) {
-    api.signIn(email, password);
+    api.signIn(email, password)
+      .finally(() => {
+        const modalAuth = document.getElementById('modal-auth') as HTMLElement;
+        this.destroyModal(modalAuth);
+      })
+  }
+
+  public validateEmail(email: string): RegExpMatchArray | null {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  public showError(input: HTMLInputElement): void {
+    const inputError = document.createElement('div');
+    inputError.classList.add('input-error');
+    inputError.innerHTML = input.validationMessage;
+    input.after(inputError);
+    input.style.border = '2px solid red';
+    setTimeout(() => {
+      input.style.border = '';
+      inputError.remove();
+    }, 2000);
   }
 }

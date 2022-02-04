@@ -6,31 +6,43 @@
 
   &__bottom {
     justify-content: space-between;
+    margin: 20px 0 0 0;
   }
 
   &__content {
     padding: 20px;
   }
 
-  &__login-btn, &__registration-btn {
+  &__login-btn,
+  &__registration-btn {
     flex: 0 1 50%;
     text-align: center;
     padding: 10px;
     cursor: pointer;
 
-    &.active{
-      border-bottom: 2px solid var(--blue);  
+    &.active {
+      border-bottom: 2px solid var(--blue);
     }
   }
 
-  &__login-content, &__registration-content {
+  &__login-content,
+  &__registration-content {
     width: 100%;
   }
 
   input {
     width: 100%;
     height: 40px;
-    margin: 0 0 20px 0;
     padding: 5px;
+
+    & + input {
+      margin: 20px 0 0 0;
+    }
+  }
+
+  .input-error {
+    color: red;
+    font-size: 14px;
+    padding: 5px 0;
   }
 }
