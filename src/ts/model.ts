@@ -22,7 +22,7 @@ export class Model {
 
   private getAuthObjectFromLocalStorage() {
     if (localStorage.getItem('authObject')) {
-      return JSON.parse(localStorage.getItem('auth') as string) as IAuthObject;
+      return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
     }
 
     return null;
