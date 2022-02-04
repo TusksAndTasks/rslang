@@ -1,4 +1,4 @@
-import { EPage, ITemplate } from "../types/types";
+import { EPage, IAutocall, ITemplate } from "../types/types";
 
 export class View {
   private header: ITemplate;
@@ -6,7 +6,7 @@ export class View {
   private auth: ITemplate;
   private main: ITemplate;
   private electronBook: ITemplate;
-  private audioCall: ITemplate;
+  private audiocall: IAutocall;
   private sprint: ITemplate;
 
   constructor(
@@ -15,7 +15,7 @@ export class View {
     auth: ITemplate,
     main: ITemplate,
     electronBook: ITemplate,
-    audioCall: ITemplate,
+    audiocall: IAutocall,
     sprint: ITemplate
   ) {
     this.header = header;
@@ -23,7 +23,7 @@ export class View {
     this.auth = auth;
     this.main = main;
     this.electronBook = electronBook;
-    this.audioCall = audioCall;
+    this.audiocall = audiocall;
     this.sprint = sprint;
   }
 
@@ -70,8 +70,9 @@ export class View {
         contentEl!.innerHTML = this.electronBook.getHTML();
         break;
 
-      case EPage.audioCallLevels:
-        contentEl!.innerHTML = this.audioCall.getHTML();
+      case EPage.audiocall:
+        contentEl!.innerHTML = this.audiocall.getHTML();
+        this.audiocall.addListeners();
         break;
 
       case EPage.sprint:

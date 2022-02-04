@@ -1,4 +1,3 @@
-import { addAudioCallListeners } from "../games/audioCall/game-audioCall-listeners";
 import { EPage, IModel, IView } from "../types/types";
 
 export class Controller {
@@ -46,9 +45,8 @@ export class Controller {
     });
 
     audioCallBtn.addEventListener("click", (): void => {
-      this.model.activePage = EPage.audioCallLevels;
+      this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
-      addAudioCallListeners(this.view, this.model);
     });
 
     sprintBtn.addEventListener("click", (): void => {

@@ -1,7 +1,10 @@
 export interface ITemplate {
   getHTML: () => string;
 }
-
+export interface IAutocall {
+  getHTML: () => string;
+  addListeners: () => void;
+}
 export interface IView {
   renderApp: () => void;
   renderHeader: () => void;
@@ -13,10 +16,29 @@ export interface IModel {
   activePage: string;
 }
 
+export interface IWordData {
+  id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  wordTranslate: string;
+  textMeaningTranslate: string;
+  textExampleTranslate: string;
+}
+
+export type IWordsData = IWordData[];
+
 export enum EPage {
   auth = "auth",
   main = "main",
   electronBook = "electronBook",
-  audioCallLevels = "audioCallLevels",
+  audiocall = "audiocall",
   sprint = "sprint",
 }

@@ -1,5 +1,6 @@
 import "../scss/global.scss";
 import "../scss/style.scss";
+import "../scss/audiocall.scss";
 
 import "airbnb-browser-shims/browser-only";
 
@@ -12,8 +13,8 @@ import { Footer } from "../components/footer";
 import { Auth } from "../pages/auth";
 import { Main } from "../pages/main";
 import { ElectronBook } from "../pages/electronBook";
-import { AudioCall } from '../games/audiocall/audiocall';
-import { Sprint } from '../games/sprint/sprint';
+import { Sprint } from "../games/sprint/sprint";
+import { Audiocall } from "../games/audiocall/audiocall";
 
 const view = new View(
   Header,
@@ -21,7 +22,7 @@ const view = new View(
   Auth,
   Main,
   ElectronBook,
-  AudioCall,
+  Audiocall,
   Sprint
 );
 const model = new Model();
