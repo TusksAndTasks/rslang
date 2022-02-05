@@ -1,6 +1,7 @@
 import "../scss/global.scss";
 import "../scss/style.scss";
 import "../scss/audiocall.scss";
+import '../scss/auth.scss';
 
 import "airbnb-browser-shims/browser-only";
 
@@ -15,8 +16,8 @@ import { ElectronBook } from "../pages/electronBook";
 import { Sprint } from "../games/sprint/sprint";
 import { Audiocall } from "../games/audiocall/audiocall";
 
-const view = new View(
-  Header,
+export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, Sprint);
+export const model = new Model();
   Footer,
   Auth,
   Main,
@@ -24,8 +25,7 @@ const view = new View(
   new Audiocall(),
   Sprint
 );
-const model = new Model();
 
-const controller = new Controller(view, model);
+export const controller = new Controller(view, model)
 
 controller.initApp();

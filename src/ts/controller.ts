@@ -19,17 +19,17 @@ export class Controller {
 
   // Header
   private addHeaderListeners(): void {
-    const authBtn = document.querySelector("#auth-btn") as HTMLElement;
-    const mainBtn = document.querySelector("#main-btn") as HTMLElement;
-    const electronBookBtn = document.querySelector(
-      "#electron-book-btn"
-    ) as HTMLElement;
+    const mainBtn = document.getElementById('main-btn') as HTMLElement;
+    const electronBookBtn = document.getElementById('electron-book-btn') as HTMLElement;
+    const audioCallBtn = document.getElementById('audio-call-btn') as HTMLElement;
+    const sprintBtn = document.getElementById('sprint-btn') as HTMLElement;
+    const autBtn = document.getElementById('logout-btn') || document.getElementById('login-btn') as HTMLElement;
     const audioCallBtn = document.querySelector(
       "#audio-call-btn"
     ) as HTMLElement;
     const sprintBtn = document.querySelector("#sprint-btn") as HTMLElement;
-
-    authBtn.addEventListener("click", (): void => {
+    
+    autBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.auth;
       this.view.renderContent(this.model.activePage);
     });
