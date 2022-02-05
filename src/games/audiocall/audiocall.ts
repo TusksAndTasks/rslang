@@ -1,7 +1,6 @@
-import { API, baseUrl } from "../../ts/api";
 import { IWordsData, IWordData } from "../../types/types";
+import { api } from "../../ts/api";
 
-const api = new API();
 const numberOfPages = 30;
 
 export class Audiocall {
@@ -64,7 +63,7 @@ export class Audiocall {
   }
 
   private getSrc (path: string): string {
-    return `${baseUrl}${path}`;
+    return `${api.baseUrl}/${path}`;
   };
 
   private createOffset (percent:number, length:number): string {

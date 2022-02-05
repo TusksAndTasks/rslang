@@ -16,15 +16,9 @@ import { ElectronBook } from "../pages/electronBook";
 import { Sprint } from "../games/sprint/sprint";
 import { Audiocall } from "../games/audiocall/audiocall";
 
-export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, Sprint);
+export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, new Audiocall(), Sprint);
 export const model = new Model();
-  Footer,
-  Auth,
-  Main,
-  ElectronBook,
-  new Audiocall(),
-  Sprint
-);
+ 
 
 export const controller = new Controller(view, model)
 

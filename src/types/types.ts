@@ -1,9 +1,10 @@
 export interface ITemplate {
   getHTML: () => string;
 }
-export interface IAutocall {
+export interface IAudiocall {
   getHTML: () => string;
-  addListeners: () => void;
+  addListeners: () => void;}
+  
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }

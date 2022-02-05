@@ -1,6 +1,5 @@
-import { EPage, IAutocall, ITemplate } from "../types/types";
 import { model } from ".";
-import { EPage, IAuth, IHeader, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader,IAudiocall, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -8,18 +7,11 @@ export class View {
   private auth: IAuth;
   private main: ITemplate;
   private electronBook: ITemplate;
-  private audiocall: IAutocall;
+  private audiocall: IAudiocall;
   private sprint: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
-    header: ITemplate,
-    footer: ITemplate,
-    auth: ITemplate,
-    main: ITemplate,
-    electronBook: ITemplate,
-    audiocall: IAutocall,
-    sprint: ITemplate
-  ) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: IAudiocall, sprint: ITemplate) 
+  {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
