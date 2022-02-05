@@ -31,80 +31,90 @@ export class Auth {
   }
 
   public openAuthModal(): void {
+    this.showLogin();
+    this.setAuthListeners();
+  }
+
+  private showLogin() {
     const contentWrapper = document.getElementById('content-wrapper') as HTMLElement;
-    const modalAuth = document.getElementById('modal-auth') as HTMLElement;
     const loginToggleBtn = document.getElementById('login-toggle-btn') as HTMLElement;
     const registrationToggleBtn = document.getElementById('registration-toggle-btn') as HTMLElement;
 
-    const showLogin = () => {
-      loginToggleBtn.classList.add('active');
-      registrationToggleBtn.classList.remove('active');
-      contentWrapper.innerHTML = /*html*/`
-        <div class="row auth__content">
-          <div id="login-content" class="auth__login-content active">
-            <input tabindex="1" id="login-email" type="email" placeholder="Почта" required />
-            <input tabindex="2" id="login-password" type="password" placeholder="Пароль" required minlength="8" />
-            <div class="row auth__bottom">
-              <button tabindex="4" class="btn auth__cancel">Отмена</button>
-              <button tabindex="3" id="login" class="btn btn-blue" type="submit">Вход</button>
-            </div>
+    loginToggleBtn.classList.add('active');
+    registrationToggleBtn.classList.remove('active');
+    contentWrapper.innerHTML = /*html*/`
+      <div class="row auth__content">
+        <div id="login-content" class="auth__login-content active">
+          <input tabindex="1" id="login-email" type="email" placeholder="Почта" required />
+          <input tabindex="2" id="login-password" type="password" placeholder="Пароль" required minlength="8" />
+          <div class="row auth__bottom">
+            <button tabindex="4" class="btn auth__cancel">Отмена</button>
+            <button tabindex="3" id="login" class="btn btn-blue" type="submit">Вход</button>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      const loginEmailInput = document.getElementById('login-email') as HTMLInputElement;
-      const loginPasswordInput = document.getElementById('login-password') as HTMLInputElement;
-      const loginBtn = document.getElementById('login') as HTMLInputElement;
+    const loginEmailInput = document.getElementById('login-email') as HTMLInputElement;
+    const loginPasswordInput = document.getElementById('login-password') as HTMLInputElement;
+    const loginBtn = document.getElementById('login') as HTMLInputElement;
 
-      loginBtn.addEventListener('click', () => {
-        if (!this.validateEmail(loginEmailInput.value)) {
-          this.showError(loginEmailInput);
-        } else if (loginPasswordInput.value.length < 8) {
-          this.showError(loginPasswordInput);
-        } else {
-          this.loginUser(loginEmailInput.value, loginPasswordInput.value);
-          this.backToMainPage();
-        }
-      });
-    }
+    loginBtn.addEventListener('click', () => {
+      if (!this.validateEmail(loginEmailInput.value)) {
+        this.showError(loginEmailInput);
+      } else if (loginPasswordInput.value.length < 8) {
+        this.showError(loginPasswordInput);
+      } else {
+        this.loginUser(loginEmailInput.value, loginPasswordInput.value);
+        this.backToMainPage();
+      }
+    });
+  }
 
-    const showRegistration = () => {
-      registrationToggleBtn.classList.add('active');
-      loginToggleBtn.classList.remove('active');
-      contentWrapper.innerHTML = /*html*/`
-        <div class="row auth__content">
-          <div id="registration-content" class="auth__registration-content">
-            <input tabindex="1" id="registration-name" type="text" placeholder="Имя" required minlength="1" />
-            <input tabindex="2" id="registration-email" type="email" placeholder="Почта" required/>
-            <input tabindex="3" id="registration-password" type="password" placeholder="Пароль" required minlength="8" />
-            <div class="row auth__bottom">
-              <button tabindex="5" class="btn auth__cancel">Отмена</button>
-              <button tabindex="4" id="registration" class="btn btn-blue" type="submit">Регистрация</button>
-            </div>
+  private showRegistration() {
+    const contentWrapper = document.getElementById('content-wrapper') as HTMLElement;
+    const loginToggleBtn = document.getElementById('login-toggle-btn') as HTMLElement;
+    const registrationToggleBtn = document.getElementById('registration-toggle-btn') as HTMLElement;
+
+    registrationToggleBtn.classList.add('active');
+    loginToggleBtn.classList.remove('active');
+    contentWrapper.innerHTML = /*html*/`
+      <div class="row auth__content">
+        <div id="registration-content" class="auth__registration-content">
+          <input tabindex="1" id="registration-name" type="text" placeholder="Имя" required minlength="1" />
+          <input tabindex="2" id="registration-email" type="email" placeholder="Почта" required/>
+          <input tabindex="3" id="registration-password" type="password" placeholder="Пароль" required minlength="8" />
+          <div class="row auth__bottom">
+            <button tabindex="5" class="btn auth__cancel">Отмена</button>
+            <button tabindex="4" id="registration" class="btn btn-blue" type="submit">Регистрация</button>
           </div>
         </div>
-      `;
+      </div>
+    `;
 
-      const registrationNameInput = document.getElementById('registration-name') as HTMLInputElement;
-      const registrationEmailInput = document.getElementById('registration-email') as HTMLInputElement;
-      const registrationPasswordInput = document.getElementById('registration-password') as HTMLInputElement;
-      const registrationBtn = document.getElementById('registration') as HTMLInputElement;
+    const registrationNameInput = document.getElementById('registration-name') as HTMLInputElement;
+    const registrationEmailInput = document.getElementById('registration-email') as HTMLInputElement;
+    const registrationPasswordInput = document.getElementById('registration-password') as HTMLInputElement;
+    const registrationBtn = document.getElementById('registration') as HTMLInputElement;
 
-      registrationBtn.addEventListener('click', () => {
-        if (registrationNameInput.value.length < 1) {
-          this.showError(registrationNameInput);
-        } else if (!this.validateEmail(registrationEmailInput.value)) {
-          this.showError(registrationEmailInput);
-        } else if (registrationPasswordInput.value.length < 8) {
-          this.showError(registrationPasswordInput);
-        } else {
-          this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
-          this.backToMainPage();
-        }
-      });
-    }
+    registrationBtn.addEventListener('click', () => {
+      if (registrationNameInput.value.length < 1) {
+        this.showError(registrationNameInput);
+      } else if (!this.validateEmail(registrationEmailInput.value)) {
+        this.showError(registrationEmailInput);
+      } else if (registrationPasswordInput.value.length < 8) {
+        this.showError(registrationPasswordInput);
+      } else {
+        this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
+        this.backToMainPage();
+      }
+    });
+  }
 
-    showLogin();
+  private setAuthListeners() {
+    const loginToggleBtn = document.getElementById('login-toggle-btn') as HTMLElement;
+    const registrationToggleBtn = document.getElementById('registration-toggle-btn') as HTMLElement;
+    const modalAuth = document.getElementById('modal-auth') as HTMLElement;
 
     modalAuth.addEventListener('click', (event): void => {
       const target = event.target as HTMLElement;
@@ -115,9 +125,9 @@ export class Auth {
       ) {
         this.backToMainPage();
       } else if (target === loginToggleBtn) {
-        showLogin();
+        this.showLogin();
       } else if (target === registrationToggleBtn) {
-        showRegistration();
+        this.showRegistration();
       }
     });
   }
@@ -154,18 +164,21 @@ export class Auth {
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
-  };
+  }
 
   public showError(input: HTMLInputElement): void {
     const inputError = document.createElement('div');
     inputError.classList.add('input-error');
     inputError.innerHTML = input.validationMessage;
-    input.after(inputError);
-    input.style.border = '1px solid red';
-    setTimeout(() => {
-      input.style.border = '';
-      inputError.remove();
-    }, 2000);
+
+    if (!input.nextElementSibling?.classList.contains('input-error')) {
+      input.after(inputError);
+      input.style.border = '1px solid red';
+      setTimeout(() => {
+        input.style.border = '';
+        inputError.remove();
+      }, 2000);
+    }
   }
 
   public backToMainPage(): void {
