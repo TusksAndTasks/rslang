@@ -1,16 +1,3 @@
-//<div class="audiocall">
-//        <h2>Мини-игра аудиовызов</h2>
-//        <p>Выбери сложность игры</p>
-//        <div id="levels" class="levels">
-//        <button data-level=0 class="btn">1</button>
-//        <button data-level=1 class="btn">2</button>
-//        <button data-level=2 class="btn">3</button>
-//        <button data-level=3 class="btn">4</button>
-//        <button data-level=4 class="btn">5</button>
-//        <button data-level=5 class="btn">6</button>
-//        </div>
-//      </div>
-
 .audiocall {
   width: 50%;
   height: 40vh;
@@ -42,5 +29,138 @@
       transform: scale(0.9);
       background: rgb(142, 142, 189);
     }
+  }
+}
+.game-audio {
+  width: 100%;
+  height: 80vh;
+  background: rgb(170, 170, 194);
+  display: flex;
+  flex-direction: column;
+  row-gap: 120px;
+}
+
+.game-header {
+  width: 100%;
+  display: flex;
+  justify-content:space-between;
+
+  &__progress {
+    width:100px;
+    height:100px; 
+    position:relative;
+  }
+
+  &__progress_svg {
+    width:100px;
+    height:100px; 
+    position:absolute;
+  }
+  &__progress_circle{
+    cx:50px;
+    cy:50px;
+    stroke:#E0FFFF;
+    stroke-width:6px;
+    transform-origin: center;
+    transform:rotate(-90deg);
+    transition:0.5s;
+  }
+  &__progress_text{
+    position:absolute;
+    width:100px;
+    height:100px; 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  &__settings{
+    display:flex;
+    column-gap:10px;
+
+    
+    &_sound,
+    &_full {
+      width: 30px;
+      height: 30px;
+      background-color: transporent;
+      background-image:url('../assets/svg/sound.svg');
+      background-size:cover;
+    }
+    &_full{
+      background-image:url('../assets/svg/fullscreen.svg');
+    }
+  }
+
+}
+.game-main__word{
+&_image {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  align-self: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+&_sound{
+  position:absolute;
+  left:0;
+  top:0;
+  width: 102%;
+  height:102%;
+  border-radius: 50%;
+  border: 2px solid rgb(129, 129, 151);
+  background-color:rgb(160, 160, 180);
+  background-image:url('../assets/svg/sound-on.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor:pointer;
+  &:hover{
+  transform:scale(1.1)
+  }
+}
+&_animate{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  border-radius: 50%;
+  border: 2px solid rgb(129, 129, 151);
+  opacity:1;
+  background:transparent;
+}
+&_en{
+  position:absolute;
+  left:0;
+  top:110%;
+}
+&_ansvers{
+  width:80%;
+  margin:0 auto;
+  height: 20px;
+  display:flex;
+  justify-content: space-between;
+}
+}
+.button-ansvers{
+  width:10rem !important;
+  height:2rem;
+
+  &_dont-know{
+    background:#87CEFA;
+    align-self:center;
+
+    &:hover{
+      transform:scale(0.9);
+      background:rgb(129, 129, 151);
+    }
+  }
+
+  &:hover{
+    transform:scale(0.9);
+    background:rgb(129, 129, 151);
   }
 }

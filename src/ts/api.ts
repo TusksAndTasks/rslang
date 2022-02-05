@@ -1,8 +1,8 @@
 import { IWordData, IWordsData } from "../types/types";
 
+export const baseUrl: string = "https://react-learnwords-example.herokuapp.com/";
 export class API {
-  private baseUrl: string = "https://react-learnwords-example.herokuapp.com";
-  private words: string = `${this.baseUrl}/words`;
+  private words: string = `${baseUrl}words`;
 
   public getWords = async (
     group: number,

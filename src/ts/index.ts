@@ -7,7 +7,6 @@ import "airbnb-browser-shims/browser-only";
 import { Model } from "./model";
 import { View } from "./view";
 import { Controller } from "./controller";
-
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 import { Auth } from "../pages/auth";
@@ -22,7 +21,7 @@ const view = new View(
   Auth,
   Main,
   ElectronBook,
-  Audiocall,
+  new Audiocall(),
   Sprint
 );
 const model = new Model();
