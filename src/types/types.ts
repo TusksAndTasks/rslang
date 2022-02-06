@@ -6,6 +6,25 @@ export interface ISprint extends ITemplate {
   startSprint: () => void;
 }
 
+export interface IHeader {
+  getHTML: (auth: IAuthObject | null) => string;
+}
+
+export interface IAuth {
+  getHTML: () => string;
+  init: () => void;
+  openAuthModal: () => void;
+  registrateUser: (name: string, email: string, password: string) => void;
+  loginUser: (email: string, password: string) => void;
+  validateEmail: (email: string) => RegExpMatchArray | null;
+  showError: (input: HTMLInputElement) => void;
+  backToMainPage: () => void;
+  showAuthStatusMessage: (status: string, isSuccess: boolean) => void;
+  setLogoutButton: () => void;
+  setLoginButton: () => void;
+  logoutUser: () => void;
+}
+
 
 export interface IView {
   renderApp: () => void;
@@ -15,8 +34,9 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string;
-  sprintTimer: number
+  activePage: string
+  auth: IAuthObject | null
+  sprintTimer: number;
 }
 
 export enum EPage {
@@ -48,4 +68,18 @@ export interface ISprintWord {
   word: string,
   wordTranslate: string;
   correct: boolean;
+}
+
+export interface IUser {
+  name: string,
+  email: string,
+  password: string
+}
+
+export interface IAuthObject {
+  message: string,
+  token: string,
+  refreshToken: string,
+  userId: string,
+  name: string
 }
