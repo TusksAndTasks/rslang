@@ -43,126 +43,123 @@
 .game-header {
   width: 100%;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 
   &__progress {
-    width:100px;
-    height:100px; 
-    position:relative;
+    width: 100px;
+    height: 100px;
+    position: relative;
   }
 
   &__progress_svg {
-    width:100px;
-    height:100px; 
-    position:absolute;
+    width: 100px;
+    height: 100px;
+    position: absolute;
   }
-  &__progress_circle{
-    cx:50px;
-    cy:50px;
-    stroke:#E0FFFF;
-    stroke-width:6px;
+  &__progress_circle {
+    cx: 50px;
+    cy: 50px;
+    stroke: #e0ffff;
+    stroke-width: 6px;
     transform-origin: center;
-    transform:rotate(-90deg);
-    transition:0.5s;
+    transform: rotate(-90deg);
+    transition: 0.5s;
   }
-  &__progress_text{
-    position:absolute;
-    width:100px;
-    height:100px; 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  &__progress_text {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  &__settings{
-    display:flex;
-    column-gap:10px;
+  &__settings {
+    display: flex;
+    column-gap: 10px;
 
-    
     &_sound,
     &_full {
       width: 30px;
       height: 30px;
       background-color: transporent;
-      background-image:url('../assets/svg/sound.svg');
-      background-size:cover;
+      background-image: url("../assets/svg/sound.svg");
+      background-size: cover;
     }
-    &_full{
-      background-image:url('../assets/svg/fullscreen.svg');
-    }
-  }
-
-}
-.game-main__word{
-&_image {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  align-self: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-&_sound{
-  position:absolute;
-  left:0;
-  top:0;
-  width: 102%;
-  height:102%;
-  border-radius: 50%;
-  border: 2px solid rgb(129, 129, 151);
-  background-color:rgb(160, 160, 180);
-  background-image:url('../assets/svg/sound-on.svg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  cursor:pointer;
- 
-  &:hover{
- border:3px;
-  }
-  
-}
-&_animate{
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  height:100%;
-  border-radius: 50%;
-  border: 2px solid rgb(129, 129, 151);
-  opacity:1;
-  background:transparent;
-}
-&_en{
-  position:absolute;
-  left:90%;
-  top:110%;
-}
-&_ansvers{
-  width:100%;
-  margin:0 auto;
-  height: 20px;
-  display:flex;
-  justify-content: space-around;
-}
-}
-.button-ansvers{
-  width:20% !important;
-  height:2.5rem;
-
-  &_dont-know{
-    background:#87CEFA;
-    align-self:center;
-
-    &:hover{
-      transform:scale(0.9);
-      background:rgb(129, 129, 151);
+    &_full {
+      background-image: url("../assets/svg/fullscreen.svg");
     }
   }
 }
-.after-select{
-  transform:scale(0.4) !important;
-  top:70% !important;
-  left:-50% !important;
+.game-main__word {
+  &_image {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    align-self: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  &_sound {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 102%;
+    height: 102%;
+    border-radius: 50%;
+    border: 2px solid rgb(129, 129, 151);
+    background-color: rgb(160, 160, 180);
+    background-image: url("../assets/svg/sound-on.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    &:hover {
+      border: 3px;
+    }
+  }
+  &_animate {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid rgb(129, 129, 151);
+    opacity: 1;
+    background: transparent;
+  }
+  &_en {
+    position: absolute;
+    left: 90%;
+    top: 110%;
+  }
+  &_answers {
+    width: 100%;
+    margin: 0 auto;
+    height: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+.button-answers {
+  width: 20% !important;
+  height: 2.5rem;
+
+  &_dont-know {
+    background: #87cefa;
+    align-self: center;
+
+    &:hover {
+      transform: scale(0.9);
+      background: rgb(129, 129, 151);
+    }
+  }
+}
+.after-select {
+  transform: scale(0.4) !important;
+  top: 70% !important;
+  left: -50% !important;
 }

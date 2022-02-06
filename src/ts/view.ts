@@ -66,7 +66,7 @@ export class View {
 
       case EPage.audiocall:
         contentEl!.innerHTML = this.audiocall.getHTML();
-        this.audiocall.addListeners();
+        this.audiocall.initAudiocall();
         break;
 
       case EPage.sprint:

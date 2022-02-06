@@ -3,7 +3,7 @@ export interface ITemplate {
 }
 export interface IAudiocall {
   getHTML: () => string;
-  addListeners: () => void;}
+  initAudiocall: () => void;}
   
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
