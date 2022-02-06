@@ -37,7 +37,7 @@
   background: rgb(170, 170, 194);
   display: flex;
   flex-direction: column;
-  row-gap: 120px;
+  row-gap: 15%;
 }
 
 .game-header {
@@ -117,9 +117,11 @@
   background-position: center;
   background-repeat: no-repeat;
   cursor:pointer;
+ 
   &:hover{
-  transform:scale(1.1)
+ border:3px;
   }
+  
 }
 &_animate{
   position:absolute;
@@ -134,20 +136,20 @@
 }
 &_en{
   position:absolute;
-  left:0;
+  left:90%;
   top:110%;
 }
 &_ansvers{
-  width:80%;
+  width:100%;
   margin:0 auto;
   height: 20px;
   display:flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 }
 .button-ansvers{
-  width:10rem !important;
-  height:2rem;
+  width:20% !important;
+  height:2.5rem;
 
   &_dont-know{
     background:#87CEFA;
@@ -158,9 +160,9 @@
       background:rgb(129, 129, 151);
     }
   }
-
-  &:hover{
-    transform:scale(0.9);
-    background:rgb(129, 129, 151);
-  }
+}
+.after-select{
+  transform:scale(0.4) !important;
+  top:70% !important;
+  left:-50% !important;
 }

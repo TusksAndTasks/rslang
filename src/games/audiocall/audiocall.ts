@@ -84,7 +84,7 @@ export class Audiocall {
           <svg class="game-header__progress_svg">
               <circle id="circle" class="game-header__progress_circle" fill="none" r="45">
           </svg>
-          <div class="game-header__progress_text">
+          <div id="textPtogress" class="game-header__progress_text">
           0/20
           </div>
         </div>
@@ -93,28 +93,22 @@ export class Audiocall {
           <div class="game-header__settings_full"></div>
         </div>
       </div>
-      <div class="game-main__word_image" style=${backImg}>
-        <div id="animation" class="game-main__word_animate"></div>
-        <button id="sound-btn" class="game-main__word_sound"></button>
-        <div class="game-main__word_en hide">${word.word}   
-        ${word.transcription} </div>
+      <div id="image" class="game-main__word_image" style=${backImg}>
+        <button id="sound-btn" class="game-main__word_sound">
+          <div id="animation" class="game-main__word_animate"></div>
+        </button>
+        <div id="correct-word" class="game-main__word_en hide">${word.word} ${word.transcription} </div>
       </div>
       <div id="ansvers" class="game-main__word_ansvers"></div>
-      <button class="btn button-ansvers_dont-know"> Не знаю </button>
+      <button id="next" class="btn button-ansvers_dont-know"> Не знаю </button>
     </div>
     `;
-
-    const circle=document.getElementById("circle") as unknown as SVGCircleElement;
-    const radius=circle.r.baseVal.value;
-    const length = 2*Math.PI*radius;
-    circle.style.strokeDasharray=`${length} ${length}`;
-    circle.style.strokeDashoffset = `${length}`;
 
     const audio = new Audio(audioSrc);
     audio.play();
     const audioAnimateElement = document.getElementById("animation") as HTMLElement;
-    const audioAnimate = audioAnimateElement.animate([{transform: 'scale(0.8)', opacity:1},
-          {transform: 'scale(1.3)', opacity:0.1}],
+    const audioAnimate = audioAnimateElement.animate([{transform: 'scale(1)', opacity:1},
+          {transform: 'scale(1.4)', opacity:0.1}],
           {duration: 600, iterations: Infinity})
     audio.addEventListener('ended',()=>audioAnimate.cancel());
 
@@ -122,15 +116,48 @@ export class Audiocall {
     audioButton.addEventListener("click",()=>{
       audio.play();
       audioAnimate.play();
-      //circle.style.strokeDashoffset = this.createOffset(20,length);
-    })
-   const ansvers= document.getElementById("ansvers") as HTMLElement;
+   })
+
+  const circle=document.getElementById("circle") as unknown as SVGCircleElement;
+  const radius=circle.r.baseVal.value;
+  const length = 2*Math.PI*radius;
+  circle.style.strokeDasharray=`${length} ${length}`;
+  circle.style.strokeDashoffset = `${length}`;
+
+  const ansvers= document.getElementById('ansvers') as HTMLElement;
+  const contentProgress=document.getElementById('textPtogress') as HTMLElement;
+  const buttonNext=document.getElementById('next') as HTMLButtonElement;
+  const correctWord = document.getElementById('correct-word') as HTMLElement;
+  const stepProgress=5;
+  let progress=0;
+  let textProgress=0;
 
   arrAnsvers.forEach((wordData:IWordData )=> {
   const button  = document.createElement("button");
-  button.textContent = wordData.word;
+  button.textContent = wordData.wordTranslate;
   button.className="btn button-ansvers"
   ansvers.append(button);  
+  button.addEventListener('click',()=>{
+    progress+=stepProgress;
+    textProgress+=1;
+    circle.style.strokeDashoffset = this.createOffset(progress,length);
+    contentProgress.textContent=`${textProgress}/20`;
+    ansvers.querySelectorAll('button').forEach(btn => {
+      btn.disabled=true;
+      btn.style.cursor="default";
+    });
+    buttonNext.textContent="Дальше";
+    correctWord.classList.remove('hide');
+    audioButton.classList.add('after-select')
+
+
+
+    if(button.textContent === word.wordTranslate){
+      button.style.background="#00FF7F";
+    } else {
+      button.style.background="#CD5C5C";
+    }
+  })
     });
   }
 }
