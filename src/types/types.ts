@@ -3,7 +3,7 @@ export interface ITemplate {
 }
 
 export interface ISprint extends ITemplate {
-  setCheckListeners: () => void;
+  startSprint: () => void;
 }
 
 
@@ -15,7 +15,8 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string
+  activePage: string;
+  sprintTimer: number
 }
 
 export enum EPage {

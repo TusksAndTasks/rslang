@@ -68,7 +68,7 @@ export class View {
 
       case EPage.sprint:
         contentEl!.innerHTML = this.sprint.getHTML();
-        this.sprint.setCheckListeners();
+        this.sprint.startSprint();
         break;
 
       default:

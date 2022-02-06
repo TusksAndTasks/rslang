@@ -53,4 +53,32 @@
         align-items: center;
     }
 
+    &__timer {
+        width: 5%;
+        height: 5%;
+        border: black solid 1px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__count-box {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        width: 50%;
+        height: 5%;
+    }
+
+    &__score,
+    &__current-count,
+    &__streak {
+        width: 10%;
+        height: 100%;
+        border: black solid 1px;
+        justify-content: center;
+        align-items: center;
+    }
+
 }
