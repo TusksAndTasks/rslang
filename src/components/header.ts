@@ -10,11 +10,17 @@ export class Header {
               <path d="M32,2C15.432,2,2,15.432,2,32s13.432,30,30,30s30-13.432,30-30S48.568,2,32,2z M43.275,46.508H22.725V17.492h6.063v23.799h14.488V46.508z" fill="#1e88e5"/>
             </svg>
           </div>
-          <ul class="row justify-content-sb align-items-center">
+          <div class="header__icon icon-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <ul class="row justify-content-sb align-items-center header__menu">
             <li id="main-btn" class="">Главная</li>
             <li id="electron-book-btn" class="">Электронный учебник</li>
             <li id="audio-call-btn" class="">Аудиовызов</li>
             <li id="sprint-btn" class="">Спринт</li>
+            <li id="statistics-btn" class="">Статистика</li>
           </ul>
           ${auth
             ? '<button id="logout-btn" class="btn btn-logout btn-darkblue">Выйти</button>'

@@ -24,6 +24,7 @@ export class Controller {
     const audioCallBtn = document.getElementById('audio-call-btn') as HTMLElement;
     const sprintBtn = document.getElementById('sprint-btn') as HTMLElement;
     const autBtn = document.getElementById('logout-btn') || document.getElementById('login-btn') as HTMLElement;
+    const statisticsBtn = document.getElementById('statistics-btn') as HTMLElement;
     
     autBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.auth;
@@ -47,6 +48,11 @@ export class Controller {
 
     sprintBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.sprint;
+      this.view.renderContent(this.model.activePage);
+    });
+
+    statisticsBtn.addEventListener('click', (): void => {
+      this.model.activePage = EPage.statistics;
       this.view.renderContent(this.model.activePage);
     });
   }

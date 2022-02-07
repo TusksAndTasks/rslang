@@ -16,10 +16,11 @@ import { Footer } from '../components/footer';
 import { Auth } from '../pages/auth';
 import { Main } from '../pages/main';
 import { ElectronBook } from '../pages/electronBook';
+import { Statistics } from '../pages/statistics';
 import { AudioCall } from '../games/audiocall/audiocall';
 import { Sprint } from '../games/sprint/sprint';
 
-export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, Sprint);
+export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, Sprint, Statistics);
 export const model = new Model();
 
 export const controller = new Controller(view, model)
