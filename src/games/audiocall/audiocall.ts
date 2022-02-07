@@ -8,6 +8,7 @@ import {
   createOffset,
   changeValFromLS,
 } from "./secondary-functions";
+import { KeysLS, ValueButtonNext } from "./types-for-audiocall";
 
 const numberOfPages = 30;
 const numberOfQuestion = 20;
@@ -18,11 +19,79 @@ export class Audiocall {
   }
 
   public initAudiocall(): void {
-    this.addListeners();
+    const contentEl = document.querySelector("#content") as HTMLElement;
+    const levels = document.querySelector("#levels") as HTMLElement;
+    levels.addEventListener("click", (e: Event): void => {
+      const group = Number((e.target as HTMLElement).dataset.level);
+      const page = getRandomNumber(numberOfPages);
+      api.getWords(group, page).then((words) => {
+        const defaultValue = "0";
+        localStorage.setItem(KeysLS.index, defaultValue);
+        localStorage.setItem(KeysLS.progress, defaultValue);
+        localStorage.setItem(KeysLS.textProgress, defaultValue);
+        contentEl.innerHTML = getPageGame();
+
+        /*create progress element*/
+        const circle = document.getElementById(
+          "circle"
+        ) as unknown as SVGCircleElement;
+        const length = 2 * Math.PI * circle.r.baseVal.value;
+        circle.style.strokeDasharray = `${length} ${length}`;
+        circle.style.strokeDashoffset = `${length}`;
+
+        const audio = new Audio();
+        const imageWord = document.getElementById("image") as HTMLElement;
+        const buttonNext = document.getElementById("next") as HTMLButtonElement;
+        const answers = document.getElementById("answers") as HTMLElement;
+        const correctWord = document.getElementById(
+          "correct-word"
+        ) as HTMLElement;
+        this.renderGame(
+          words,
+          answers,
+          imageWord,
+          buttonNext,
+          correctWord,
+          audio
+        );
+
+        const contentProgress = document.getElementById(
+          "textProgress"
+        ) as HTMLElement;
+        buttonNext.addEventListener("click", () => {
+          changeValFromLS(KeysLS.index);
+          changeValFromLS(KeysLS.progress);
+          changeValFromLS(KeysLS.textProgress);
+          const newProgress = localStorage.getItem(KeysLS.progress) || 0;
+          const newTextProgress =
+            Number(localStorage.getItem(KeysLS.textProgress)) || 0;
+          circle.style.strokeDashoffset = createOffset(
+            Number(newProgress),
+            length
+          );
+          contentProgress.textContent = `${newTextProgress}/20`;
+          buttonNext.textContent = ValueButtonNext.dontKnow;
+          answers.innerHTML = "";
+          const audioButton = document.getElementById(
+            "sound-btn"
+          ) as HTMLButtonElement;
+          audioButton.classList.remove("after-select");
+          correctWord.classList.add("hide");
+          this.renderGame(
+            words,
+            answers,
+            imageWord,
+            buttonNext,
+            correctWord,
+            audio
+          );
+        });
+      });
+    });
   }
 
-  private playAudio(src: string): void {
-    const audio = new Audio(src);
+  private playAudio(audio: HTMLAudioElement, src: string): void {
+    audio.src = src;
     audio.play();
     const audioAnimateElement = document.getElementById(
       "animation"
@@ -37,106 +106,66 @@ export class Audiocall {
     audio.addEventListener("ended", () => audioAnimate.cancel());
   }
 
-  private addListeners(): void {
-    const contentEl = document.querySelector("#content") as HTMLElement;
-    const levels = document.querySelector("#levels") as HTMLElement;
-    levels.addEventListener("click", (e: Event): void => {
-      const group = Number((e.target as HTMLElement).dataset.level);
-      const page = getRandomNumber(numberOfPages);
-
-      api.getWords(group, page).then((words) => {
-        localStorage.setItem("indexWord", "0");
-        localStorage.setItem("progress", "0");
-        localStorage.setItem("textProgress", "0");
-        const url = `${getSrc(
-          words[Number(localStorage.getItem("index"))].image
-        )}`;
-        const backImg = `background-image:url(${url})`;
-        const audioSrc = `${getSrc(
-          words[Number(localStorage.getItem("index"))].audio
-        )}`;
-        contentEl.innerHTML = getPageGame(
-          backImg,
-          words[Number(localStorage.getItem("index"))]
-        );
-
-        this.playAudio(audioSrc);
-        const audioButton = document.getElementById(
-          "sound-btn"
-        ) as HTMLButtonElement;
-        audioButton.addEventListener("click", () => {
-          this.playAudio(audioSrc);
-        });
-
-        const circle = document.getElementById(
-          "circle"
-        ) as unknown as SVGCircleElement;
-        const length = 2 * Math.PI * circle.r.baseVal.value;
-        circle.style.strokeDasharray = `${length} ${length}`;
-        circle.style.strokeDashoffset = `${length}`;
-
-        const arrayAnswers = getArrOfAnswers(
-          words[Number(localStorage.getItem("index"))],
-          words
-        );
-        const answers = document.getElementById("answers") as HTMLElement;
-        const arrButtonAnswers = this.renderAnswers(arrayAnswers, answers);
-        const contentProgress = document.getElementById(
-          "textProgress"
-        ) as HTMLElement;
-        const buttonNext = document.getElementById("next") as HTMLButtonElement;
-        const correctWord = document.getElementById(
-          "correct-word"
-        ) as HTMLElement;
-
-        arrButtonAnswers.forEach((button) => {
-          button.addEventListener("click", () => {
-            changeValFromLS("progress");
-            changeValFromLS("textProgress");
-            const newProgress = localStorage.getItem("progress") || 0;
-            const newTextProgress =
-              Number(localStorage.getItem("textProgress")) || 0;
-            circle.style.strokeDashoffset = createOffset(
-              Number(newProgress),
-              length
-            );
-
-            contentProgress.textContent = `${newTextProgress}/20`;
-            buttonNext.textContent = "Дальше";
-            audioButton.classList.add("after-select");
-            correctWord.classList.remove("hide");
-
-            arrButtonAnswers.forEach((btn) => {
-              btn.disabled = true;
-              btn.style.cursor = "default";
-            });
-
-            if (
-              button.textContent ===
-              words[Number(localStorage.getItem("index"))].wordTranslate
-            ) {
-              button.style.background = "#00FF7F";
-            } else {
-              button.style.background = "#CD5C5C";
-            }
-          });
-        });
-      });
-    });
-  }
-
   private renderAnswers(
     arrAnswers: IWordsData,
     answers: HTMLElement
   ): HTMLButtonElement[] {
-    const arrButtons: HTMLButtonElement[] = [];
+    const buttonsAnswers: HTMLButtonElement[] = [];
     arrAnswers.forEach((wordData: IWordData) => {
       const button = document.createElement("button");
       button.textContent = wordData.wordTranslate;
       button.className = "btn button-answers";
       answers.append(button);
-      arrButtons.push(button);
+      buttonsAnswers.push(button);
     });
-    return arrButtons;
+    return buttonsAnswers;
+  }
+
+  private renderGame(
+    words: IWordsData,
+    answers: HTMLElement,
+    imageWord: HTMLElement,
+    buttonNext: HTMLButtonElement,
+    correctWord: HTMLElement,
+    audio: HTMLAudioElement
+  ): void {
+    const currentIndex = Number(localStorage.getItem(KeysLS.index));
+    const currentWord = words[currentIndex];
+    const url = `${getSrc(currentWord.image)}`;
+    const backImg = `url(${url})`;
+    const audioSrc = `${getSrc(currentWord.audio)}`;
+    imageWord.style.backgroundImage = backImg;
+    this.playAudio(audio, audioSrc);
+
+    /*button play audio for current word*/
+    const audioButton = document.getElementById(
+      "sound-btn"
+    ) as HTMLButtonElement;
+    audioButton.addEventListener("click", () => {
+      this.playAudio(audio, audioSrc);
+    });
+
+    /*get random answer + valid answer*/
+    const arrayAnswers = getArrOfAnswers(currentWord, words);
+    const arrButtonAnswers = this.renderAnswers(arrayAnswers, answers);
+    arrButtonAnswers.forEach((button) => {
+      button.addEventListener("click", () => {
+        arrButtonAnswers.forEach((btn) => {
+          btn.disabled = true;
+          btn.style.cursor = "default";
+        });
+        buttonNext.textContent = ValueButtonNext.next;
+        audioButton.classList.add("after-select");
+        correctWord.classList.remove("hide");
+        correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
+
+        /*check answer*/
+        if (button.textContent === currentWord.wordTranslate) {
+          button.style.background = "#00FF7F";
+        } else {
+          button.style.background = "#CD5C5C";
+        }
+      });
+    });
   }
 }

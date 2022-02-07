@@ -3,8 +3,9 @@ export interface ITemplate {
 }
 export interface IAudiocall {
   getHTML: () => string;
-  initAudiocall: () => void;}
-  
+  initAudiocall: () => void;
+}
+
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }
@@ -33,7 +34,7 @@ export interface IView {
 
 export interface IModel {
   activePage: string;
-  auth: IAuthObject | null
+  auth: IAuthObject | null;
 }
 
 export interface IWordData {
@@ -64,15 +65,15 @@ export enum EPage {
 }
 
 export interface IUser {
-  name: string,
-  email: string,
-  password: string
+  name: string;
+  email: string;
+  password: string;
 }
 
 export interface IAuthObject {
-  message: string,
-  token: string,
-  refreshToken: string,
-  userId: string,
-  name: string
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
 }

@@ -19,7 +19,7 @@ export const getPageLevel = (): string => {
     `;
 };
 
-export const getPageGame = (backImg: string, word: IWordData): string => {
+export const getPageGame = (): string => {
   return `
     <div class="game-audio">
       <div class="game-header">
@@ -36,11 +36,11 @@ export const getPageGame = (backImg: string, word: IWordData): string => {
           <div class="game-header__settings_full"></div>
         </div>
       </div>
-      <div id="image" class="game-main__word_image" style=${backImg}>
+      <div id="image" class="game-main__word_image" >
         <button id="sound-btn" class="game-main__word_sound">
           <div id="animation" class="game-main__word_animate"></div>
         </button>
-        <div id="correct-word" class="game-main__word_en hide">${word.word} ${word.transcription} </div>
+        <div id="correct-word" class="game-main__word_en hide"> </div>
       </div>
       <div id="answers" class="game-main__word_answers"></div>
       <button id="next" class="btn button-answers_dont-know"> Не знаю </button>
