@@ -3,6 +3,10 @@
   margin: 0 0 30px 0;
   background: var(--darkblue);
 
+  &__row {
+    position: relative;
+  }
+
   .logo {
     margin: 0 20px 0 0;
   }
@@ -26,16 +30,28 @@
     }
 
     ul {
+      display: block;
       position: fixed;
       width: 100%;
       height: 100%;
       top: 0;
       left: 0;
-      transform: translate(0, -100%);
+      transform: translate(-100%, 0);
       transition: all 0.5s;
-      overflow: auto;
+      background: #071a2f;
+
+      li {
+        text-align: center;
+        margin: 80px 0 30px;
+        font-size: 20px;
+
+        & + li {
+          margin: 30px 0;
+        }
+      }
+
       &.active {
-        transform: translate(0, 0%);
+        transform: translate(0, 0);
       }
     }
   }
@@ -43,13 +59,14 @@
 
 .icon-menu {
   display: none;
-  position: fixed;
-  top: 20px;
+  position: absolute;
+  top: 10px;
   left: 10px;
   width: 30px;
   height: 18px;
   cursor: pointer;
   z-index: 5;
+
   span {
     transition: all 0.5s;
     top: 8px;
@@ -58,6 +75,7 @@
     width: 100%;
     height: 2px;
     background-color: #fff;
+
     &:first-child {
       top: 0px;
     }

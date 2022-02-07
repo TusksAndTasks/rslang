@@ -9,11 +9,35 @@
   }
 
   &__logo {
+    display: block;
     width: 80px;
     height: 30px;
   }
 
   &__year {
     color: var(--black);
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    &__row {
+      display: block;
+    }
+
+    &__links,
+    &__logo {
+      margin: 0 auto 10px;
+    }
+
+    &__year {
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 350px) {
+  .footer {
+    font-size: 14px;
   }
 }

@@ -25,6 +25,11 @@ export class Controller {
     const sprintBtn = document.getElementById('sprint-btn') as HTMLElement;
     const autBtn = document.getElementById('logout-btn') || document.getElementById('login-btn') as HTMLElement;
     const statisticsBtn = document.getElementById('statistics-btn') as HTMLElement;
+    const iconMenu = document.getElementById('icon-menu') as HTMLElement;
+
+    iconMenu.addEventListener('click', () => {
+      this.toggleHeaderMenu();
+    });
     
     autBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.auth;
@@ -34,26 +39,39 @@ export class Controller {
     mainBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
+      this.toggleHeaderMenu();
     });
 
     electronBookBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
+      this.toggleHeaderMenu();
     });
 
     audioCallBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
+      this.toggleHeaderMenu();
     });
 
     sprintBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.sprint;
       this.view.renderContent(this.model.activePage);
+      this.toggleHeaderMenu();
     });
 
     statisticsBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.statistics;
       this.view.renderContent(this.model.activePage);
+      this.toggleHeaderMenu();
     });
+  }
+
+  public toggleHeaderMenu() {
+    const iconMenu = document.getElementById('icon-menu') as HTMLElement;
+    const bodyMenu = document.getElementById('body-menu') as HTMLElement;
+
+    iconMenu.classList.toggle('active');
+    bodyMenu.classList.toggle('active');
   }
 }

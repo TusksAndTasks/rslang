@@ -88,7 +88,7 @@
   min-height: 200px;
 
   &__image {
-    flex: 0 1 30%;
+    flex: 0 0 200px;
     position: relative;
 
     img {
@@ -102,7 +102,6 @@
   }
 
   &__about {
-    flex: 0 1 70%;
     padding: 20px;
   }
 
@@ -120,9 +119,6 @@
   &__info {
     margin: 0 0 20px 0;
   }
-
-  &__link {
-  }
 }
 
 @media (max-width: 1000px) {
@@ -132,6 +128,30 @@
     }
     &__title {
       margin: 0 0 20px 0;
+      padding: 0;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .advanteges {
+    &__col {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+@media (max-width:425px){
+  .team-card {
+    display: block;
+    &__image {
+      height: 250px;
+    }
+  }
+
+  .about {
+    &__title {
+      font-size: 70px;
     }
   }
 }
