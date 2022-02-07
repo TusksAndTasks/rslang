@@ -1,6 +1,9 @@
 import '../scss/global.scss';
 import '../scss/style.scss';
 import '../scss/auth.scss';
+import '../scss/main.scss';
+import '../scss/header.scss';
+import '../scss/footer.scss';
 
 import 'airbnb-browser-shims/browser-only';
 

@@ -1,0 +1,24 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: calc(100% - 15px);
+  z-index: 10;
+  background: var(--white);
+  margin: 20px 0 0 0;
+  padding: 2px 0;
+
+  &__link {
+    color: var(--black);
+    margin: 0 0 0 20px;
+  }
+
+  &__logo {
+    width: 80px;
+    height: 30px;
+  }
+
+  &__year {
+    color: var(--black);
+  }
+}

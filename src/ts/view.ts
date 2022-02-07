@@ -28,9 +28,9 @@ export class View {
     app.classList.add('app');
 
     app.innerHTML = /*html*/`
-      <div id="header" class="header"></div>
-      <div id="content" class="content"></div>
-      <div id="footer" class="footer"></div>
+      <header id="header" class="header"></header>
+      <main id="content" class="content"></main>
+      <footer id="footer" class="footer"></foot>
     `;
 
     body.innerHTML = '';
