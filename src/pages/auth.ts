@@ -188,7 +188,7 @@ export class Auth {
 
   public showAuthStatusMessage(status: string, isSuccess: boolean): void {
     const authStatusModal = document.createElement('div') as HTMLElement;
-    authStatusModal.classList.add('auth-status-modal', 'btn', isSuccess ? 'btn-success' : 'btn-error');
+    authStatusModal.classList.add('auth-status-modal', 'btn', isSuccess ? 'btn-blue' : 'btn-error');
     authStatusModal.innerHTML = status;
     document.body.append(authStatusModal);
     setTimeout(() => {
@@ -201,7 +201,7 @@ export class Auth {
     const loginBtn = document.getElementById('login-btn') as HTMLElement;
     const logoutBtn = document.createElement('button');
 
-    logoutBtn.classList.add('btn', 'btn-logout', 'btn-error');
+    logoutBtn.classList.add('btn', 'btn-logout', 'btn-darkblue');
     logoutBtn.id = 'logout-btn'
     logoutBtn.innerHTML = `Выйти`;
     loginBtn.remove();
@@ -217,7 +217,7 @@ export class Auth {
     const logoutBtn = document.getElementById('logout-btn') as HTMLElement;
     const loginBtn = document.createElement('button');
 
-    loginBtn.classList.add('btn', 'btn-login', 'btn-success');
+    loginBtn.classList.add('btn', 'btn-login', 'btn-blue');
     loginBtn.id = 'login-btn'
     loginBtn.innerHTML = `Войти`;
     logoutBtn.remove();

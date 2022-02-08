@@ -61,7 +61,8 @@ export enum EPage {
   main = "main",
   electronBook = "electronBook",
   audiocall = "audiocall",
-  sprint = "sprint",
+  sprint = 'sprint',
+  statistics = 'statistics'
 }
 
 export interface IUser {
