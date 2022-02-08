@@ -28,7 +28,11 @@ export class Controller {
     const iconMenu = document.getElementById('icon-menu') as HTMLElement;
 
     iconMenu.addEventListener('click', () => {
-      this.toggleHeaderMenu();
+      if (iconMenu.classList.contains('icon-menu--active')) {
+        this.toggleHeaderMenu('close');
+      } else {
+        this.toggleHeaderMenu('open');
+      }
     });
     
     autBtn.addEventListener('click', (): void => {
@@ -39,39 +43,44 @@ export class Controller {
     mainBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
-      this.toggleHeaderMenu();
+      this.toggleHeaderMenu('close');
     });
 
     electronBookBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
-      this.toggleHeaderMenu();
+      this.toggleHeaderMenu('close');
     });
 
     audioCallBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
-      this.toggleHeaderMenu();
+      this.toggleHeaderMenu('close');
     });
 
     sprintBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.sprint;
       this.view.renderContent(this.model.activePage);
-      this.toggleHeaderMenu();
+      this.toggleHeaderMenu('close');
     });
 
     statisticsBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.statistics;
       this.view.renderContent(this.model.activePage);
-      this.toggleHeaderMenu();
+      this.toggleHeaderMenu('close');
     });
   }
 
-  public toggleHeaderMenu() {
+  public toggleHeaderMenu(action: string) {
     const iconMenu = document.getElementById('icon-menu') as HTMLElement;
     const bodyMenu = document.getElementById('body-menu') as HTMLElement;
 
-    iconMenu.classList.toggle('active');
-    bodyMenu.classList.toggle('active');
+    if (action === 'close') {
+      iconMenu.classList.remove('icon-menu--active');
+      bodyMenu.classList.remove('body-menu--active');
+    } else {
+      iconMenu.classList.add('icon-menu--active');
+      bodyMenu.classList.add('body-menu--active');
+    }
   }
 }

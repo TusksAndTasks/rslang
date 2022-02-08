@@ -15,7 +15,7 @@ export class Header {
             <span></span>
             <span></span>
           </div>
-          <ul id="body-menu" class="row justify-content-sb align-items-center">
+          <ul id="body-menu" class="row justify-content-sb align-items-center body-menu">
             <li id="main-btn" class="">Главная</li>
             <li id="electron-book-btn" class="">Электронный учебник</li>
             <li id="audio-call-btn" class="">Аудиовызов</li>
