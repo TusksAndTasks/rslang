@@ -16,11 +16,11 @@ export class Header {
             <span></span>
           </div>
           <ul id="body-menu" class="row justify-content-sb align-items-center body-menu">
-            <li id="main-btn" class="">Главная</li>
-            <li id="electron-book-btn" class="">Электронный учебник</li>
-            <li id="audio-call-btn" class="">Аудиовызов</li>
-            <li id="sprint-btn" class="">Спринт</li>
-            <li id="statistics-btn" class="">Статистика</li>
+            <li id="main-btn">Главная</li>
+            <li id="electron-book-btn">Электронный учебник</li>
+            <li id="audio-call-btn">Аудиовызов</li>
+            <li id="sprint-btn">Спринт</li>
+            <li id="statistics-btn">Статистика</li>
           </ul>
           ${auth
             ? '<button id="logout-btn" class="btn btn-logout btn-darkblue">Выйти</button>'
