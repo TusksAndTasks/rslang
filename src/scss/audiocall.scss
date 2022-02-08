@@ -163,3 +163,50 @@
   top: 70% !important;
   left: -50% !important;
 }
+.audiocall__statistic {
+  margin: 0 auto;
+  width: 40vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(170, 170, 194);
+  border: 2px solid rgb(129, 129, 151);
+
+  &_tittle {
+    text-align: center;
+  }
+
+  &_circle {
+    width: 5rem;
+    height: 5rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(129, 129, 151);
+  }
+  &_circle-wive {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    left: -31%;
+    top: 101%;
+    background-color: rgb(129, 129, 151);
+    border-radius: 45%;
+    animation: wave 5s linear infinite;
+
+    @keyframes wave {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+  &_text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

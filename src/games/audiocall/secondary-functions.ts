@@ -52,3 +52,16 @@ export const changeValFromLS = (keyLS: string): void => {
   const nemValue = Number(oldValue) + step;
   localStorage.setItem(keyLS, String(nemValue));
 };
+
+export const addAnswer = (word: IWordData, key: string): void => {
+  const oldValue = getFromLocalStorage(key) || [];
+  setInLocalStorage([...oldValue, word], key);
+};
+
+export const setInLocalStorage = (data: IWordsData, nameKey: string) => {
+  localStorage.setItem(nameKey, JSON.stringify(data));
+};
+
+export const getFromLocalStorage = (nameKey: string): IWordsData => {
+  return JSON.parse(localStorage.getItem(nameKey) as string);
+};

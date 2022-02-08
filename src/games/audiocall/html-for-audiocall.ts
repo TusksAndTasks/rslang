@@ -1,5 +1,3 @@
-import { IWordData } from "../../types/types";
-
 export const getPageLevel = (): string => {
   return `
       <div class="audiocall mt-10">
@@ -21,7 +19,7 @@ export const getPageLevel = (): string => {
 
 export const getPageGame = (): string => {
   return `
-    <div class="game-audio">
+    <div id="game-audio" class="game-audio">
       <div class="game-header">
         <div class="game-header__progress">
           <svg class="game-header__progress_svg">
@@ -43,7 +41,24 @@ export const getPageGame = (): string => {
         <div id="correct-word" class="game-main__word_en hide"> </div>
       </div>
       <div id="answers" class="game-main__word_answers"></div>
-      <button id="next" class="btn button-answers_dont-know"> Не знаю </button>
+      <button id="next" class="btn button-answers_dont-know">Не знаю</button>
     </div>
-   `;
+  `;
+};
+
+export const getPageStatistic = (): string => {
+  return `
+    <div class="audiocall__statistic">
+      <p class="audiocall__statistic_tittle"> Ваш результат </p>
+      <div id="statistic_circle" class="audiocall__statistic_circle">
+        <div id="statistic_circle-wive" class="audiocall__statistic_circle-wive"></div>
+        <div id="text-statistic" class="audiocall__statistic_text"></div>
+      </div>
+      <button id="details" class="btn ">Подробнее</button>
+      <button id="play-again" class="btn " >Играть снова</button>
+      </div>
+    <div class="audiocall__details">
+    
+    </div>
+  `;
 };

@@ -1,8 +1,9 @@
-import { EPage, IAuthObject } from "../types/types";
+import { EPage, IAuthObject, IWordData, IWordsData } from "../types/types";
 
 export class Model {
   private _activePage: string = EPage.main;
-  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
+  private _auth: IAuthObject | null =
+    this.getAuthObjectFromLocalStorage() || null;
 
   get activePage() {
     return this._activePage;
@@ -21,8 +22,10 @@ export class Model {
   }
 
   private getAuthObjectFromLocalStorage() {
-    if (localStorage.getItem('authObject')) {
-      return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
+    if (localStorage.getItem("authObject")) {
+      return JSON.parse(
+        localStorage.getItem("authObject") as string
+      ) as IAuthObject;
     }
 
     return null;
