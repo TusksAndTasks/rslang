@@ -9,8 +9,9 @@ export class View {
   private electronBook: ITemplate;
   private audiocall: ITemplate;
   private sprint: ITemplate;
+  private statistics: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate, statistics: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -18,6 +19,7 @@ export class View {
     this.electronBook = electronBook;
     this.audiocall = audiocall;
     this.sprint = sprint;
+    this.statistics = statistics;
   }
 
   public renderApp(): void {
@@ -28,9 +30,9 @@ export class View {
     app.classList.add('app');
 
     app.innerHTML = /*html*/`
-      <div id="header" class="header"></div>
-      <div id="content" class="content"></div>
-      <div id="footer" class="footer"></div>
+      <header id="header" class="header"></header>
+      <main id="content" class="content"></main>
+      <footer id="footer" class="footer"></foot>
     `;
 
     body.innerHTML = '';
@@ -69,6 +71,10 @@ export class View {
 
       case EPage.sprint:
         contentEl!.innerHTML = this.sprint.getHTML();
+        break;
+
+      case EPage.statistics:
+        contentEl!.innerHTML = this.statistics.getHTML();
         break;
 
       default:
