@@ -13,7 +13,8 @@ export class Controller {
     this.view.renderApp();
     this.view.renderHeader();
     this.view.renderFooter();
-    this.view.renderContent(EPage.main);
+    // this.view.renderContent(EPage.main);
+    this.view.renderContent(EPage.electronBook);
     this.addHeaderListeners();
   }
 

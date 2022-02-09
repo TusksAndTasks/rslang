@@ -1,17 +1,17 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, ITemplate } from "../types/types";
+import { EPage, IAuth, IElectronBook, IHeader, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
   private footer: ITemplate;
   private auth: IAuth;
   private main: ITemplate;
-  private electronBook: ITemplate;
+  private electronBook: IElectronBook;
   private audiocall: ITemplate;
   private sprint: ITemplate;
   private statistics: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ITemplate, statistics: ITemplate) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: IElectronBook, audiocall: ITemplate, sprint: ITemplate, statistics: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -62,7 +62,7 @@ export class View {
         break;
 
       case EPage.electronBook:
-        contentEl!.innerHTML = this.electronBook.getHTML();
+        this.electronBook.init();
         break;
 
       case EPage.audiocall:

@@ -21,6 +21,11 @@ export interface IAuth {
   logoutUser: () => void;
 }
 
+export interface IElectronBook {
+  getHTML: () => string;
+  init: () => void;
+  initPagination: () => void;
+}
 
 export interface IView {
   renderApp: () => void;
@@ -44,15 +49,15 @@ export enum EPage {
 }
 
 export interface IUser {
-  name: string,
-  email: string,
-  password: string
+  name: string;
+  email: string;
+  password: string;
 }
 
 export interface IAuthObject {
-  message: string,
-  token: string,
-  refreshToken: string,
-  userId: string,
-  name: string
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
 }
