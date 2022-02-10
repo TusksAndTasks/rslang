@@ -11,6 +11,7 @@ export class Model {
     maxStreak: 0
 };
   private _wordsArray: IWordsData = [];
+  private _sprintScore: string = '0';
 
   get activePage() {
     return this._activePage;
@@ -42,6 +43,14 @@ export class Model {
 
   set wordsArray(arr: IWordsData){
     this._wordsArray = arr;
+  }
+
+  get sprintScore(){
+    return this._sprintScore;
+  }
+
+  set sprintScore(score: string){
+    this._sprintScore = score;
   }
 
   public updateSprintStatData(correctWord: IWordData | null = null, incorrectWord: IWordData | null = null, learnedWord: IWordData | null = null, streak: number = 0) {

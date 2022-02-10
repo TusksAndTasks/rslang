@@ -8,6 +8,7 @@ export class SprintStat {
       <h2>Мини-игра спринт</h2>
       <div class="sprint-stat">
        <div class="sprint-stat__stat-box">
+       <div class="sprint-stat__score" id="sprint-score-stat"></div>
        <div class="sprint-stat__streak" id="sprint-streak-stat"></div>
        <h2>Правильные ответы:</h2>
         <div class="sprint-stat__correct-words" id="sprint-correct-stat"></div>
@@ -21,7 +22,9 @@ export class SprintStat {
 
     public showStatWords() {
         const streakSection = document.getElementById('sprint-streak-stat') as HTMLElement;
-        streakSection.innerHTML = (model.sprintStatData.maxStreak).toString();
+        const scoreSection = document.getElementById('sprint-score-stat') as HTMLElement;
+        streakSection.innerHTML = `Лучшая серия за раунд: ${(model.sprintStatData.maxStreak).toString()}`;
+        scoreSection.innerHTML = `Ваш счет за раунд: ${model.sprintScore}`;
         this.showCorrectWords();
         this.showIncorrectWords();
         this.setAudioListeners();
@@ -33,7 +36,7 @@ export class SprintStat {
 
         model.sprintStatData.correctWords.forEach((elem) => {
             correctSection.innerHTML += `<div class="sprint-stat__correct-word">
-            ${elem.word} Перевод - ${elem.wordTranslate} 
+            ${elem.word} --- ${elem.wordTranslate} 
             <button class="sprint-stat__correct-audio" id="${elem.id}">Прослушать</button>
             </div>`
         });
@@ -44,7 +47,7 @@ export class SprintStat {
 
         model.sprintStatData.incorrectWords.forEach((elem) => {
             incorrectSection.innerHTML += `<div class="sprint-stat__incorrect-word">
-            ${elem.word} Перевод - ${elem.wordTranslate} 
+            ${elem.word} --- ${elem.wordTranslate} 
             <button class="sprint-stat__incorrect-audio" id="${elem.id}">Прослушать</button>
             </div>`
         })  

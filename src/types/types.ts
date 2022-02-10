@@ -47,6 +47,7 @@ export interface IModel {
   sprintTimer: number;
   sprintStatData: ISprintStatObj;
   updateSprintStatData: (correctWord: IWordData | null, incorrectWord: IWordData | null, learnedWord: IWordData | null, streak: number) => void;
+  sprintScore: string;
 }
 
 export enum EPage {

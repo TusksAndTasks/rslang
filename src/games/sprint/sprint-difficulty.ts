@@ -8,12 +8,12 @@ export class SprintDifficulty {
         return `
       <h2>Мини-игра спринт</h2>
       <div class="sprint-difficulty">
-        <button class="sprint-difficulty_button" id="sd1">1</button>
-        <button class="sprint-difficulty_button" id="sd2">2</button>
-        <button class="sprint-difficulty_button" id="sd3">3</button>
-        <button class="sprint-difficulty_button" id="sd4">4</button>
-        <button class="sprint-difficulty_button" id="sd5">5</button>
-        <button class="sprint-difficulty_button" id="sd6">6</button>
+        <button class="sprint-difficulty__button" id="sd0">1</button>
+        <button class="sprint-difficulty__button" id="sd1">2</button>
+        <button class="sprint-difficulty__button" id="sd2">3</button>
+        <button class="sprint-difficulty__button" id="sd3">4</button>
+        <button class="sprint-difficulty__button" id="sd4">5</button>
+        <button class="sprint-difficulty__button" id="sd5">6</button>
       </div>
       `
     }
@@ -22,15 +22,15 @@ export class SprintDifficulty {
     public setDifficultyListeners() {
          const buttonsContainer = document.querySelector('.sprint-difficulty') as HTMLElement;
          buttonsContainer.addEventListener('click', (e) => {
-            if ((e.target as HTMLElement).classList.contains('sprint-difficulty_button')) {
-                this.startSprintGame(+((e.target as HTMLElement).textContent as string));
+            if ((e.target as HTMLElement).classList.contains('sprint-difficulty__button')) {
+                this.startSprintGame(+((e.target as HTMLElement).id.slice(2) as string));
             }
         })
          
     }
 
     private getRandomPage(){
-        return Math.floor(Math.random() * (31 - 1) + 1);
+        return Math.floor(Math.random() * 30);
     }
 
     private async setWordsArray(group: number) {

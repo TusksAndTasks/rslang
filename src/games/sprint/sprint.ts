@@ -6,16 +6,17 @@ export class Sprint {
   private sprintCorrectness: boolean;
   private streak: number;
   private viewChanged: boolean;
+  private index: number;
 
   constructor(){
     this.sprintCorrectness = true;
     this.streak = 0;
     this.viewChanged = false;
+    this.index = 0;
   }
 
 
   public getHTML(): string {
-    this.clearProperties();
     return `
       <h2>Мини-игра спринт</h2>
       <div class="sprint">
@@ -47,6 +48,8 @@ export class Sprint {
     this.viewChanged = false;
     model.sprintTimer = 59;
     this.streak = 0;
+    model.sprintScore = '0';
+    this.index = 0;
   }
 
   private createRandomNumber(): number {
@@ -85,14 +88,14 @@ export class Sprint {
     model.sprintTimer = -1;
   }
 
-  private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>, index: number): void{
-    if (index === questionsArray.length){
+  private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>): void{
+    if (this.index === questionsArray.length){
       this.stopSprint();
       return
     }
-    word.innerHTML = questionsArray[index].word;
-    translation.innerHTML = questionsArray[index].wordTranslate;
-    this.sprintCorrectness = questionsArray[index].correct;
+    word.innerHTML = questionsArray[this.index].word;
+    translation.innerHTML = questionsArray[this.index].wordTranslate;
+    this.sprintCorrectness = questionsArray[this.index].correct;
   }
 
   private countCorrectAnswer(word: HTMLElement): void {
@@ -105,49 +108,66 @@ export class Sprint {
      let correctWord = model.wordsArray.find((elem) => elem.word === wordName);
      model.updateSprintStatData(correctWord);
      rightAudio.play();
+     const cloneCurrentCount = currentCount.cloneNode() as HTMLElement;
+     const cloneScore = score.cloneNode() as HTMLElement;
 
      switch(this.streak) {
        case 0:
        case 1:
        case 2: 
         this.streak++
-        currentCount.innerHTML = '+50'
-        score.innerHTML = (+score.innerHTML + 50).toString();
-        streak.innerHTML = 'Dope!';
+        cloneCurrentCount.innerHTML = '+50';
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + 50).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = '<span class="dope">D</span>ope!';
+        model.sprintScore = cloneScore.innerHTML;
         break;
        
        case 3:
        case 4: 
        case 5:
         this.streak++
-        currentCount.innerHTML = '+100'
-        score.innerHTML = (+score.innerHTML + 100).toString();
-        streak.innerHTML = 'Cool!';
+        cloneCurrentCount.innerHTML = '+100';
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + 100).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = '<span class="cool">C</span>ool!';
+        model.sprintScore = cloneScore.innerHTML;
         break;
 
        case 6:
        case 7: 
        case 8:
         this.streak++
-        currentCount.innerHTML = '+150'
-        score.innerHTML = (+score.innerHTML + 150).toString();
-        streak.innerHTML = 'Brilliant!';
+        cloneCurrentCount.innerHTML = '+150';
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + 150).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = '<span class="brilliant">B</span>rilliant!';
+        model.sprintScore = cloneScore.innerHTML;
         break; 
 
        case 9:
        case 10: 
        case 11:
         this.streak++
-        currentCount.innerHTML = '+200'
-        score.innerHTML = (+score.innerHTML + 200).toString();
-        streak.innerHTML = 'Amazing!';
+        cloneCurrentCount.innerHTML = '+200';
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + 200).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = '<span class="amazing">A</span>mazing!';
+        model.sprintScore = cloneScore.innerHTML;
         break;
         
        default: 
         this.streak++
-        currentCount.innerHTML = '+250'
-        score.innerHTML = (+score.innerHTML + 250).toString();
-        streak.innerHTML = 'Spectacular!';
+        cloneCurrentCount.innerHTML = '+250';
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + 250).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = '<span class="spectacular">S</span>pectacular!';
+        model.sprintScore = cloneScore.innerHTML;
         break;
      }
   }
@@ -163,7 +183,7 @@ export class Sprint {
     this.streak = 0;
     wrongAudio.play();
     currentCount.innerHTML = '+0';
-    streak.innerHTML = 'Dope!';
+    streak.innerHTML = '<span class="dope">D</span>ope!';
   }
 
   private setCheckListeners(): void {
@@ -172,62 +192,52 @@ export class Sprint {
     const questionsArray = this.createQuestionsArray();
     const correctButton = document.getElementById('sprint-right') as HTMLElement;
     const incorrectButton = document.getElementById('sprint-wrong') as HTMLElement;
-    let index = 0;
 
-    this.setWord(word, translation, questionsArray, index);
+    this.setWord(word, translation, questionsArray);
 
     correctButton.addEventListener('click', () => {
-      if (this.sprintCorrectness){
-        this.countCorrectAnswer(word);
-        index++;
-        this.setWord(word, translation, questionsArray, index);
-      }
-      else if (!this.sprintCorrectness) {
-        this.countIncorrectAnswer(word);
-        index++;
-        this.setWord(word, translation, questionsArray, index);
-      }
+     this.correctListener(word, translation, questionsArray);
     })
 
     incorrectButton.addEventListener('click', () => {
-      if (!this.sprintCorrectness){
-        this.countCorrectAnswer(word);
-        index++;
-        this.setWord(word, translation, questionsArray, index);
-      }
-      else if (this.sprintCorrectness) {
-        this.countIncorrectAnswer(word);
-        index++;
-        this.setWord(word, translation, questionsArray, index);
-      }
+     this.incorrectListener(word, translation, questionsArray);
     })
 
     document.addEventListener('keyup', (e) => {
       if (e.code === 'ArrowLeft'){
-        if (!this.sprintCorrectness){
-          this.countCorrectAnswer(word);
-          index++;
-          this.setWord(word, translation, questionsArray, index);
-        }
-        else if (this.sprintCorrectness) {
-          this.countIncorrectAnswer(word);
-          index++;
-          this.setWord(word, translation, questionsArray, index);
-        }
+     this.correctListener(word, translation, questionsArray);
       }
       if (e.code === 'ArrowRight'){
-        if (this.sprintCorrectness){
-          this.countCorrectAnswer(word);
-          index++;
-          this.setWord(word, translation, questionsArray, index);
-        }
-        else if (!this.sprintCorrectness) {
-          this.countIncorrectAnswer(word);
-          index++;
-          this.setWord(word, translation, questionsArray, index);
-        }
+     this.incorrectListener(word, translation, questionsArray);
       }
     });
+  }
+
+
+  private correctListener(word: HTMLElement, translation: HTMLElement, questionsArray: ISprintWord[]){
+    if (this.sprintCorrectness){
+      this.countCorrectAnswer(word);
+      this.index++;
+      this.setWord(word, translation, questionsArray);
+    }
+    else if (!this.sprintCorrectness) {
+      this.countIncorrectAnswer(word);
+      this.index++;
+      this.setWord(word, translation, questionsArray);
+    }
+  }
+
+  private incorrectListener(word: HTMLElement, translation: HTMLElement, questionsArray: ISprintWord[]){
+    if (!this.sprintCorrectness){
+      this.countCorrectAnswer(word);
+      this.index++;
+      this.setWord(word, translation, questionsArray);
+    }
+    else if (this.sprintCorrectness) {
+      this.countIncorrectAnswer(word);
+      this.index++;
+      this.setWord(word, translation, questionsArray);
+    }
   }
 
   private setTimer(timer: HTMLElement) {
@@ -264,6 +274,7 @@ export class Sprint {
   }
 
   public startSprint(): void{
+    this.clearProperties();
     this.startTimer();
     this.setCheckListeners();
 }
