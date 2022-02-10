@@ -1,9 +1,10 @@
-import { IAuthObject, IUser } from "../types/types";
+import { IAuthObject, IUser, IWord } from "../types/types";
 
 class API {
   private baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
+  private words: string = `${this.baseUrl}/words`;
 
   public createUser = async (name: string, email: string, password: string): Promise<IUser> | never => {
     const response: Response = await fetch(this.users, {
@@ -36,6 +37,16 @@ class API {
         password: password
       })
     })
+
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
+    return await response.json();
+  }
+
+  public getWords = async (group: number = 1, page: number = 1): Promise<IWord[]> | never => {
+    const response: Response = await fetch(`${this.words}?group=${group}&page=${page}`);
 
     if (!response.ok) {
       console.error(response.status, response.statusText)
