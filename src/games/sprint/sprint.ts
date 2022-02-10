@@ -104,12 +104,12 @@ export class Sprint {
      let wordName = word.innerHTML;
      let correctWord = model.wordsArray.find((elem) => elem.word === wordName);
      model.updateSprintStatData(correctWord);
+     rightAudio.play();
 
      switch(this.streak) {
        case 0:
        case 1:
        case 2: 
-        rightAudio.play();
         this.streak++
         currentCount.innerHTML = '+50'
         score.innerHTML = (+score.innerHTML + 50).toString();
@@ -119,7 +119,6 @@ export class Sprint {
        case 3:
        case 4: 
        case 5:
-        rightAudio.play();
         this.streak++
         currentCount.innerHTML = '+100'
         score.innerHTML = (+score.innerHTML + 100).toString();
@@ -129,7 +128,6 @@ export class Sprint {
        case 6:
        case 7: 
        case 8:
-        rightAudio.play();
         this.streak++
         currentCount.innerHTML = '+150'
         score.innerHTML = (+score.innerHTML + 150).toString();
@@ -139,7 +137,6 @@ export class Sprint {
        case 9:
        case 10: 
        case 11:
-        rightAudio.play();
         this.streak++
         currentCount.innerHTML = '+200'
         score.innerHTML = (+score.innerHTML + 200).toString();
@@ -147,7 +144,6 @@ export class Sprint {
         break;
         
        default: 
-        rightAudio.play();
         this.streak++
         currentCount.innerHTML = '+250'
         score.innerHTML = (+score.innerHTML + 250).toString();
@@ -206,6 +202,32 @@ export class Sprint {
       }
     })
 
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'ArrowLeft'){
+        if (!this.sprintCorrectness){
+          this.countCorrectAnswer(word);
+          index++;
+          this.setWord(word, translation, questionsArray, index);
+        }
+        else if (this.sprintCorrectness) {
+          this.countIncorrectAnswer(word);
+          index++;
+          this.setWord(word, translation, questionsArray, index);
+        }
+      }
+      if (e.code === 'ArrowRight'){
+        if (this.sprintCorrectness){
+          this.countCorrectAnswer(word);
+          index++;
+          this.setWord(word, translation, questionsArray, index);
+        }
+        else if (!this.sprintCorrectness) {
+          this.countIncorrectAnswer(word);
+          index++;
+          this.setWord(word, translation, questionsArray, index);
+        }
+      }
+    });
   }
 
   private setTimer(timer: HTMLElement) {
@@ -246,6 +268,4 @@ export class Sprint {
     this.setCheckListeners();
 }
 
-
 } 
-
