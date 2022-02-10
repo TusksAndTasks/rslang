@@ -76,46 +76,33 @@ export class Audiocall {
           audioButton,
           audio
         );
-
-        buttonNext.addEventListener("click", () => {
-          if (
-            Number(localStorage.getItem(KeysLS.textProgress)) ===
-            numberOfQuestion
-          ) {
-            /*end to game*/
-            this.endOfTheGame(words);
-          } else {
-            if (buttonNext.textContent === ValueButtonNext.dontKnow) {
-              addAnswer(false, KeysLS.checkAnswers);
-            } else {
-              buttonNext.textContent = ValueButtonNext.dontKnow;
-            }
-
-            changeValFromLS(KeysLS.index);
-            changeValFromLS(KeysLS.progress);
-            changeValFromLS(KeysLS.textProgress);
-            const newProgress = Number(
-              localStorage.getItem(KeysLS.progress) || 0
-            );
-            const newTextProgress =
-              Number(localStorage.getItem(KeysLS.textProgress)) || 0;
-
-            circle.style.strokeDashoffset = createOffset(newProgress, length);
-            contentProgress.textContent = `${newTextProgress}/20`;
-
-            answers.innerHTML = "";
-            audioButton.classList.remove("after-select");
-            correctWord.classList.add("hide");
-            this.renderGame(
+        document.addEventListener("keydown", (event: KeyboardEvent) => {
+          if (event.code == "Space") {
+            this.eventButtonNext(
               words,
+              buttonNext,
+              circle,
+              contentProgress,
               answers,
               imageWord,
-              buttonNext,
               correctWord,
               audioButton,
               audio
             );
           }
+        });
+        buttonNext.addEventListener("click", () => {
+          this.eventButtonNext(
+            words,
+            buttonNext,
+            circle,
+            contentProgress,
+            answers,
+            imageWord,
+            correctWord,
+            audioButton,
+            audio
+          );
         });
       });
     });
@@ -171,33 +158,55 @@ export class Audiocall {
     audioButton.addEventListener("click", () => {
       this.playAudio(audio, audioSrc);
     });
+
     const arrayAnswers = getArrOfAnswers(currentWord, words);
     const arrButtonAnswers = this.renderAnswers(arrayAnswers, answers);
+
     arrButtonAnswers.forEach((button) => {
       button.addEventListener("click", () => {
-        arrButtonAnswers.forEach((btn) => {
-          btn.disabled = true;
-          btn.style.cursor = "default";
-        });
-        if (
-          Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
-        ) {
-          buttonNext.textContent = ValueButtonNext.last;
-        } else buttonNext.textContent = ValueButtonNext.next;
-        audioButton.classList.add("after-select");
-        correctWord.classList.remove("hide");
-        correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
-        /*check answer*/
-        if (
-          (button.textContent as string).includes(currentWord.wordTranslate)
-        ) {
-          button.style.background = "#00FF7F";
-          addAnswer(true, KeysLS.checkAnswers);
-        } else {
-          button.style.background = "#CD5C5C";
-          addAnswer(false, KeysLS.checkAnswers);
-        }
+        this.eventButtonAnswer(
+          arrButtonAnswers,
+          buttonNext,
+          audioButton,
+          correctWord,
+          currentWord,
+          button
+        );
       });
+    });
+
+    document.addEventListener("keydown", (event: KeyboardEvent) => {
+      const indexCurrentWord: number = Number(event.code.slice(-1));
+      if (indexCurrentWord === 1) {
+        this.eventButtonAnswer(
+          arrButtonAnswers,
+          buttonNext,
+          audioButton,
+          correctWord,
+          arrButtonAnswers[0],
+          button
+        );
+      }
+      if (event.code == "Digit2") {
+        this.eventButtonAnswer(
+          arrButtonAnswers,
+          buttonNext,
+          audioButton,
+          correctWord,
+          currentWord,
+          button
+        );
+      }
+      if (event.code == "Digit3") {
+        this.eventButtonAnswer(
+          arrButtonAnswers,
+          buttonNext,
+          audioButton,
+          correctWord,
+          currentWord,
+          button
+        );
+      }
     });
   }
 
@@ -317,5 +326,111 @@ export class Audiocall {
       audioAnswer.src = src;
       audioAnswer.play();
     });
+  }
+
+  private eventButtonNext(
+    words: IWordsData,
+    buttonNext: HTMLButtonElement,
+    circle: SVGCircleElement,
+    contentProgress: HTMLElement,
+    answers: HTMLElement,
+    imageWord: HTMLElement,
+    correctWord: HTMLElement,
+    audioButton: HTMLButtonElement,
+    audio: HTMLAudioElement
+  ) {
+    if (
+      Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
+    ) {
+      this.endOfTheGame(words);
+    } else {
+      if (buttonNext.textContent === ValueButtonNext.dontKnow) {
+        addAnswer(false, KeysLS.checkAnswers);
+      } else {
+        buttonNext.textContent = ValueButtonNext.dontKnow;
+      }
+
+      changeValFromLS(KeysLS.index);
+      changeValFromLS(KeysLS.progress);
+      changeValFromLS(KeysLS.textProgress);
+      const newProgress = Number(localStorage.getItem(KeysLS.progress) || 0);
+      const newTextProgress =
+        Number(localStorage.getItem(KeysLS.textProgress)) || 0;
+
+      circle.style.strokeDashoffset = createOffset(newProgress, length);
+      contentProgress.textContent = `${newTextProgress}/20`;
+
+      answers.innerHTML = "";
+      audioButton.classList.remove("after-select");
+      correctWord.classList.add("hide");
+      this.renderGame(
+        words,
+        answers,
+        imageWord,
+        buttonNext,
+        correctWord,
+        audioButton,
+        audio
+      );
+    }
+  }
+
+  private eventButtonAnswer(
+    arrButtonAnswers: HTMLButtonElement[],
+    buttonNext: HTMLButtonElement,
+    audioButton: HTMLButtonElement,
+    correctWord: HTMLElement,
+    currentWord: IWordData,
+    button: HTMLButtonElement
+  ) {
+    arrButtonAnswers.forEach((btn) => {
+      btn.disabled = true;
+      btn.style.cursor = "default";
+    });
+    if (
+      Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
+    ) {
+      buttonNext.textContent = ValueButtonNext.last;
+    } else buttonNext.textContent = ValueButtonNext.next;
+    audioButton.classList.add("after-select");
+    correctWord.classList.remove("hide");
+    correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
+    /*check answer*/
+    if ((button.textContent as string).includes(currentWord.wordTranslate)) {
+      button.style.background = "#00FF7F";
+      addAnswer(true, KeysLS.checkAnswers);
+    } else {
+      button.style.background = "#CD5C5C";
+      addAnswer(false, KeysLS.checkAnswers);
+    }
+  }
+  private eventButtonAnswerKeyboard(
+    arrButtonAnswers: HTMLButtonElement[],
+    buttonNext: HTMLButtonElement,
+    audioButton: HTMLButtonElement,
+    correctWord: HTMLElement,
+    currentWord: IWordData,
+    button: HTMLButtonElement
+  ) {
+    arrButtonAnswers.forEach((btn) => {
+      btn.disabled = true;
+      btn.style.cursor = "default";
+    });
+    if (
+      Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
+    ) {
+      buttonNext.textContent = ValueButtonNext.last;
+    } else buttonNext.textContent = ValueButtonNext.next;
+    audioButton.classList.add("after-select");
+    correctWord.classList.remove("hide");
+    correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
+    /*check answer*/
+    if ((button.textContent as string).includes(currentWord.wordTranslate)) {
+      button.style.background = "#00FF7F";
+      addAnswer(true, KeysLS.checkAnswers);
+    } else {
+      button.style.background = "#CD5C5C";
+      addAnswer(false, KeysLS.checkAnswers);
+    }
   }
 }
