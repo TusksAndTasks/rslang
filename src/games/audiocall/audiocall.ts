@@ -76,7 +76,11 @@ export class Audiocall {
           audioButton,
           audio
         );
-
+        document.addEventListener("keypress", (e: KeyboardEvent) => {
+          if (e.code === "Space") {
+            buttonNext.click();
+          }
+        });
         buttonNext.addEventListener("click", () => {
           if (
             Number(localStorage.getItem(KeysLS.textProgress)) ===
