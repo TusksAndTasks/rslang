@@ -5,7 +5,7 @@ import { EPage } from "../../types/types";
 
 export class SprintDifficulty {
     public getHTML(): string{
-        return /*html*/`
+        return `
       <h2>Мини-игра спринт</h2>
       <div class="sprint-difficulty">
         <button class="sprint-difficulty_button" id="sd1">1</button>

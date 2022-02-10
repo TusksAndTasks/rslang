@@ -4,24 +4,19 @@ import { model, view } from "../../ts";
 export class Sprint {
   
   private sprintCorrectness: boolean;
-  private timerArray: Array<NodeJS.Timer>;
   private streak: number;
+  private viewChanged: boolean;
 
   constructor(){
     this.sprintCorrectness = true;
-    this.timerArray = [];
     this.streak = 0;
+    this.viewChanged = false;
   }
 
 
   public getHTML(): string {
-    model.sprintStatData = {
-      correctWords: [],
-      incorrectWords: [],
-      learnedWords: [],
-      maxStreak: 0
-    };
-    return /*html*/`
+    this.clearProperties();
+    return `
       <h2>Мини-игра спринт</h2>
       <div class="sprint">
         <div class="sprint__count-box" id="sprint-count-box">
@@ -40,6 +35,18 @@ export class Sprint {
         </div>  
       </div>
     `;
+  }
+
+  private clearProperties(){
+    model.sprintStatData = {
+      correctWords: [],
+      incorrectWords: [],
+      learnedWords: [],
+      maxStreak: 0
+    };
+    this.viewChanged = false;
+    model.sprintTimer = 59;
+    this.streak = 0;
   }
 
   private createRandomNumber(): number {
@@ -75,13 +82,12 @@ export class Sprint {
     model.activePage = EPage.sprintStat;
     view.renderContent(model.activePage);
     model.updateSprintStatData(null, null, null, this.streak);
-    this.streak = 0;
+    model.sprintTimer = -1;
   }
 
   private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>, index: number): void{
     if (index === questionsArray.length){
       this.stopSprint();
-      clearInterval(this.timerArray[0]);
       return
     }
     word.innerHTML = questionsArray[index].word;
@@ -202,43 +208,36 @@ export class Sprint {
 
   }
 
-  private setTimer(id: NodeJS.Timer) {
-  const timer = document.getElementById('sprint-timer') as HTMLElement;
-
+  private setTimer(timer: HTMLElement) {
   timer.innerHTML = model.sprintTimer.toString();
   
   model.sprintTimer--;
   
-    if (model.sprintTimer === -1){
-          this.clearTimer(id);
-          this.stopSprint();
+    if (model.sprintTimer <= -1){
+        this.stopSprint();
+        return;     
     }
-  }
 
-  private clearTimer(id: NodeJS.Timer){
-    clearInterval(id);
-    this.timerArray.shift();
-    model.sprintTimer = 59;
-  }
+    if (this.viewChanged){
+      return;
+    }
 
+    setTimeout(() => {this.setTimer(timer)}, 1000);
+  }
 
   private setClearTimerListeners(){
     const header = document.getElementById('header') as HTMLElement;
 
     header.addEventListener('click',(e) => {
-      if ((e.target as HTMLElement).classList.contains('btn') && (e.target as HTMLElement).id !== 'sprint-btn' ||
-      (e.target as HTMLElement).id === 'sprint-btn' && this.timerArray.length > 1){
-        clearInterval(this.timerArray[0]);
-        this.timerArray.shift();
-        model.sprintTimer = 59;
-        this.streak = 0;
+      if ((e.target as HTMLElement).tagName === 'LI'){
+        this.viewChanged = true;
       } 
       });
   }
 
   private startTimer() {
-    const id = setInterval(() => {this.setTimer(id)}, 1000);
-    this.timerArray.push(id);
+   const timer = document.getElementById('sprint-timer') as HTMLElement;
+    setTimeout(() => {this.setTimer(timer)}, 1000);
     this.setClearTimerListeners();
   }
 
