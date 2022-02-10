@@ -24,7 +24,7 @@ export const getPageGame = (): string => {
       <div class="game-header">
         <div class="game-header__progress">
           <svg class="game-header__progress_svg">
-              <circle id="circle" class="game-header__progress_circle" fill="none" r="45">
+              <circle id="circle" class="game-header__progress_circle" fill="none" r="35">
           </svg>
           <div id="textProgress" class="game-header__progress_text"> </div>
         </div>
@@ -76,7 +76,7 @@ export const getStatisticAnswersItem = (
     class="statistic-answers-item_sound">
     </button>
     <div class="details-word">${word.word}</div>
-    <div class="details-word">${word.transcription}</div>
+    <div class="details-word_tr">${word.transcription}</div>
     <div class="details-word_lang">${word.wordTranslate}</div>
     <div id="check-answer" class="check-answer ${check}">
     </div>

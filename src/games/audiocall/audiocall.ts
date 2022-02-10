@@ -233,11 +233,9 @@ export class Audiocall {
     ) as HTMLElement;
 
     textStatistic.textContent = `${percentOfValid}%`;
-    totalValid.textContent = `Правильных ответов ${numberValidAnswer}`;
-    totalInvalid.textContent = `Неправильных ответов ${
-      numberOfQuestion - numberValidAnswer
-    }`;
-    answersInRow.textContent = `Правильных ответов подряд ${getMaxSeries(
+    totalValid.textContent = `Верных ответов ${numberValidAnswer}`;
+    totalInvalid.textContent = `Ошибок ${numberOfQuestion - numberValidAnswer}`;
+    answersInRow.textContent = `Верных ответов подряд ${getMaxSeries(
       checkAnswer
     )}`;
 

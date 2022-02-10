@@ -43,6 +43,12 @@
       background: rgb(142, 142, 189);
     }
   }
+  @media (max-width: 700px) {
+    width: 80%;
+  }
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 }
 .game-audio {
   display: flex;
@@ -50,6 +56,9 @@
   margin-top: 10px;
   flex-direction: column;
   width: 80%;
+  @media (max-width: 960px) {
+    width: 100%;
+  }
 }
 
 .game-header {
@@ -57,20 +66,24 @@
   display: flex;
   justify-content: space-between;
 
+  @media (max-width: 460px) {
+    display: none;
+  }
+
   &__progress {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     position: relative;
   }
 
   &__progress_svg {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     position: absolute;
   }
   &__progress_circle {
-    cx: 50px;
-    cy: 50px;
+    cx: 40px;
+    cy: 40px;
     stroke: #e0ffff;
     stroke-width: 6px;
     transform-origin: center;
@@ -79,8 +92,8 @@
   }
   &__progress_text {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,6 +110,11 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+    @media (max-width: 600px) {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 60px;
+    }
   }
   &_sound {
     position: absolute;
@@ -139,18 +157,41 @@
     height: 40px;
     display: flex;
     justify-content: space-around;
+
+    @media (max-width: 600px) {
+      flex-wrap: wrap;
+      height: 150px;
+    }
+    @media (max-width: 460px) {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      row-gap: 5px;
+      align-items: center;
+    }
   }
 }
 .button-answers {
-  width: 22% !important;
   height: 3rem;
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   &:hover {
-    transform: scale(1.1);
+    background-color: #ccc;
     border: 2px solid rgb(129, 129, 151);
+  }
+
+  @media (max-width: 960px) {
+    width: 22% !important;
+    padding: 5px;
+  }
+
+  @media (max-width: 600px) {
+    width: 48% !important;
+  }
+  @media (max-width: 460px) {
+    width: 80% !important;
   }
 
   &_dont-know {
@@ -193,6 +234,10 @@
   border-radius: 10px;
   z-index: 1000;
 
+  @media (max-width: 500px) {
+    width: 120%;
+    height: 120%;
+  }
   &_total {
     display: flex;
     flex-direction: column;
@@ -220,11 +265,15 @@
     display: flex;
     width: 100%;
     justify-content: space-around;
-    & buttons {
-      &:hover {
-        transform: scale(1.1);
-        border: 2px solid rgb(129, 129, 151);
-      }
+
+    & buttons:hover {
+      transform: scale(1.1);
+      border: 2px solid rgb(129, 129, 151);
+    }
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: center;
+      row-gap: 5px;
     }
   }
   &_tittle {
@@ -285,6 +334,12 @@
       border: 2px solid var(--darkblue);
     }
   }
+  @media (max-width: 500px) {
+    width: 150%;
+    transform: translate(-20%, -10%);
+    font-size: 12px;
+    padding: 5px;
+  }
 }
 .statistic-answers-item {
   width: 100%;
@@ -299,6 +354,13 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
+    @media (max-width: 760px) {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+  }
+  @media (max-width: 900px) {
+    font-size: 14px;
   }
 }
 .check-answer {
@@ -306,6 +368,10 @@
   height: 1rem;
   background-size: contain;
   background-repeat: no-repeat;
+  @media (max-width: 760px) {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
 }
 .valid {
   background-image: url("../assets/icons/valid.png");
@@ -316,8 +382,21 @@
 .details-word {
   display: flex;
   width: 20%;
+  @media (max-width: 760px) {
+    width: 40%;
+  }
+}
+.details-word_tr {
+  display: flex;
+  width: 20%;
+  @media (max-width: 760px) {
+    display: none;
+  }
 }
 .details-word_lang {
   display: flex;
   width: 30%;
+  @media (max-width: 760px) {
+    width: 40%;
+  }
 }
