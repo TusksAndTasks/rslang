@@ -82,3 +82,40 @@
     }
 
 }
+
+.sprint-stat {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    &__stat-box {
+        width: 50%;
+        height: 50%;
+        border: solid 2px black;
+        display: flex;
+        flex-flow: column;
+        overflow-y: scroll;
+    }
+
+    &__correct-words,
+    &__incorrect-words {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+        border: solid 2px red;
+    }
+
+    &__again-button {
+        border: solid 2px red;
+        height: 50%;
+        width: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+    }
+}

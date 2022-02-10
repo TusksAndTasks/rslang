@@ -6,6 +6,10 @@ export interface ISprint extends ITemplate {
   startSprint: () => void;
 }
 
+export interface ISprintStat extends ITemplate {
+  showStatWords: () => void;
+}
+
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }
@@ -37,6 +41,8 @@ export interface IModel {
   activePage: string
   auth: IAuthObject | null
   sprintTimer: number;
+  sprintStatData: ISprintStatObj;
+  updateSprintStatData: (correctWord: IWordData | null, incorrectWord: IWordData | null, learnedWord: IWordData | null, streak: number) => void;
 }
 
 export enum EPage {
@@ -44,7 +50,8 @@ export enum EPage {
   main = 'main',
   electronBook = 'electronBook',
   audiocall = 'audiocall',
-  sprint = 'sprint'
+  sprint = 'sprint',
+  sprintStat = 'sprint-stat'
 }
 
 export interface IWordData {
@@ -66,8 +73,8 @@ export interface IWordData {
 
 export interface ISprintWord {
   word: string,
-  wordTranslate: string;
-  correct: boolean;
+  wordTranslate: string,
+  correct: boolean
 }
 
 export interface IUser {
@@ -82,4 +89,11 @@ export interface IAuthObject {
   refreshToken: string,
   userId: string,
   name: string
+}
+
+export interface ISprintStatObj {
+  correctWords: Array<IWordData>,
+  incorrectWords: Array<IWordData>,
+  learnedWords: Array<IWordData>,
+  maxStreak: number
 }

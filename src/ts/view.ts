@@ -1,5 +1,5 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, ISprint, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader, ISprint, ISprintStat, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -9,8 +9,9 @@ export class View {
   private electronBook: ITemplate;
   private audiocall: ITemplate;
   private sprint: ISprint;
+  private sprintStat: ISprintStat
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint, sprintStat: ISprintStat) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -18,6 +19,7 @@ export class View {
     this.electronBook = electronBook;
     this.audiocall = audiocall;
     this.sprint = sprint;
+    this.sprintStat = sprintStat;
   }
 
   public renderApp(): void {
@@ -70,6 +72,11 @@ export class View {
       case EPage.sprint:
         contentEl!.innerHTML = this.sprint.getHTML();
         this.sprint.startSprint();
+        break;
+
+      case EPage.sprintStat: 
+        contentEl!.innerHTML = this.sprintStat.getHTML();
+        this.sprintStat.showStatWords();
         break;
 
       default:

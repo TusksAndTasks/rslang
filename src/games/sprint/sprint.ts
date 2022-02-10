@@ -1,11 +1,10 @@
-import { IWordData, ISprintWord, IModel} from "../../types/types";
-import { Model } from "../../ts/model";
+import { IWordData, ISprintWord, EPage} from "../../types/types";
+import { model, view } from "../../ts";
 
 export class Sprint {
   
   private testArray: Array<IWordData>;
   private sprintCorrectness: boolean;
-  private model: IModel;
   private timerArray: Array<NodeJS.Timer>;
   private streak: number;
 
@@ -333,13 +332,19 @@ export class Sprint {
       }
     ]
     this.sprintCorrectness = true;
-    this.model = new Model();
     this.timerArray = [];
     this.streak = 0;
   }
 
 
   public getHTML(): string {
+    model.sprintStatData = {
+      correctWords: [],
+      incorrectWords: [],
+      learnedWords: [],
+      maxStreak: 0
+    };
+    console.log(model.sprintStatData);
     return /*html*/`
       <h2>Мини-игра спринт</h2>
       <div class="sprint">
@@ -391,8 +396,10 @@ export class Sprint {
   }
 
   private stopSprint(){
-    const sprint = document.querySelector('.sprint') as HTMLElement;
-    sprint.innerHTML = 'STOP';
+    model.activePage = EPage.sprintStat;
+    view.renderContent(model.activePage);
+    model.updateSprintStatData(null, null, null, this.streak);
+    this.streak = 0;
   }
 
   private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>, index: number): void{
@@ -406,12 +413,15 @@ export class Sprint {
     this.sprintCorrectness = questionsArray[index].correct;
   }
 
-  private countCorrectAnswer(): void {
+  private countCorrectAnswer(word: HTMLElement): void {
      const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
      const score = document.getElementById('sprint-score') as HTMLElement;
      const streak = document.getElementById('sprint-streak') as HTMLElement;
      const rightAudio = new Audio();
      rightAudio.src = '../../assets/sounds/Right-answer.mp3'
+     let wordName = word.innerHTML;
+     let correctWord = this.testArray.find((elem) => elem.word === wordName);
+     model.updateSprintStatData(correctWord);
 
      switch(this.streak) {
        case 0:
@@ -464,13 +474,15 @@ export class Sprint {
      }
   }
 
-  private countIncorrectAnswer() {
-    this.streak = 0;
+  private countIncorrectAnswer(word: HTMLElement) {
     const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
     const streak = document.getElementById('sprint-streak') as HTMLElement;
     const wrongAudio = new Audio();
-    wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3'
-
+    wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3';
+    let wordName = word.innerHTML;
+    let incorrectWord = this.testArray.find((elem) => elem.word === wordName);
+    model.updateSprintStatData(null, incorrectWord, null, this.streak);
+    this.streak = 0;
     wrongAudio.play();
     currentCount.innerHTML = '+0';
     streak.innerHTML = 'Dope!';
@@ -488,12 +500,12 @@ export class Sprint {
 
     correctButton.addEventListener('click', () => {
       if (this.sprintCorrectness){
-        this.countCorrectAnswer();
+        this.countCorrectAnswer(word);
         index++;
         this.setWord(word, translation, questionsArray, index);
       }
       else if (!this.sprintCorrectness) {
-        this.countIncorrectAnswer();
+        this.countIncorrectAnswer(word);
         index++;
         this.setWord(word, translation, questionsArray, index);
       }
@@ -501,12 +513,12 @@ export class Sprint {
 
     incorrectButton.addEventListener('click', () => {
       if (!this.sprintCorrectness){
-        this.countCorrectAnswer();
+        this.countCorrectAnswer(word);
         index++;
         this.setWord(word, translation, questionsArray, index);
       }
       else if (this.sprintCorrectness) {
-        this.countIncorrectAnswer();
+        this.countIncorrectAnswer(word);
         index++;
         this.setWord(word, translation, questionsArray, index);
       }
@@ -517,11 +529,11 @@ export class Sprint {
   private setTimer(id: NodeJS.Timer) {
   const timer = document.getElementById('sprint-timer') as HTMLElement;
 
-  timer.innerHTML = this.model.sprintTimer.toString();
+  timer.innerHTML = model.sprintTimer.toString();
   
-  this.model.sprintTimer--;
+  model.sprintTimer--;
   
-    if (this.model.sprintTimer === -1){
+    if (model.sprintTimer === -1){
           this.clearTimer(id);
           this.stopSprint();
     }
@@ -530,6 +542,7 @@ export class Sprint {
   private clearTimer(id: NodeJS.Timer){
     clearInterval(id);
     this.timerArray.shift();
+    model.sprintTimer = 59;
   }
 
 
@@ -537,18 +550,13 @@ export class Sprint {
     const header = document.getElementById('header') as HTMLElement;
 
     header.addEventListener('click',(e) => {
-      if ((e.target as HTMLElement).classList.contains('btn') && (e.target as HTMLElement).id !== 'sprint-btn'){
+      if ((e.target as HTMLElement).classList.contains('btn') && (e.target as HTMLElement).id !== 'sprint-btn' ||
+      (e.target as HTMLElement).id === 'sprint-btn' && this.timerArray.length > 1){
         clearInterval(this.timerArray[0]);
         this.timerArray.shift();
-        this.model.sprintTimer = 59;
+        model.sprintTimer = 59;
         this.streak = 0;
       } 
-      else if ((e.target as HTMLElement).id === 'sprint-btn' && this.timerArray.length > 1){
-        clearInterval(this.timerArray[0]);
-        this.timerArray.shift();
-        this.model.sprintTimer = 59;
-        this.streak = 0;
-      }
       });
   }
 

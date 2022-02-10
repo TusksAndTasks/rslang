@@ -17,8 +17,9 @@ import { Main } from '../pages/main';
 import { ElectronBook } from '../pages/electronBook';
 import { AudioCall } from '../games/audiocall/audiocall';
 import { Sprint } from '../games/sprint/sprint';
+import { SprintStat } from '../games/sprint/sprint-stat';
 
-export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, new Sprint());
+export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, AudioCall, new Sprint(), new SprintStat());
 export const model = new Model();
 
 export const controller = new Controller(view, model)
