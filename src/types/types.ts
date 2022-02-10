@@ -10,6 +10,10 @@ export interface ISprintStat extends ITemplate {
   showStatWords: () => void;
 }
 
+export interface ISprintDifficulty extends ITemplate {
+  setDifficultyListeners: () => void;
+}
+
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }
@@ -51,7 +55,9 @@ export enum EPage {
   electronBook = 'electronBook',
   audiocall = 'audiocall',
   sprint = 'sprint',
-  sprintStat = 'sprint-stat'
+  sprintStat = 'sprint-stat',
+  sprintDifficulty = 'sprint-difficulty', 
+  statistics = 'statistics',
 }
 
 export interface IWordData {
@@ -97,3 +103,5 @@ export interface ISprintStatObj {
   learnedWords: Array<IWordData>,
   maxStreak: number
 }
+
+export type IWordsData = IWordData[];

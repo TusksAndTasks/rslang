@@ -119,3 +119,22 @@
         align-self: center;
     }
 }
+
+.sprint-difficulty {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+
+    &__button {
+        border: solid 2px red;
+        height: 50%;
+        width: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+    }
+}

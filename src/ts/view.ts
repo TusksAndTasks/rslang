@@ -1,5 +1,5 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, ISprint, ISprintStat, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader, ISprint, ISprintDifficulty, ISprintStat, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -9,9 +9,11 @@ export class View {
   private electronBook: ITemplate;
   private audiocall: ITemplate;
   private sprint: ISprint;
-  private sprintStat: ISprintStat
+  private sprintStat: ISprintStat;
+  private sprintDifficulty: ISprintDifficulty;
+  private statistics: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint, sprintStat: ISprintStat) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -20,6 +22,8 @@ export class View {
     this.audiocall = audiocall;
     this.sprint = sprint;
     this.sprintStat = sprintStat;
+    this.sprintDifficulty = sprintDifficulty;
+    this.statistics = statistics;
   }
 
   public renderApp(): void {
@@ -30,9 +34,9 @@ export class View {
     app.classList.add('app');
 
     app.innerHTML = /*html*/`
-      <div id="header" class="header"></div>
-      <div id="content" class="content"></div>
-      <div id="footer" class="footer"></div>
+      <header id="header" class="header"></header>
+      <main id="content" class="content"></main>
+      <footer id="footer" class="footer"></foot>
     `;
 
     body.innerHTML = '';
@@ -77,6 +81,15 @@ export class View {
       case EPage.sprintStat: 
         contentEl!.innerHTML = this.sprintStat.getHTML();
         this.sprintStat.showStatWords();
+        break;
+
+      case EPage.sprintDifficulty: 
+        contentEl!.innerHTML = this.sprintDifficulty.getHTML();
+        this.sprintDifficulty.setDifficultyListeners();
+        break;
+
+      case EPage.statistics:
+        contentEl!.innerHTML = this.statistics.getHTML();
         break;
 
       default:

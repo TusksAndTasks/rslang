@@ -1,4 +1,4 @@
-import { EPage, IAuthObject, ISprintStatObj, IWordData } from "../types/types";
+import { EPage, IAuthObject, ISprintStatObj, IWordData, IWordsData } from "../types/types";
 
 export class Model {
   private _activePage: string = EPage.main;
@@ -10,6 +10,7 @@ export class Model {
     learnedWords: [],
     maxStreak: 0
 };
+  private _wordsArray: IWordsData = [];
 
   get activePage() {
     return this._activePage;
@@ -33,6 +34,14 @@ export class Model {
 
   set sprintStatData(stat: ISprintStatObj) {
     this._sprintStatData = stat;
+  }
+
+  get wordsArray(){
+    return this._wordsArray;
+  }
+
+  set wordsArray(arr: IWordsData){
+    this._wordsArray = arr;
   }
 
   public updateSprintStatData(correctWord: IWordData | null = null, incorrectWord: IWordData | null = null, learnedWord: IWordData | null = null, streak: number = 0) {
