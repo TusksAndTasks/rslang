@@ -20,7 +20,12 @@ import {
   getMaxSeries,
   getSrc,
 } from "./secondary-functions";
-import { KeysLS, ValueButtonNext } from "./types-for-audiocall";
+import {
+  IDataListenerNext,
+  IDataRenderGame,
+  KeysLS,
+  ValueButtonNext,
+} from "./types-for-audiocall";
 import { model, view } from "../../ts";
 
 export class Audiocall {
@@ -67,42 +72,36 @@ export class Audiocall {
         const audioButton = document.getElementById(
           "sound-btn"
         ) as HTMLButtonElement;
-        this.renderGame(
-          words,
-          answers,
-          imageWord,
-          buttonNext,
-          correctWord,
-          audioButton,
-          audio
-        );
+        const dataForRenderGame = {
+          words: words,
+          answers: answers,
+          imageWord: imageWord,
+          buttonNext: buttonNext,
+          correctWord: correctWord,
+          audioButton: audioButton,
+          audio: audio,
+        };
+        this.renderGame(dataForRenderGame);
+
+        const dataForListenerNext: IDataListenerNext = {
+          words: words,
+          buttonNext: buttonNext,
+          circle: circle,
+          contentProgress: contentProgress,
+          answers: answers,
+          imageWord: imageWord,
+          correctWord: correctWord,
+          audioButton: audioButton,
+          audio: audio,
+        };
+
         document.addEventListener("keydown", (event: KeyboardEvent) => {
           if (event.code == "Space") {
-            this.eventButtonNext(
-              words,
-              buttonNext,
-              circle,
-              contentProgress,
-              answers,
-              imageWord,
-              correctWord,
-              audioButton,
-              audio
-            );
+            this.eventButtonNext(dataForListenerNext, dataForRenderGame);
           }
         });
         buttonNext.addEventListener("click", () => {
-          this.eventButtonNext(
-            words,
-            buttonNext,
-            circle,
-            contentProgress,
-            answers,
-            imageWord,
-            correctWord,
-            audioButton,
-            audio
-          );
+          this.eventButtonNext(dataForListenerNext, dataForRenderGame);
         });
       });
     });
@@ -139,72 +138,42 @@ export class Audiocall {
     return buttonsAnswers;
   }
 
-  private renderGame(
-    words: IWordsData,
-    answers: HTMLElement,
-    imageWord: HTMLElement,
-    buttonNext: HTMLButtonElement,
-    correctWord: HTMLElement,
-    audioButton: HTMLButtonElement,
-    audio: HTMLAudioElement
-  ): void {
+  private renderGame(data: IDataRenderGame): void {
     const currentIndex = Number(localStorage.getItem(KeysLS.index));
-    const currentWord = words[currentIndex];
+    const currentWord = data.words[currentIndex];
     const url = `${getSrc(currentWord.image)}`;
     const backImg = `url(${url})`;
     const audioSrc = `${getSrc(currentWord.audio)}`;
-    imageWord.style.backgroundImage = backImg;
-    this.playAudio(audio, audioSrc);
-    audioButton.addEventListener("click", () => {
-      this.playAudio(audio, audioSrc);
+    data.imageWord.style.backgroundImage = backImg;
+    this.playAudio(data.audio, audioSrc);
+    data.audioButton.addEventListener("click", () => {
+      this.playAudio(data.audio, audioSrc);
     });
 
-    const arrayAnswers = getArrOfAnswers(currentWord, words);
-    const arrButtonAnswers = this.renderAnswers(arrayAnswers, answers);
-
-    arrButtonAnswers.forEach((button) => {
-      button.addEventListener("click", () => {
-        this.eventButtonAnswer(
-          arrButtonAnswers,
-          buttonNext,
-          audioButton,
-          correctWord,
-          currentWord,
-          button
-        );
-      });
+    const arrayAnswers = getArrOfAnswers(currentWord, data.words);
+    const arrButtonAnswers = this.renderAnswers(arrayAnswers, data.answers);
+    data.answers.addEventListener("click", (e: Event) => {
+      const button = e.target as HTMLButtonElement;
+      this.eventButtonAnswer(
+        arrButtonAnswers,
+        data.buttonNext,
+        data.audioButton,
+        data.correctWord,
+        currentWord,
+        button
+      );
     });
 
     document.addEventListener("keydown", (event: KeyboardEvent) => {
       const indexCurrentWord: number = Number(event.code.slice(-1));
-      if (indexCurrentWord === 1) {
+      if (indexCurrentWord > 0 && indexCurrentWord < 5) {
         this.eventButtonAnswer(
           arrButtonAnswers,
-          buttonNext,
-          audioButton,
-          correctWord,
-          arrButtonAnswers[0],
-          button
-        );
-      }
-      if (event.code == "Digit2") {
-        this.eventButtonAnswer(
-          arrButtonAnswers,
-          buttonNext,
-          audioButton,
-          correctWord,
+          data.buttonNext,
+          data.audioButton,
+          data.correctWord,
           currentWord,
-          button
-        );
-      }
-      if (event.code == "Digit3") {
-        this.eventButtonAnswer(
-          arrButtonAnswers,
-          buttonNext,
-          audioButton,
-          correctWord,
-          currentWord,
-          button
+          arrButtonAnswers[indexCurrentWord - 1]
         );
       }
     });
@@ -329,25 +298,18 @@ export class Audiocall {
   }
 
   private eventButtonNext(
-    words: IWordsData,
-    buttonNext: HTMLButtonElement,
-    circle: SVGCircleElement,
-    contentProgress: HTMLElement,
-    answers: HTMLElement,
-    imageWord: HTMLElement,
-    correctWord: HTMLElement,
-    audioButton: HTMLButtonElement,
-    audio: HTMLAudioElement
+    data: IDataListenerNext,
+    dataForRenderGame: IDataRenderGame
   ) {
     if (
       Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
     ) {
-      this.endOfTheGame(words);
+      this.endOfTheGame(data.words);
     } else {
-      if (buttonNext.textContent === ValueButtonNext.dontKnow) {
+      if (data.buttonNext.textContent === ValueButtonNext.dontKnow) {
         addAnswer(false, KeysLS.checkAnswers);
       } else {
-        buttonNext.textContent = ValueButtonNext.dontKnow;
+        data.buttonNext.textContent = ValueButtonNext.dontKnow;
       }
 
       changeValFromLS(KeysLS.index);
@@ -357,54 +319,16 @@ export class Audiocall {
       const newTextProgress =
         Number(localStorage.getItem(KeysLS.textProgress)) || 0;
 
-      circle.style.strokeDashoffset = createOffset(newProgress, length);
-      contentProgress.textContent = `${newTextProgress}/20`;
-
-      answers.innerHTML = "";
-      audioButton.classList.remove("after-select");
-      correctWord.classList.add("hide");
-      this.renderGame(
-        words,
-        answers,
-        imageWord,
-        buttonNext,
-        correctWord,
-        audioButton,
-        audio
-      );
+      data.circle.style.strokeDashoffset = createOffset(newProgress, length);
+      data.contentProgress.textContent = `${newTextProgress}/20`;
+      data.answers.innerHTML = "";
+      data.audioButton.classList.remove("after-select");
+      data.correctWord.classList.add("hide");
+      this.renderGame(dataForRenderGame);
     }
   }
 
   private eventButtonAnswer(
-    arrButtonAnswers: HTMLButtonElement[],
-    buttonNext: HTMLButtonElement,
-    audioButton: HTMLButtonElement,
-    correctWord: HTMLElement,
-    currentWord: IWordData,
-    button: HTMLButtonElement
-  ) {
-    arrButtonAnswers.forEach((btn) => {
-      btn.disabled = true;
-      btn.style.cursor = "default";
-    });
-    if (
-      Number(localStorage.getItem(KeysLS.textProgress)) === numberOfQuestion
-    ) {
-      buttonNext.textContent = ValueButtonNext.last;
-    } else buttonNext.textContent = ValueButtonNext.next;
-    audioButton.classList.add("after-select");
-    correctWord.classList.remove("hide");
-    correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
-    /*check answer*/
-    if ((button.textContent as string).includes(currentWord.wordTranslate)) {
-      button.style.background = "#00FF7F";
-      addAnswer(true, KeysLS.checkAnswers);
-    } else {
-      button.style.background = "#CD5C5C";
-      addAnswer(false, KeysLS.checkAnswers);
-    }
-  }
-  private eventButtonAnswerKeyboard(
     arrButtonAnswers: HTMLButtonElement[],
     buttonNext: HTMLButtonElement,
     audioButton: HTMLButtonElement,
