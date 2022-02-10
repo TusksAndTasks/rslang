@@ -3,6 +3,7 @@ import { IWord } from "../types/types";
 
 export class ElectronBook {
   private words: IWord[] = [];
+  private isAudioPlaying: boolean = false;
 
   public getHTML(): string {
     return /*html*/`
@@ -111,17 +112,15 @@ export class ElectronBook {
             </div>
             <div class="word-card__body">
               <div class="word-card__top">
-                <div class="row">
+                <div class="row align-items-center justify-content-sb">
                   <div class="word-card__word">${word.word}</div>
                   <div class="word-card__transcription">${word.transcription}</div>
-                  <div class="word-card__audio">
-                    <img src="./assets/icons/audio-speaker.png" alt="audio-speaker">
-                  </div>
+                  <div class="word-card__audio"></div>
                 </div>
+                <div class="word-card__translate">${word.wordTranslate}</div>
               </div>
 
               <div class="word-card__mid">
-                <div class="word-card__translate">${word.wordTranslate}</div>
                 <div class="word-card__meaning">${word.textMeaning}</div>
                 <div class="word-card__meaningtranslate">${word.textMeaningTranslate}</div>
               </div>
@@ -132,7 +131,10 @@ export class ElectronBook {
               </div>
             </div>
           </div>
-        `
+        `;
+      })
+      .then(() => {
+        this.initAudioPlayerBtn(wordCard, word);
       });
 
     return wordCard;
@@ -145,6 +147,59 @@ export class ElectronBook {
     await img.decode();
 
     return img;
+  }
+
+  private async getWordAudio(src: string): Promise<HTMLAudioElement> {
+    const audio = new Audio() as HTMLAudioElement;
+    audio.src = `https://rs-lang-react.herokuapp.com/${src}`;
+
+    return audio;
+  }
+
+  private initAudioPlayerBtn(wordCard: HTMLElement, word: IWord) {
+    Promise.all([
+      this.getWordAudio(word.audio),
+      this.getWordAudio(word.audioMeaning),
+      this.getWordAudio(word.audioExample)
+    ])
+      .then(audioPlayers => {
+        const audioBtn = wordCard.querySelector('.word-card__audio') as HTMLElement;
+
+        audioBtn.addEventListener('click', () => {
+          if (audioBtn.classList.contains('active')) {
+            audioBtn.classList.remove('active');
+
+            audioPlayers.forEach(audioPlayer => {
+              audioPlayer.pause();
+              audioPlayer.currentTime = 0;
+              this.isAudioPlaying = false;
+            });
+          } else {
+            if (!this.isAudioPlaying) {
+              audioBtn.classList.add('active');
+              this.isAudioPlaying = true;
+              
+              audioPlayers[0].play()
+                .then(() => {
+                  audioPlayers[0].onended = () => {
+                    audioPlayers[1].play();
+                  };
+                })
+                .then(() => {
+                  audioPlayers[1].onended = () => {
+                    audioPlayers[2].play()
+                      .then(() => {
+                        audioPlayers[2].onended = () => {
+                          audioBtn.classList.remove('active');
+                          this.isAudioPlaying = false;
+                        }
+                      })
+                  };
+                });
+            }
+          }
+        });
+      });
   }
 
   private sortWordsByNumber(arr: IWord[]) {

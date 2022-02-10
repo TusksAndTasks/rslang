@@ -41,6 +41,11 @@
 
   &__words {
     flex: 1 1 auto;
+    margin: 0 -20px;
+  }
+
+  &__word {
+    padding: 0 20px;
   }
 
   &__groups {
@@ -82,13 +87,14 @@
   color: var(--black);
   border-radius: 10px;
   overflow: hidden;
-  padding: 10px;
+  padding: 20px;
   margin: 0 0 20px 0;
 
   &__image {
     position: relative;
-    flex: 0 0 300px;
-    height: 300px;
+    flex: 0 0 250px;
+    height: 250px;
+    border: 4px solid #000;
 
     img {
       position: absolute;
@@ -106,23 +112,41 @@
   }
 
   &__top {
+    border-left: 4px solid #000;
+    margin: 0 0 50px 0;
   }
 
   &__word {
     font-size: 24px;
     text-transform: capitalize;
+    margin: 0 0 0 10px;
   }
 
   &__transcription {
+    margin: 0 auto 0 10px;
   }
 
   &__audio {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("../assets/icons/audio-speaker.png") center no-repeat;
+
+    &.active {
+      background: url("../assets/icons/stop.png") center no-repeat;
+    }
   }
 
   &__mid {
+    margin: 0 0 50px 0;
   }
 
   &__translate {
+    margin: 0 0 0 14px;
+    color: #8a8a8a;
   }
 
   &__meaning {
