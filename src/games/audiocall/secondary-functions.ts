@@ -1,9 +1,9 @@
 import { IWordsData, IWordData } from "../../types/types";
 import { api } from "../../ts/api";
 
-export const getRandomNumber = (max: number): number => {
-  return Math.floor(Math.random() * (max + 1));
-};
+//export const getRandomNumber = (max: number): number => {
+//  return Math.floor(Math.random() * (max + 1));
+//};
 
 const getRandomArray = (arr: IWordsData): IWordsData => {
   for (let index = arr.length - 1; index > 0; index -= 1) {
@@ -53,15 +53,32 @@ export const changeValFromLS = (keyLS: string): void => {
   localStorage.setItem(keyLS, String(nemValue));
 };
 
-export const addAnswer = (word: IWordData, key: string): void => {
-  const oldValue = getFromLocalStorage(key) || [];
-  setInLocalStorage([...oldValue, word], key);
-};
-
-export const setInLocalStorage = (data: IWordsData, nameKey: string) => {
+export const setInLocalStorage = (data: boolean[], nameKey: string) => {
   localStorage.setItem(nameKey, JSON.stringify(data));
 };
 
-export const getFromLocalStorage = (nameKey: string): IWordsData => {
+export const getFromLocalStorage = (nameKey: string): boolean[] => {
   return JSON.parse(localStorage.getItem(nameKey) as string);
+};
+
+export const addAnswer = (value: boolean, key: string): void => {
+  const oldValue = getFromLocalStorage(key) || [];
+  setInLocalStorage([...oldValue, value], key);
+};
+
+export const getMaxSeries = (arr: boolean[]): number => {
+  let max = 0;
+  let current = 0;
+  const firstIndex = arr.indexOf(true);
+  if (firstIndex !== -1) {
+    arr.forEach((el, i) => {
+      if (el === true) {
+        current++;
+      } else {
+        max = Math.max(max, current);
+        current = 0;
+      }
+    });
+  }
+  return max;
 };

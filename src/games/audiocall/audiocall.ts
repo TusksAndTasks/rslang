@@ -1,9 +1,15 @@
-import { IWordsData, IWordData } from "../../types/types";
+import {
+  IWordsData,
+  IWordData,
+  numberOfPages,
+  numberOfQuestion,
+} from "../../types/types";
 import { api } from "../../ts/api";
 import {
   getPageGame,
   getPageLevel,
   getPageStatistic,
+  getStatisticAnswersItem,
 } from "./html-for-audiocall";
 import {
   addAnswer,
@@ -11,37 +17,24 @@ import {
   createOffset,
   getArrOfAnswers,
   getFromLocalStorage,
-  getRandomNumber,
+  getMaxSeries,
   getSrc,
 } from "./secondary-functions";
 import { KeysLS, ValueButtonNext } from "./types-for-audiocall";
 import { model, view } from "../../ts";
 
-const numberOfPages = 30;
-const numberOfQuestion = 20;
-
 export class Audiocall {
-  public getHTML(): string {
-    return /*html*/ getPageLevel();
-  }
-
   public initAudiocall(): void {
-    const contentEl = document.querySelector("#content") as HTMLElement;
-    const levels = document.querySelector("#levels") as HTMLElement;
+    const contentEl = document.getElementById("content") as HTMLElement;
+    contentEl.innerHTML = getPageLevel();
+    const levels = document.getElementById("levels") as HTMLElement;
     levels.addEventListener("click", (e: Event): void => {
       const group = Number((e.target as HTMLElement).dataset.level);
-      const page = getRandomNumber(numberOfPages);
-
-      if (localStorage.getItem(KeysLS.invalidAnswer)) {
-        localStorage.removeItem(KeysLS.invalidAnswer);
-      }
-      if (localStorage.getItem(KeysLS.validAnswer)) {
-        localStorage.removeItem(KeysLS.validAnswer);
-      }
+      const page = Math.floor(Math.random() * (numberOfPages + 1));
+      localStorage.removeItem(KeysLS.checkAnswers);
 
       api.getWords(group, page).then((words) => {
         contentEl.innerHTML = getPageGame();
-
         /*create progress element*/
         const defaultValueIdex = "0";
         const defaultValueProgress = "5";
@@ -89,38 +82,11 @@ export class Audiocall {
             Number(localStorage.getItem(KeysLS.textProgress)) ===
             numberOfQuestion
           ) {
-            const gameAudiocallElement = document.getElementById(
-              "game-audio"
-            ) as HTMLElement;
-            gameAudiocallElement.innerHTML = getPageStatistic();
-            const validAnswer = getFromLocalStorage(KeysLS.validAnswer) || [];
-            const invalidAnswer =
-              getFromLocalStorage(KeysLS.invalidAnswer) || [];
-            const numberValidAnswer = validAnswer.length;
-            const numberInvalidAnswer = invalidAnswer.length;
-            const percentOfValid = (numberValidAnswer * 100) / numberOfQuestion;
-            const animateElement = document.getElementById(
-              "statistic_circle-wive"
-            ) as HTMLElement;
-            const animationCircle = animateElement.animate(
-              [{ top: "100%" }, { top: `${100 - percentOfValid}%` }],
-              { duration: 2000, fill: "forwards" }
-            );
-
-            const textStatistic = document.getElementById(
-              "text-statistic"
-            ) as HTMLElement;
-            textStatistic.textContent = `${numberValidAnswer}/${numberOfQuestion}`;
-            const buttonPlayAgain = document.getElementById(
-              "play-again"
-            ) as HTMLButtonElement;
-            buttonPlayAgain.addEventListener("click", () => {
-              view.renderContent(model.activePage);
-            });
+            /*end to game*/
+            this.endOfTheGame(words);
           } else {
             if (buttonNext.textContent === ValueButtonNext.dontKnow) {
-              const ind = Number(localStorage.getItem(KeysLS.index) || 0);
-              addAnswer(words[ind], KeysLS.invalidAnswer);
+              addAnswer(false, KeysLS.checkAnswers);
             } else {
               buttonNext.textContent = ValueButtonNext.dontKnow;
             }
@@ -176,9 +142,9 @@ export class Audiocall {
     answers: HTMLElement
   ): HTMLButtonElement[] {
     const buttonsAnswers: HTMLButtonElement[] = [];
-    arrAnswers.forEach((wordData: IWordData) => {
+    arrAnswers.forEach((wordData: IWordData, index: number) => {
       const button = document.createElement("button");
-      button.textContent = wordData.wordTranslate;
+      button.textContent = `${index + 1} ${wordData.wordTranslate}`;
       button.className = "btn button-answers";
       answers.append(button);
       buttonsAnswers.push(button);
@@ -202,12 +168,9 @@ export class Audiocall {
     const audioSrc = `${getSrc(currentWord.audio)}`;
     imageWord.style.backgroundImage = backImg;
     this.playAudio(audio, audioSrc);
-
-    /*button play audio for current word*/
     audioButton.addEventListener("click", () => {
       this.playAudio(audio, audioSrc);
     });
-
     const arrayAnswers = getArrOfAnswers(currentWord, words);
     const arrButtonAnswers = this.renderAnswers(arrayAnswers, answers);
     arrButtonAnswers.forEach((button) => {
@@ -224,16 +187,137 @@ export class Audiocall {
         audioButton.classList.add("after-select");
         correctWord.classList.remove("hide");
         correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
-
         /*check answer*/
-        if (button.textContent === currentWord.wordTranslate) {
+        if (
+          (button.textContent as string).includes(currentWord.wordTranslate)
+        ) {
           button.style.background = "#00FF7F";
-          addAnswer(currentWord, KeysLS.validAnswer);
+          addAnswer(true, KeysLS.checkAnswers);
         } else {
           button.style.background = "#CD5C5C";
-          addAnswer(currentWord, KeysLS.invalidAnswer);
+          addAnswer(false, KeysLS.checkAnswers);
         }
       });
+    });
+  }
+
+  endOfTheGame(words: IWordsData) {
+    const gameAudiocallElement = document.getElementById(
+      "game-audio"
+    ) as HTMLElement;
+    gameAudiocallElement.innerHTML = getPageStatistic();
+
+    const checkAnswer = getFromLocalStorage(KeysLS.checkAnswers);
+    const numberValidAnswer = checkAnswer.filter((val) => val === true).length;
+    const percentOfValid = Math.round(
+      (numberValidAnswer * 100) / numberOfQuestion
+    );
+    const animateElement = document.getElementById(
+      "statistic_circle-wive"
+    ) as HTMLElement;
+    animateElement.animate(
+      [{ top: "100%" }, { top: `${100 - percentOfValid}%` }],
+      { duration: 2000, fill: "forwards" }
+    );
+    const textStatistic = document.getElementById(
+      "text-statistic"
+    ) as HTMLElement;
+    const answersInRow = document.getElementById(
+      "in-a-row-answers"
+    ) as HTMLElement;
+    const totalValid = document.getElementById(
+      "total-valid-answers"
+    ) as HTMLElement;
+    const totalInvalid = document.getElementById(
+      "total-invalid-answers"
+    ) as HTMLElement;
+
+    textStatistic.textContent = `${percentOfValid}%`;
+    totalValid.textContent = `Правильных ответов ${numberValidAnswer}`;
+    totalInvalid.textContent = `Неправильных ответов ${
+      numberOfQuestion - numberValidAnswer
+    }`;
+    answersInRow.textContent = `Правильных ответов подряд ${getMaxSeries(
+      checkAnswer
+    )}`;
+
+    const buttonPlayAgain = document.getElementById(
+      "play-again"
+    ) as HTMLButtonElement;
+    buttonPlayAgain.addEventListener("click", () => {
+      view.renderContent(model.activePage);
+    });
+
+    const answersGame = document.getElementById(
+      "answers-statistic"
+    ) as HTMLElement;
+    words.forEach((word, index) => {
+      const wrapperAnswers = document.createElement("div");
+      wrapperAnswers.className = "statistic-answers-item";
+      if (checkAnswer[index]) {
+        wrapperAnswers.innerHTML = getStatisticAnswersItem(
+          word,
+          String(index),
+          "valid"
+        );
+      } else
+        wrapperAnswers.innerHTML = getStatisticAnswersItem(
+          word,
+          String(index),
+          "invalid"
+        );
+      answersGame.append(wrapperAnswers);
+    });
+    const buttonBack = document.createElement("button");
+    buttonBack.className = "back-from-details btn btn-blue";
+    buttonBack.textContent = "Назад";
+    answersGame.append(buttonBack);
+
+    const buttonStatisticAnswers = document.getElementById(
+      "details"
+    ) as HTMLButtonElement;
+    const lastPage = document.getElementById("last-page") as HTMLElement;
+    buttonStatisticAnswers.addEventListener("click", () => {
+      lastPage.animate(
+        [
+          { left: "0", opacity: 1 },
+          { left: "200%", opacity: 0 },
+        ],
+        { duration: 800, fill: "forwards" }
+      );
+
+      answersGame.animate(
+        [
+          { left: "-200%", opacity: 0 },
+          { left: "0", opacity: 1 },
+        ],
+        { duration: 800, fill: "forwards" }
+      );
+    });
+    buttonBack.addEventListener("click", () => {
+      lastPage.animate(
+        [
+          { left: "200%", opacity: 0 },
+          { left: "0", opacity: 1 },
+        ],
+        { duration: 800, fill: "forwards" }
+      );
+
+      answersGame.animate(
+        [
+          { left: "0", opacity: 1 },
+          { left: "-200%", opacity: 0 },
+        ],
+        { duration: 800, fill: "forwards" }
+      );
+    });
+
+    const audioAnswer = new Audio();
+    answersGame.addEventListener("click", (el: Event): void => {
+      const index = Number((el.target as HTMLElement).dataset.sound);
+      const src = getSrc(words[index].audio);
+      audioAnswer.src = src;
+      audioAnswer.play();
     });
   }
 }

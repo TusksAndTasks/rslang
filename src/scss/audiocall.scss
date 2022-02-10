@@ -1,18 +1,31 @@
 .audiocall {
   width: 50%;
-  height: 40vh;
+  height: 45vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 10px 5px 10px 5px;
-  background-color: rgb(170, 170, 194);
-  border: 2px solid rgb(129, 129, 151);
+  padding: 30px;
+  box-sizing: border-box;
+  background-color: var(--white);
   border-radius: 10px;
   align-items: center;
   row-gap: 15px;
+  color: #000;
+
+  &__icon {
+    text-align: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background-image: url("../assets/icons/headphones.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
 
   & h2 {
-    color: rgb(42, 42, 54);
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 20px 0;
   }
 
   & h4 {
@@ -32,12 +45,11 @@
   }
 }
 .game-audio {
-  width: 100%;
-  height: 80vh;
-  background: rgb(170, 170, 194);
   display: flex;
+  margin: 0 auto;
+  margin-top: 10px;
   flex-direction: column;
-  row-gap: 15%;
+  width: 80%;
 }
 
 .game-header {
@@ -73,27 +85,12 @@
     align-items: center;
     justify-content: center;
   }
-  &__settings {
-    display: flex;
-    column-gap: 10px;
-
-    &_sound,
-    &_full {
-      width: 30px;
-      height: 30px;
-      background-color: transporent;
-      background-image: url("../assets/svg/sound.svg");
-      background-size: cover;
-    }
-    &_full {
-      background-image: url("../assets/svg/fullscreen.svg");
-    }
-  }
 }
 .game-main__word {
   &_image {
     width: 110px;
     height: 110px;
+    margin-bottom: 150px;
     border-radius: 50%;
     align-self: center;
     background-size: cover;
@@ -109,8 +106,8 @@
     height: 102%;
     border-radius: 50%;
     border: 2px solid rgb(129, 129, 151);
-    background-color: rgb(160, 160, 180);
-    background-image: url("../assets/svg/sound-on.svg");
+    background-color: var(--white);
+    background-image: url("../assets/icons/sound-on.svg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -139,22 +136,29 @@
   &_answers {
     width: 100%;
     margin: 0 auto;
-    height: 20px;
+    height: 40px;
     display: flex;
     justify-content: space-around;
   }
 }
 .button-answers {
-  width: 20% !important;
-  height: 2.5rem;
+  width: 22% !important;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  &:hover {
+    transform: scale(1.1);
+    border: 2px solid rgb(129, 129, 151);
+  }
 
   &_dont-know {
-    background: #87cefa;
     align-self: center;
+    margin-top: 40px;
 
     &:hover {
-      transform: scale(0.9);
-      background: rgb(129, 129, 151);
+      transform: scale(1.1);
     }
   }
 }
@@ -163,18 +167,69 @@
   top: 70% !important;
   left: -50% !important;
 }
-.audiocall__statistic {
+/*last page*/
+.audiocall__statistic_wrapper {
+  width: 60%;
+  position: relative;
+  height: 50vh;
   margin: 0 auto;
-  width: 40vw;
-  height: 40vh;
+  flex-direction: column;
+  background-color: transparent;
+  border-radius: 10px;
+  align-items: center;
+  color: #000;
+}
+.audiocall__statistic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  background-color: rgb(170, 170, 194);
-  border: 2px solid rgb(129, 129, 151);
+  row-gap: 20px;
+  background-color: var(--white);
+  border-radius: 10px;
+  z-index: 1000;
 
+  &_total {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+
+    &-true {
+      color: #3a8140;
+    }
+    &-false {
+      color: #8b0000;
+    }
+  }
+
+  &_text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    color: rgb(0, 30, 60);
+  }
+
+  &_buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    & buttons {
+      &:hover {
+        transform: scale(1.1);
+        border: 2px solid rgb(129, 129, 151);
+      }
+    }
+  }
   &_tittle {
+    font-size: 20px;
+    padding: 10px;
     text-align: center;
   }
 
@@ -184,8 +239,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 50%;
-    background-color: rgb(255, 255, 255);
-    border: 2px solid rgb(129, 129, 151);
+    background-color: var(--grey);
   }
   &_circle-wive {
     position: absolute;
@@ -193,7 +247,7 @@
     height: 150%;
     left: -31%;
     top: 101%;
-    background-color: rgb(129, 129, 151);
+    background-color: var(--blue);
     border-radius: 45%;
     animation: wave 5s linear infinite;
 
@@ -203,10 +257,67 @@
       }
     }
   }
-  &_text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+}
+.audiocall__statistic_answers {
+  position: absolute;
+  padding: 15px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: var(--white);
+  border-radius: 10px;
+  opacity: 0;
+  z-index: 0;
+  .back-from-details {
+    width: 5rem;
+    height: 2rem;
+    margin: 5px;
+    background-color: var(--blue);
+    border-radius: 5px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      border: 2px solid var(--darkblue);
+    }
   }
+}
+.statistic-answers-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid rgb(0, 30, 60);
+  &_sound {
+    width: 1rem;
+    height: 1rem;
+    border: none;
+    background-image: url("../assets/icons/play.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+}
+.check-answer {
+  width: 1rem;
+  height: 1rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.valid {
+  background-image: url("../assets/icons/valid.png");
+}
+.invalid {
+  background-image: url("../assets/icons/invalid.png");
+}
+.details-word {
+  display: flex;
+  width: 20%;
+}
+.details-word_lang {
+  display: flex;
+  width: 30%;
 }

@@ -2,8 +2,7 @@ export enum KeysLS {
   index = "indexWord",
   progress = "progress",
   textProgress = "textProgress",
-  validAnswer = "validAudiocall",
-  invalidAnswer = "invalidAudiocall",
+  checkAnswers = "checkAnswers",
 }
 export enum ValueButtonNext {
   dontKnow = "Не знаю",

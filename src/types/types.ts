@@ -2,7 +2,6 @@ export interface ITemplate {
   getHTML: () => string;
 }
 export interface IAudiocall {
-  getHTML: () => string;
   initAudiocall: () => void;
 }
 
@@ -61,8 +60,8 @@ export enum EPage {
   main = "main",
   electronBook = "electronBook",
   audiocall = "audiocall",
-  sprint = 'sprint',
-  statistics = 'statistics'
+  sprint = "sprint",
+  statistics = "statistics",
 }
 
 export interface IUser {
@@ -78,3 +77,6 @@ export interface IAuthObject {
   userId: string;
   name: string;
 }
+
+export const numberOfPages = 30;
+export const numberOfQuestion = 20;

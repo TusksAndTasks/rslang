@@ -1,5 +1,5 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader,IAudiocall, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader, IAudiocall, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -11,8 +11,16 @@ export class View {
   private sprint: ITemplate;
   private statistics: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: IAudiocall, sprint: ITemplate, statistics: ITemplate)
-  {
+  constructor(
+    header: IHeader,
+    footer: ITemplate,
+    auth: IAuth,
+    main: ITemplate,
+    electronBook: ITemplate,
+    audiocall: IAudiocall,
+    sprint: ITemplate,
+    statistics: ITemplate
+  ) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -67,7 +75,6 @@ export class View {
         break;
 
       case EPage.audiocall:
-        contentEl!.innerHTML = this.audiocall.getHTML();
         this.audiocall.initAudiocall();
         break;
 
