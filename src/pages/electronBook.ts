@@ -7,6 +7,7 @@ export class ElectronBook {
   private isAudioPlaying: boolean = false;
   private firstPageIdx: number = 0;
   private pageLimitIdx: number = 29;
+  private groupsCount: number = 6;
 
   public getHTML(): string {
     return /*html*/`
@@ -38,18 +39,13 @@ export class ElectronBook {
             <input id="pagination-input" type="number" class="pagination__input" min="${this.firstPageIdx + 1}" max="${this.pageLimitIdx + 1}" value="${this.firstPageIdx + 1}">
             <button id="pagination-switch" class="btn" disabled>Перейти</button>
           </div>
-          <div class="row">
+          <div class="row electron-book__wrapper">
             <div id="electron-book-words" class="electron-book__words">
               <div class="loader"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
             </div>
-            <div id="electron-book-groups" class="electron-book__groups">
-              <div class="electron-book__group">1</div>
-              <div class="electron-book__group">2</div>
-              <div class="electron-book__group">3</div>
-              <div class="electron-book__group">4</div>
-              <div class="electron-book__group">5</div>
-              <div class="electron-book__group">6</div>
-              <div class="electron-book__group">7</div>
+            <div>
+              <div class="electron-book__groups-title">Группы</div>
+              <div id="electron-book-groups" class="electron-book__groups"></div>
             </div>
           </div>
         </div>
@@ -61,6 +57,7 @@ export class ElectronBook {
     const contentEl = document.querySelector('#content') as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.initPagination();
+    this.initGroups();
     this.initWords(model.electronBookGroup, model.electronBookPage);
   }
 
@@ -85,6 +82,7 @@ export class ElectronBook {
         model.electronBookPage--;
         this.initWords(model.electronBookGroup, model.electronBookPage);
         this.initPagination();
+        this.initGroups();
       }
     };
   }
@@ -103,6 +101,7 @@ export class ElectronBook {
         model.electronBookPage++;
         this.initWords(model.electronBookGroup, model.electronBookPage);
         this.initPagination();
+        this.initGroups();
       }
     };
   }
@@ -129,6 +128,7 @@ export class ElectronBook {
       model.electronBookPage = +paginationInput.value - 1;
       this.initWords(model.electronBookGroup, model.electronBookPage);
       this.initPagination();
+      this.initGroups();
     };
   }
 
@@ -171,6 +171,33 @@ export class ElectronBook {
       .then(img => {
         wordCard.prepend(img);
         const imgHTML = wordCard.innerHTML;
+
+        switch (model.electronBookGroup) {
+          case 0:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 1:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 2:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 3:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 4:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 5:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+          case 6:
+            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+            break;
+        
+          default:
+            break;
+        }
 
         wordCard.innerHTML = /*html*/`
           <div class="row word-card">
@@ -275,5 +302,34 @@ export class ElectronBook {
       const bImageNum = +b.image.slice(-8, -4);
       return aImageNum - bImageNum;
     });
+  }
+
+  private initGroups(): void {
+    const groups = document.getElementById('electron-book-groups') as HTMLElement;
+
+    groups.innerHTML = '';
+
+    for (let i = 0; i < this.groupsCount; i++) {
+      const group = document.createElement('div') as HTMLElement;
+
+      group.classList.add('electron-book__group', `electron-book__group--${i + 1}`);
+
+      if (i === model.electronBookGroup) {
+        group.classList.add('electron-book__group--active');
+      }
+
+      group.innerHTML = `${i + 1}`;
+      group.onclick = () => {
+        this.switchGroup(i);
+      };
+      groups.append(group);
+    }
+  }
+
+  private switchGroup(group: number): void {
+    model.electronBookGroup = group;
+    this.initWords(model.electronBookGroup, model.electronBookPage);
+    this.initPagination();
+    this.initGroups();
   }
 }
