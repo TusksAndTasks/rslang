@@ -208,36 +208,38 @@
   top: 70% !important;
   left: -50% !important;
 }
+
 /*last page*/
 .audiocall__statistic_wrapper {
-  width: 60%;
-  position: relative;
-  height: 50vh;
+  width: 100%;
+  height: 70vh;
   margin: 0 auto;
-  flex-direction: column;
   background-color: transparent;
-  border-radius: 10px;
+  display: flex;
   align-items: center;
+  justify-content: center;
   color: #000;
 }
 .audiocall__statistic {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 60%;
   display: flex;
+  padding: 15px;
   flex-direction: column;
   align-items: center;
   row-gap: 20px;
   background-color: var(--white);
   border-radius: 10px;
-  z-index: 1000;
 
-  @media (max-width: 500px) {
-    width: 120%;
-    height: 120%;
+  @media (max-width: 650px) {
+    width: 80%;
+    height: 70%;
   }
+
+  & button {
+    width: 8rem;
+  }
+
   &_total {
     display: flex;
     flex-direction: column;
@@ -278,7 +280,7 @@
   }
   &_tittle {
     font-size: 20px;
-    padding: 10px;
+    padding: 0px;
     text-align: center;
   }
 
@@ -288,6 +290,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 50%;
+    border: 2px solid var(--darkblue);
     background-color: var(--grey);
   }
   &_circle-wive {
@@ -307,19 +310,16 @@
     }
   }
 }
+
 .audiocall__statistic_answers {
-  position: absolute;
+  width: 75%;
+  height: 100%;
   padding: 15px;
-  top: 0;
-  left: 0;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   background-color: var(--white);
   border-radius: 10px;
-  opacity: 0;
-  z-index: 0;
   .back-from-details {
     width: 5rem;
     height: 2rem;
@@ -333,12 +333,6 @@
     &:hover {
       border: 2px solid var(--darkblue);
     }
-  }
-  @media (max-width: 500px) {
-    width: 150%;
-    transform: translate(-20%, -10%);
-    font-size: 12px;
-    padding: 5px;
   }
 }
 .statistic-answers-item {
@@ -354,13 +348,12 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    @media (max-width: 760px) {
-      width: 0.8rem;
-      height: 0.8rem;
-    }
   }
   @media (max-width: 900px) {
     font-size: 14px;
+  }
+  @media (max-width: 500px) {
+    width: 95%;
   }
 }
 .check-answer {
@@ -368,10 +361,6 @@
   height: 1rem;
   background-size: contain;
   background-repeat: no-repeat;
-  @media (max-width: 760px) {
-    width: 0.8rem;
-    height: 0.8rem;
-  }
 }
 .valid {
   background-image: url("../assets/icons/valid.png");
