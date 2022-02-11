@@ -1,4 +1,5 @@
-import { IAuthObject, IUser, IWord } from "../types/types";
+import { model } from ".";
+import { IAuthObject, INewWord, IUser, IWord } from "../types/types";
 
 class API {
   private baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
@@ -54,6 +55,21 @@ class API {
 
     return await response.json();
   }
+
+  public createUserWord = async (userId: string, wordId: string, word: INewWord) => {
+    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'POST',
+      // withCredentials: true,
+      headers: {
+        'Authorization': `Bearer ${model.auth?.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
+    });
+
+    return await response.json();
+  };
 }
 
 export const api = new API();

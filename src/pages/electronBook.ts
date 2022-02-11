@@ -172,32 +172,7 @@ export class ElectronBook {
         wordCard.prepend(img);
         const imgHTML = wordCard.innerHTML;
 
-        switch (model.electronBookGroup) {
-          case 0:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 1:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 2:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 3:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 4:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 5:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-          case 6:
-            wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
-            break;
-        
-          default:
-            break;
-        }
+        wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
 
         wordCard.innerHTML = /*html*/`
           <div class="row word-card">
@@ -223,6 +198,8 @@ export class ElectronBook {
                 <div class="word-card__example">${word.textExample}</div>
                 <div class="word-card__exampletranslate">${word.textExampleTranslate}</div>
               </div>
+
+              ${model.auth ? '<div class="word-card__buttons"><button class="word-card__difficult btn">Сложное</button><button class="word-card__delete btn">Удалить</button></div>' : ''}
             </div>
           </div>
         `;
@@ -308,6 +285,10 @@ export class ElectronBook {
     const groups = document.getElementById('electron-book-groups') as HTMLElement;
 
     groups.innerHTML = '';
+
+    if (model.auth) {
+      this.groupsCount = 7
+    }
 
     for (let i = 0; i < this.groupsCount; i++) {
       const group = document.createElement('div') as HTMLElement;

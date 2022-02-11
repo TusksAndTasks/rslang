@@ -2,6 +2,7 @@ import { EPage, IAuthObject } from "../types/types";
 
 export class Model {
   private _activePage: string = EPage.main;
+  private _previousPage: string | null = null;
   private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
   private _electronBookPage: number = 0;
   private _electronBookGroup: number = 0;
@@ -12,6 +13,14 @@ export class Model {
 
   set activePage(page: string) {
     this._activePage = page;
+  }
+
+  get previousPage() {
+    return this._previousPage;
+  }
+
+  set previousPage(page: string | null) {
+    this._previousPage = page;
   }
 
   get auth() {

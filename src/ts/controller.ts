@@ -13,8 +13,8 @@ export class Controller {
     this.view.renderApp();
     this.view.renderHeader();
     this.view.renderFooter();
-    // this.view.renderContent(EPage.main);
-    this.view.renderContent(EPage.electronBook);
+    this.view.renderContent(EPage.main);
+    // this.view.renderContent(EPage.electronBook);
     this.addHeaderListeners();
   }
 
@@ -35,37 +35,43 @@ export class Controller {
         this.toggleHeaderMenu('open');
       }
     });
-    
+
     autBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.auth;
       this.view.renderContent(this.model.activePage);
     });
 
     mainBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
     electronBookBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
     audioCallBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
     sprintBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.sprint;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
     statisticsBtn.addEventListener('click', (): void => {
+      this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.statistics;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');

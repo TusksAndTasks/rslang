@@ -66,7 +66,7 @@ export class Auth {
         this.showError(loginPasswordInput);
       } else {
         this.loginUser(loginEmailInput.value, loginPasswordInput.value);
-        this.backToMainPage();
+        this.backToActivePage();
       }
     });
   }
@@ -106,7 +106,7 @@ export class Auth {
         this.showError(registrationPasswordInput);
       } else {
         this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
-        this.backToMainPage();
+        this.backToActivePage();
       }
     });
   }
@@ -123,7 +123,7 @@ export class Auth {
         || target.classList.contains('modal__close')
         || target.classList.contains('auth__cancel')
       ) {
-        this.backToMainPage();
+        this.backToActivePage();
       } else if (target === loginToggleBtn) {
         this.showLogin();
       } else if (target === registrationToggleBtn) {
@@ -137,7 +137,7 @@ export class Auth {
       .then((newUser: IUser) => {
         this.showAuthStatusMessage('Пользователь зарегистрирован', true);
         this.loginUser(newUser.email, password);
-        this.backToMainPage();
+        this.backToActivePage();
       })
       .catch(() => {
         this.showAuthStatusMessage('Такой пользователь уже зарегистрирован, войдите', false)
@@ -181,8 +181,10 @@ export class Auth {
     }
   }
 
-  public backToMainPage(): void {
-    model.activePage = EPage.main;
+  public backToActivePage(): void {
+    if (model.previousPage) {
+      model.activePage = model.previousPage;
+    }
     view.renderContent(model.activePage);
   }
 

@@ -14,7 +14,7 @@ export interface IAuth {
   loginUser: (email: string, password: string) => void;
   validateEmail: (email: string) => RegExpMatchArray | null;
   showError: (input: HTMLInputElement) => void;
-  backToMainPage: () => void;
+  backToActivePage: () => void;
   showAuthStatusMessage: (status: string, isSuccess: boolean) => void;
   setLogoutButton: () => void;
   setLoginButton: () => void;
@@ -36,7 +36,10 @@ export interface IView {
 
 export interface IModel {
   activePage: string
+  previousPage: string | null;
   auth: IAuthObject | null
+  electronBookPage: number;
+  electronBookGroup: number;
 }
 
 export enum EPage {
@@ -77,4 +80,9 @@ export interface IWord {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+}
+
+export interface INewWord {
+  difficulty: string,
+  optional: object
 }

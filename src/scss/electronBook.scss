@@ -5,6 +5,10 @@
       &__top {
         border-left: 4px solid rgb(242, 105, 92);
       }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
+      }
     }
   }
 
@@ -13,6 +17,10 @@
       border: 3px solid rgb(242, 166, 99);
       &__top {
         border-left: 4px solid rgb(242, 166, 99);
+      }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
       }
     }
   }
@@ -23,6 +31,10 @@
       &__top {
         border-left: 4px solid rgb(250, 170, 186);
       }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
+      }
     }
   }
 
@@ -31,6 +43,10 @@
       border: 3px solid rgb(136, 191, 176);
       &__top {
         border-left: 4px solid rgb(136, 191, 176);
+      }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
       }
     }
   }
@@ -41,6 +57,10 @@
       &__top {
         border-left: 4px solid rgb(96, 164, 191);
       }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
+      }
     }
   }
 
@@ -50,6 +70,10 @@
       &__top {
         border-left: 4px solid rgb(89, 72, 77);
       }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
+      }
     }
   }
 
@@ -58,6 +82,10 @@
       border: 3px solid rgb(199, 21, 21);
       &__top {
         border-left: 4px solid rgb(199, 21, 21);
+      }
+      &__difficult {
+        background: rgb(199, 21, 21);
+        color: #fff;
       }
     }
   }
@@ -240,6 +268,14 @@
   &__translate {
     margin: 0 0 0 14px;
     color: #8a8a8a;
+  }
+
+  &__buttons {
+    margin: 20px 0 0 0;
+  }
+
+  &__difficult {
+    margin: 0 20px 0 0;
   }
 }
 
