@@ -1,9 +1,12 @@
+import { model } from "../ts";
 import { api } from "../ts/api";
 import { IWord } from "../types/types";
 
 export class ElectronBook {
   private words: IWord[] = [];
   private isAudioPlaying: boolean = false;
+  private firstPageIdx: number = 0;
+  private pageLimitIdx: number = 29;
 
   public getHTML(): string {
     return /*html*/`
@@ -29,14 +32,16 @@ export class ElectronBook {
             </div>
           </div>
           <div class="row pagination align-items-center">
-            <button id="pagination-prev" class="btn" disabled>Пред.</button>
-            <div id="pagination-page" class="pagination__number">1</div>
-            <button id="pagination-next" class="btn" disabled>След.</button>
-            <input type="number" class="pagination__input" min="1" max="20" value="1">
-            <button id="pagination-search" class="btn" disabled>Перейти</button>
+            <button id="pagination-prev" class="btn">Пред.</button>
+            <div id="pagination-page" class="pagination__number"></div>
+            <button id="pagination-next" class="btn">След.</button>
+            <input id="pagination-input" type="number" class="pagination__input" min="${this.firstPageIdx + 1}" max="${this.pageLimitIdx + 1}" value="${this.firstPageIdx + 1}">
+            <button id="pagination-switch" class="btn" disabled>Перейти</button>
           </div>
           <div class="row">
-            <div id="electron-book-words" class="electron-book__words"></div>
+            <div id="electron-book-words" class="electron-book__words">
+              <div class="loader"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
+            </div>
             <div id="electron-book-groups" class="electron-book__groups">
               <div class="electron-book__group">1</div>
               <div class="electron-book__group">2</div>
@@ -56,31 +61,95 @@ export class ElectronBook {
     const contentEl = document.querySelector('#content') as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.initPagination();
+    this.initWords(model.electronBookGroup, model.electronBookPage);
   }
 
   public initPagination(): void {
     this.initPrevBtn();
     this.initNextBtn();
     this.initPageNumber();
-    this.getWords(0, 0);
+    this.switchPage();
   }
 
   private initPrevBtn(): void {
+    const prevBtn = document.getElementById('pagination-prev') as HTMLElement;
 
+    if (model.electronBookPage === this.firstPageIdx) {
+      prevBtn.setAttribute('disabled', '');
+    } else {
+      prevBtn.removeAttribute('disabled');
+    }
+
+    prevBtn.onclick = () => {
+      if (model.electronBookPage > this.firstPageIdx) {
+        model.electronBookPage--;
+        this.initWords(model.electronBookGroup, model.electronBookPage);
+        this.initPagination();
+      }
+    };
   }
 
   private initNextBtn(): void {
+    const nextBtn = document.getElementById('pagination-next') as HTMLElement;
 
+    if (model.electronBookPage === this.pageLimitIdx) {
+      nextBtn.setAttribute('disabled', '');
+    } else {
+      nextBtn.removeAttribute('disabled');
+    }
+
+    nextBtn.onclick = () => {
+      if (model.electronBookPage < this.pageLimitIdx) {
+        model.electronBookPage++;
+        this.initWords(model.electronBookGroup, model.electronBookPage);
+        this.initPagination();
+      }
+    };
   }
 
   private initPageNumber(): void {
-
+    const paginationPage = document.getElementById('pagination-page') as HTMLElement;
+    paginationPage.innerHTML = `${model.electronBookPage + 1}`;
   }
 
-  private getWords(group: number, page: number): void {
+  private switchPage(): void {
+    const paginationInput = document.getElementById('pagination-input') as HTMLInputElement;
+    const switchPageBtn = document.getElementById('pagination-switch') as HTMLElement;
+    const events = ['change', 'input'];
+
+    this.validatePageNumber(paginationInput, switchPageBtn);
+
+    events.forEach(event => {
+      paginationInput.addEventListener(event, () => {
+        this.validatePageNumber(paginationInput, switchPageBtn);
+      });
+    })
+
+    switchPageBtn.onclick = () => {
+      model.electronBookPage = +paginationInput.value - 1;
+      this.initWords(model.electronBookGroup, model.electronBookPage);
+      this.initPagination();
+    };
+  }
+
+  private validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement) {
+    const paginationInputIdx = +paginationInput.value - 1;
+
+    if (!Number.isNaN(paginationInputIdx) && paginationInputIdx >= this.firstPageIdx && paginationInputIdx <= this.pageLimitIdx) {
+      switchPageBtn.removeAttribute('disabled');
+    } else {
+      switchPageBtn.setAttribute('disabled', '');
+    }
+  }
+
+  private initWords(group: number, page: number): void {
+    const wordsList = document.getElementById('electron-book-words') as HTMLElement;
+    wordsList.innerHTML = '<div class="loader"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>';
+
     api.getWords(group, page)
       .then((words: IWord[]) => {
         this.words = words;
+        this.sortWordsByNumber(this.words);
         this.renderWordsList();
       });
   }
@@ -88,8 +157,6 @@ export class ElectronBook {
   private renderWordsList(): void {
     const wordsList = document.getElementById('electron-book-words') as HTMLElement;
     wordsList.innerHTML = '';
-
-    this.sortWordsByNumber(this.words);
 
     this.words.forEach((word: IWord) => {
       wordsList.append(this.getWordCard(word));
@@ -178,7 +245,7 @@ export class ElectronBook {
             if (!this.isAudioPlaying) {
               audioBtn.classList.add('active');
               this.isAudioPlaying = true;
-              
+
               audioPlayers[0].play()
                 .then(() => {
                   audioPlayers[0].onended = () => {

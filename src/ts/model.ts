@@ -3,8 +3,8 @@ import { EPage, IAuthObject } from "../types/types";
 export class Model {
   private _activePage: string = EPage.main;
   private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
-  private _electronBookPage: number = 1;
-  private _electronBookGroup: number = 1;
+  private _electronBookPage: number = 0;
+  private _electronBookGroup: number = 0;
 
   get activePage() {
     return this._activePage;

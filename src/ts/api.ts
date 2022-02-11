@@ -45,7 +45,7 @@ class API {
     return await response.json();
   }
 
-  public getWords = async (group: number = 1, page: number = 1): Promise<IWord[]> | never => {
+  public getWords = async (group: number = 0, page: number = 0): Promise<IWord[]> | never => {
     const response: Response = await fetch(`${this.words}?group=${group}&page=${page}`);
 
     if (!response.ok) {

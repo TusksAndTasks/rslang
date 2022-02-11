@@ -5,6 +5,7 @@ import '../scss/main.scss';
 import '../scss/header.scss';
 import '../scss/footer.scss';
 import '../scss/electronBook.scss';
+import '../scss/loader.scss';
 
 import 'airbnb-browser-shims/browser-only';
 
