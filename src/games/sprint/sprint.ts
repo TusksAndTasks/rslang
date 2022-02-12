@@ -18,7 +18,7 @@ export class Sprint {
 
   public getHTML(): string {
     return `
-      <h2>Мини-игра спринт</h2>
+      <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint">
         <div class="sprint__count-box" id="sprint-count-box">
           <div class="sprint__current-count" id="sprint-current-count"></div>
@@ -203,14 +203,7 @@ export class Sprint {
      this.incorrectListener(word, translation, questionsArray);
     })
 
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'ArrowLeft'){
-     this.correctListener(word, translation, questionsArray);
-      }
-      if (e.code === 'ArrowRight'){
-     this.incorrectListener(word, translation, questionsArray);
-      }
-    });
+    document.onkeyup = (e) => this.keyboardListeners(e, word, translation, questionsArray); 
   }
 
 
@@ -238,6 +231,15 @@ export class Sprint {
       this.index++;
       this.setWord(word, translation, questionsArray);
     }
+  }
+
+  private keyboardListeners(e: KeyboardEvent, word: HTMLElement, translation: HTMLElement, questionsArray: ISprintWord[]){
+      if (e.code === 'ArrowLeft'){
+     this.incorrectListener(word, translation, questionsArray);
+      }
+      if (e.code === 'ArrowRight'){
+     this.correctListener(word, translation, questionsArray);
+      }
   }
 
   private setTimer(timer: HTMLElement) {

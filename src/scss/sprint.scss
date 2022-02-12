@@ -1,3 +1,7 @@
+.sprint-title{
+   text-align: center;
+}
+
 .sprint {
     width: 100%;
     height: 90vh;
@@ -10,7 +14,9 @@
     &__word-box {
         width: 50%;
         height: 50%;
-        border: solid 2px white;
+        border: solid 2px black;
+        background-color: white;
+        color: black;
         border-radius: 20px;
         display: flex;
         flex-flow: column;
@@ -90,6 +96,7 @@
         justify-content: space-between;
         width: 50%;
         height: 5%;
+        margin-bottom: 40px;
     }
 
     &__score,
@@ -194,7 +201,7 @@
     &__correct-words,
     &__incorrect-words {
         width: 100%;
-        height: 100%;
+        height: auto;
         display: flex;
         flex-flow: column;
     }
@@ -269,5 +276,172 @@
         justify-content: center;
         align-items: center;
         align-self: center;
+    }
+}
+
+@media (max-width: 1000px) {
+    .sprint-stat{
+        &__correct-word,
+        &__incorrect-word{
+            font-size: 15px;
+        }
+
+        &__correct-audio,
+        &__incorrect-audio {
+            padding: 5px 10px;
+            margin-left: 30px;
+        }
+    }
+    
+}
+
+@media (max-width: 750px) {
+    .sprint{
+        font-size: 20px;
+
+
+        &__count-box{
+            width: 50%;
+            height: 5%;
+            margin-bottom: 40px;
+        }
+
+        &__score,
+        &__current-count,
+        &__streak {
+            width: 25%;
+            height: 130%;
+        }
+
+        &__timer {
+            width: 70px;
+            height: 70px;
+        }
+
+        &__word-box {
+            width: 50%;
+            height: 40%;
+            font-size: 30px;
+        }
+
+        &__right-answer,
+        &__wrong-answer {
+            height: 60%;
+            width: 40%;
+        }
+    }
+
+    .sprint-difficulty {
+        width: 80%;
+        margin-left: 10%;
+     }
+
+    .sprint-stat{
+        &__stat-box {
+            width: 80%;
+            height: 80%;
+        }
+    } 
+}
+
+@media (max-width: 560px) {
+    .sprint{
+    font-size: 17px;
+
+    &__word-box{
+        font-size: 20px;
+    }
+        
+    .dope,
+    .cool,
+    .brilliant,
+    .amazing,
+    .spectacular{
+    font-size: 50px;
+    }
+} 
+.sprint-stat{
+    &__stat-box {
+        width: 95%;
+    }
+    &__correct-word,
+    &__incorrect-word{
+        font-size: 12px;
+    }
+
+    &__correct-audio,
+    &__incorrect-audio {
+        margin-left: 50px;
+    }
+} 
+}
+
+@media (max-width: 420px) {
+    .sprint{
+        &__count-box,
+        &__word-box,
+        &__answer-box {
+            width: 80%;
+        }
+
+        &__word-box {
+            height: 35%;
+        }
+
+        &__streak{
+            font-size: 14px;
+        }
+    }
+
+    .sprint-difficulty {
+       flex-flow: row wrap;
+       width: 40%;
+       margin-left: 30%;
+       height: 40vh;
+    }
+
+    .sprint-stat{
+        &__score{
+            font-size: 20px;
+        }
+
+        &__correct-audio,
+        &__incorrect-audio {
+            padding: 5px 10px;
+            text-indent:-9999px;
+            width: 30px;
+            background-color: transparent;
+            background-image: url(../../src/assets/icons/sound-on.svg);
+            background-size: cover;
+            margin-left: 20px;
+        }
+
+        &__again-button {
+            margin-left: 0px;
+            width: 150px;
+        }
+    } 
+}
+
+@media (max-width: 260px) {
+    .sprint{
+        &__count-box,
+        &__word-box,
+        &__answer-box {
+            width: 100%;
+        }
+
+        &__word-box {
+            height: 35%;
+        }
+
+        &__streak{
+            font-size: 14px;
+        }
+    }
+
+    .sprint-difficulty {
+       width: 70%;
+       margin-left: 15%;
     }
 }

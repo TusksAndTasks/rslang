@@ -6,7 +6,7 @@ import { EPage } from "../../types/types";
 export class SprintDifficulty {
     public getHTML(): string{
         return `
-      <h2>Мини-игра спринт</h2>
+      <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint-difficulty">
         <button class="sprint-difficulty__button" id="sd0">1</button>
         <button class="sprint-difficulty__button" id="sd1">2</button>
@@ -25,7 +25,13 @@ export class SprintDifficulty {
             if ((e.target as HTMLElement).classList.contains('sprint-difficulty__button')) {
                 this.startSprintGame(+((e.target as HTMLElement).id.slice(2) as string));
             }
-        })
+        });
+
+        document.onkeyup = (e) => {
+            if(e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4' || e.key === '5' || e.key === '6'){
+                this.startSprintGame(+(e.key as string) - 1);
+            }
+        }
          
     }
 

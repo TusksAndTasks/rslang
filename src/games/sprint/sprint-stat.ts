@@ -5,7 +5,7 @@ export class SprintStat {
 
     public getHTML(): string{
         return `
-      <h2>Мини-игра спринт</h2>
+      <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint-stat">
        <div class="sprint-stat__stat-box">
        <div class="sprint-stat__score" id="sprint-score-stat"></div>
