@@ -1,6 +1,6 @@
-import { model } from "../ts";
+import { model, view } from "../ts";
 import { api } from "../ts/api";
-import { IWord } from "../types/types";
+import { EPage, IWord } from "../types/types";
 
 export class ElectronBook {
   private words: IWord[] = [];
@@ -16,7 +16,7 @@ export class ElectronBook {
           <div class="electron-book__title title">Проверьте свои знания в мини-играх</div>
           <div class="row electron-book__row">
             <div class="electron-book__col">
-              <div class="electron-book__game">
+              <div id="electron-book-audiocall" class="electron-book__game">
                 <div class="row align-items-center justify-content-center">
                   <div class="electron-book__icon"><img src="./assets/icons/headphones.png" alt=""></div>
                   <div>Аудиовызов</div>
@@ -24,7 +24,7 @@ export class ElectronBook {
               </div>
             </div>
             <div class="electron-book__col">
-              <div class="electron-book__game">
+              <div id="electron-book-sprint" class="electron-book__game">
                 <div class="row align-items-center justify-content-center">
                   <div class="electron-book__icon"><img src="./assets/icons/gamepad.png" alt=""></div>
                   <div>Спринт</div>
@@ -59,6 +59,7 @@ export class ElectronBook {
     this.initPagination();
     this.initGroups();
     this.initWords(model.electronBookGroup, model.electronBookPage);
+    this.initGamesButtons();
   }
 
   public initPagination(): void {
@@ -132,7 +133,7 @@ export class ElectronBook {
     };
   }
 
-  private validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement) {
+  private validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void {
     const paginationInputIdx = +paginationInput.value - 1;
 
     if (!Number.isNaN(paginationInputIdx) && paginationInputIdx >= this.firstPageIdx && paginationInputIdx <= this.pageLimitIdx) {
@@ -227,7 +228,7 @@ export class ElectronBook {
     return audio;
   }
 
-  private initAudioPlayerBtn(wordCard: HTMLElement, word: IWord) {
+  private initAudioPlayerBtn(wordCard: HTMLElement, word: IWord): void {
     Promise.all([
       this.getWordAudio(word.audio),
       this.getWordAudio(word.audioMeaning),
@@ -312,5 +313,22 @@ export class ElectronBook {
     this.initWords(model.electronBookGroup, model.electronBookPage);
     this.initPagination();
     this.initGroups();
+  }
+
+  private initGamesButtons(): void {
+    const electronBookAudiocallBtn = document.getElementById('electron-book-audiocall') as HTMLElement;
+    const electronBookSprintBtn = document.getElementById('electron-book-sprint') as HTMLElement;
+
+    electronBookAudiocallBtn.onclick = () => {
+      model.previousPage = model.activePage;
+      model.activePage = EPage.audiocall;
+      view.renderContent(model.activePage);
+    };
+
+    electronBookSprintBtn.onclick = () => {
+      model.previousPage = model.activePage;
+      model.activePage = EPage.sprint;
+      view.renderContent(model.activePage);
+    };
   }
 }

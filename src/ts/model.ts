@@ -3,9 +3,9 @@ import { EPage, IAuthObject } from "../types/types";
 export class Model {
   private _activePage: string = EPage.main;
   private _previousPage: string | null = null;
-  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
-  private _electronBookPage: number = 0;
-  private _electronBookGroup: number = 0;
+  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage();
+  private _electronBookPage: number = this.getElectronBookPageFromLocalStorage();
+  private _electronBookGroup: number = this.getElectronBookGroupFromLocalStorage();
 
   get activePage() {
     return this._activePage;
@@ -37,6 +37,7 @@ export class Model {
 
   set electronBookPage(page: number) {
     this._electronBookPage = page;
+    localStorage.setItem('electronBookPage', JSON.stringify(this._electronBookPage));
   }
 
   get electronBookGroup() {
@@ -45,13 +46,30 @@ export class Model {
 
   set electronBookGroup(group: number) {
     this._electronBookGroup = group;
+    localStorage.setItem('electronBookGroup', JSON.stringify(this._electronBookGroup));
   }
 
-  private getAuthObjectFromLocalStorage() {
+  private getAuthObjectFromLocalStorage(): IAuthObject | null {
     if (localStorage.getItem('authObject')) {
       return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
     }
 
     return null;
+  }
+
+  private getElectronBookPageFromLocalStorage(): number {
+    if (localStorage.getItem('electronBookPage')) {
+      return JSON.parse(localStorage.getItem('electronBookPage') as string) as number;
+    }
+
+    return 0;
+  }
+
+  private getElectronBookGroupFromLocalStorage(): number {
+    if (localStorage.getItem('electronBookGroup')) {
+      return JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
+    }
+
+    return 0;
   }
 }
