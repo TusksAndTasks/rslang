@@ -21,9 +21,9 @@ export class Sprint {
       <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint">
         <div class="sprint__count-box" id="sprint-count-box">
-          <div class="sprint__current-count" id="sprint-current-count"></div>
+          <div class="sprint__current-count" id="sprint-current-count">0</div>
           <div class="sprint__streak" id="sprint-streak"></div>
-          <div class="sprint__score" id="sprint-score"></div>
+          <div class="sprint__score" id="sprint-score">0</div>
         </div>
         <div class="sprint__timer" id="sprint-timer">60</div>
         <div class="sprint__word-box">
@@ -57,13 +57,13 @@ export class Sprint {
   }
 
   private sortWords(): Array<IWordData> {
-    return [...model.wordsArray].sort((firstWord, secondWord) => {
+    return [...model.sprintWordsArray].sort((firstWord, secondWord) => {
       return this.createRandomNumber();
     })
   }
 
   private createQuestionsArray(): Array<ISprintWord> {
-    const questionsArray: Array<number> = new Array(model.wordsArray.length).fill(0);
+    const questionsArray: Array<number> = new Array(model.sprintWordsArray.length).fill(0);
     const sortedArray = this.sortWords();
 
 
@@ -105,7 +105,7 @@ export class Sprint {
      const rightAudio = new Audio();
      rightAudio.src = '../../assets/sounds/Right-answer.mp3'
      let wordName = word.innerHTML;
-     let correctWord = model.wordsArray.find((elem) => elem.word === wordName);
+     let correctWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
      model.updateSprintStatData(correctWord);
      rightAudio.play();
      const cloneCurrentCount = currentCount.cloneNode() as HTMLElement;
@@ -178,7 +178,7 @@ export class Sprint {
     const wrongAudio = new Audio();
     wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3';
     let wordName = word.innerHTML;
-    let incorrectWord = model.wordsArray.find((elem) => elem.word === wordName);
+    let incorrectWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
     model.updateSprintStatData(null, incorrectWord, null, this.streak);
     this.streak = 0;
     wrongAudio.play();

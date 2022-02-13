@@ -1,4 +1,5 @@
 import { model, view } from "../../ts";
+import { api } from "../../ts/api";
 import { EPage, IWordData } from "../../types/types";
 
 export class SprintStat {
@@ -59,7 +60,7 @@ export class SprintStat {
 
            correctAudioBtn.forEach((elem) => {
             const audio = new Audio();
-            audio.src = `https://react-learnwords-example.herokuapp.com/${(model.sprintStatData.correctWords.find((el) => el.id === elem.id) as IWordData).audio}`
+            audio.src = `${api.baseUrl}/${(model.sprintStatData.correctWords.find((el) => el.id === elem.id) as IWordData).audio}`
               elem.addEventListener('click', function(){
                   audio.play();
               })
@@ -67,7 +68,7 @@ export class SprintStat {
 
            incorrectAudioBtn.forEach((elem) => {
             const audio = new Audio();
-            audio.src = `https://react-learnwords-example.herokuapp.com/${(model.sprintStatData.incorrectWords.find((el) => el.id === elem.id) as IWordData).audio}`
+            audio.src = `${api.baseUrl}/${(model.sprintStatData.incorrectWords.find((el) => el.id === elem.id) as IWordData).audio}`
               elem.addEventListener('click', function(){
                   audio.play();
               })

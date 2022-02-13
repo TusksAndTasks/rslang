@@ -10,7 +10,7 @@ export class Model {
     learnedWords: [],
     maxStreak: 0
 };
-  private _wordsArray: IWordsData = [];
+  private _sprintWordsArray: IWordsData = [];
   private _sprintScore: string = '0';
 
   get activePage() {
@@ -37,12 +37,12 @@ export class Model {
     this._sprintStatData = stat;
   }
 
-  get wordsArray(){
-    return this._wordsArray;
+  get sprintWordsArray(){
+    return this._sprintWordsArray;
   }
 
-  set wordsArray(arr: IWordsData){
-    this._wordsArray = arr;
+  set sprintWordsArray(arr: IWordsData){
+    this._sprintWordsArray = arr;
   }
 
   get sprintScore(){

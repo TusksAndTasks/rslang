@@ -43,7 +43,7 @@ export class SprintDifficulty {
        try{
          const page = this.getRandomPage();
          const response = await api.getWords(group, page);
-         model.wordsArray = response;
+         model.sprintWordsArray = response;
        }
        catch (err){
            throw err;
