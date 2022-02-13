@@ -59,7 +59,7 @@ export class Model {
 
   private getElectronBookPageFromLocalStorage(): number {
     if (localStorage.getItem('electronBookPage')) {
-      return JSON.parse(localStorage.getItem('electronBookPage') as string) as number;
+      return +JSON.parse(localStorage.getItem('electronBookPage') as string) as number;
     }
 
     return 0;
@@ -67,7 +67,7 @@ export class Model {
 
   private getElectronBookGroupFromLocalStorage(): number {
     if (localStorage.getItem('electronBookGroup')) {
-      return JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
+      return +JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
     }
 
     return 0;

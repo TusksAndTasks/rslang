@@ -25,6 +25,21 @@ export interface IElectronBook {
   getHTML: () => string;
   init: () => void;
   initPagination: () => void;
+  initPrevBtn(): void;
+  initNextBtn(): void;
+  initPageNumber(): void;
+  switchPage(): void;
+  validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void;
+  initWords(group: number, page: number): void
+  renderWordsList(): void;
+  getWordCard(word: IWord): HTMLElement;
+  getWordImage(word: IWord): Promise<HTMLImageElement>;
+  getWordAudio(src: string): Promise<HTMLAudioElement>;
+  initAudioPlayerBtn(wordCard: HTMLElement, word: IWord): void;
+  sortWordsByNumber(arr: IWord[]): void;
+  initGroups(): void;
+  switchGroup(group: number): void;
+  initGamesButtons(): void;
 }
 
 export interface IView {

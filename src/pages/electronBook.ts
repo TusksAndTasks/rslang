@@ -69,7 +69,7 @@ export class ElectronBook {
     this.switchPage();
   }
 
-  private initPrevBtn(): void {
+  public initPrevBtn(): void {
     const prevBtn = document.getElementById('pagination-prev') as HTMLElement;
 
     if (model.electronBookPage === this.firstPageIdx) {
@@ -88,7 +88,7 @@ export class ElectronBook {
     };
   }
 
-  private initNextBtn(): void {
+  public initNextBtn(): void {
     const nextBtn = document.getElementById('pagination-next') as HTMLElement;
 
     if (model.electronBookPage === this.pageLimitIdx) {
@@ -107,12 +107,12 @@ export class ElectronBook {
     };
   }
 
-  private initPageNumber(): void {
+  public initPageNumber(): void {
     const paginationPage = document.getElementById('pagination-page') as HTMLElement;
     paginationPage.innerHTML = `${model.electronBookPage + 1}`;
   }
 
-  private switchPage(): void {
+  public switchPage(): void {
     const paginationInput = document.getElementById('pagination-input') as HTMLInputElement;
     const switchPageBtn = document.getElementById('pagination-switch') as HTMLElement;
     const events = ['change', 'input'];
@@ -133,7 +133,7 @@ export class ElectronBook {
     };
   }
 
-  private validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void {
+  public validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void {
     const paginationInputIdx = +paginationInput.value - 1;
 
     if (!Number.isNaN(paginationInputIdx) && paginationInputIdx >= this.firstPageIdx && paginationInputIdx <= this.pageLimitIdx) {
@@ -143,7 +143,7 @@ export class ElectronBook {
     }
   }
 
-  private initWords(group: number, page: number): void {
+  public initWords(group: number, page: number): void {
     const wordsList = document.getElementById('electron-book-words') as HTMLElement;
     wordsList.innerHTML = '<div class="loader"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>';
 
@@ -155,7 +155,7 @@ export class ElectronBook {
       });
   }
 
-  private renderWordsList(): void {
+  public renderWordsList(): void {
     const wordsList = document.getElementById('electron-book-words') as HTMLElement;
     wordsList.innerHTML = '';
 
@@ -164,7 +164,7 @@ export class ElectronBook {
     });
   }
 
-  private getWordCard(word: IWord): HTMLElement {
+  public getWordCard(word: IWord): HTMLElement {
     const wordCard = document.createElement('div') as HTMLElement;
     wordCard.classList.add('electron-book__word');
 
@@ -212,7 +212,7 @@ export class ElectronBook {
     return wordCard;
   }
 
-  private async getWordImage(word: IWord): Promise<HTMLImageElement> {
+  public async getWordImage(word: IWord): Promise<HTMLImageElement> {
     const img = new Image() as HTMLImageElement;
     img.src = `https://rs-lang-react.herokuapp.com/${word.image}`;
     img.alt = `${word.word}`;
@@ -221,14 +221,14 @@ export class ElectronBook {
     return img;
   }
 
-  private async getWordAudio(src: string): Promise<HTMLAudioElement> {
+  public async getWordAudio(src: string): Promise<HTMLAudioElement> {
     const audio = new Audio() as HTMLAudioElement;
     audio.src = `https://rs-lang-react.herokuapp.com/${src}`;
 
     return audio;
   }
 
-  private initAudioPlayerBtn(wordCard: HTMLElement, word: IWord): void {
+  public initAudioPlayerBtn(wordCard: HTMLElement, word: IWord): void {
     Promise.all([
       this.getWordAudio(word.audio),
       this.getWordAudio(word.audioMeaning),
@@ -274,7 +274,7 @@ export class ElectronBook {
       });
   }
 
-  private sortWordsByNumber(arr: IWord[]) {
+  public sortWordsByNumber(arr: IWord[]): void {
     arr.sort((a, b) => {
       const aImageNum = +a.image.slice(-8, -4);
       const bImageNum = +b.image.slice(-8, -4);
@@ -282,7 +282,7 @@ export class ElectronBook {
     });
   }
 
-  private initGroups(): void {
+  public initGroups(): void {
     const groups = document.getElementById('electron-book-groups') as HTMLElement;
 
     groups.innerHTML = '';
@@ -308,14 +308,14 @@ export class ElectronBook {
     }
   }
 
-  private switchGroup(group: number): void {
+  public switchGroup(group: number): void {
     model.electronBookGroup = group;
     this.initWords(model.electronBookGroup, model.electronBookPage);
     this.initPagination();
     this.initGroups();
   }
 
-  private initGamesButtons(): void {
+  public initGamesButtons(): void {
     const electronBookAudiocallBtn = document.getElementById('electron-book-audiocall') as HTMLElement;
     const electronBookSprintBtn = document.getElementById('electron-book-sprint') as HTMLElement;
 
