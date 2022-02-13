@@ -110,6 +110,7 @@ class LastPage {
   }
 
   renderLastPage(words: IWordsData, arrForCheckAnswers: boolean[]) {
+    document.onkeyup = null;
     const gameAudiocallElement = document.getElementById(
       "game-audio"
     ) as HTMLElement;

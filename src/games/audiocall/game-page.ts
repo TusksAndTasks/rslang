@@ -149,7 +149,6 @@ class GamePage {
       "sound-btn"
     ) as HTMLButtonElement;
     const buttonNext = document.getElementById("next") as HTMLElement;
-
     document.onkeyup = (e: KeyboardEvent) => {
       const numberKey: number = Number(e.code.slice(-1));
       if (numberKey > 0 && numberKey < 5) {
