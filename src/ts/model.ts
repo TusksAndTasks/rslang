@@ -1,9 +1,11 @@
 import { EPage, IAuthObject, ISprintStatObj, IWordData, IWordsData } from "../types/types";
 
 export class Model {
+  public numberOfPages = 30;
+  public numberOfQuestion = 20;
   private _activePage: string = EPage.main;
   private _sprintTimer: number = 59;
-  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage() || null;
+  private _auth: IAuthObject | null =this.getAuthObjectFromLocalStorage() || null;
   private _sprintStatData: ISprintStatObj = {
     correctWords: [],
     incorrectWords: [],
@@ -69,8 +71,10 @@ export class Model {
   }
 
   private getAuthObjectFromLocalStorage() {
-    if (localStorage.getItem('authObject')) {
-      return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
+    if (localStorage.getItem("authObject")) {
+      return JSON.parse(
+        localStorage.getItem("authObject") as string
+      ) as IAuthObject;
     }
 
     return null;

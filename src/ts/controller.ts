@@ -34,31 +34,31 @@ export class Controller {
         this.toggleHeaderMenu('open');
       }
     });
-    
+      
     autBtn.addEventListener('click', (): void => {
       this.model.activePage = EPage.auth;
       this.view.renderContent(this.model.activePage);
     });
 
-    mainBtn.addEventListener('click', (): void => {
+    mainBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
-    electronBookBtn.addEventListener('click', (): void => {
+    electronBookBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
-    audioCallBtn.addEventListener('click', (): void => {
+    audioCallBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
     });
 
-    sprintBtn.addEventListener('click', (): void => {
+    sprintBtn.addEventListener("click", (): void => {
       this.model.activePage = EPage.sprintDifficulty;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');

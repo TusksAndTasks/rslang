@@ -1,6 +1,15 @@
 export interface ITemplate {
   getHTML: () => string;
 }
+export interface IAudiocall {
+  initAudiocall: () => void;
+}
+
+export enum NameBtnAudiocall {
+  dontKnow = "Не знаю",
+  next = "Дальше",
+  last = "Результат",
+}
 
 export interface ISprint extends ITemplate {
   startSprint: () => void;
@@ -33,7 +42,6 @@ export interface IAuth {
   logoutUser: () => void;
 }
 
-
 export interface IView {
   renderApp: () => void;
   renderHeader: () => void;
@@ -42,67 +50,89 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string
-  auth: IAuthObject | null
-  sprintTimer: number;
-  sprintStatData: ISprintStatObj;
-  updateSprintStatData: (correctWord: IWordData | null, incorrectWord: IWordData | null, learnedWord: IWordData | null, streak: number) => void;
-  sprintScore: string;
-}
-
-export enum EPage {
-  auth = 'auth',
-  main = 'main',
-  electronBook = 'electronBook',
-  audiocall = 'audiocall',
-  sprint = 'sprint',
-  sprintStat = 'sprint-stat',
-  sprintDifficulty = 'sprint-difficulty', 
-  statistics = 'statistics',
+  activePage: string;
+  auth: IAuthObject | null;
 }
 
 export interface IWordData {
-  id: string,
-  group: number,
-  page: number,
-  word: string,
-  image: string,
-  audio: string,
-  audioMeaning: string,
-  audioExample: string,
-  textMeaning: string,
-  textExample: string,
-  transcription: string,
-  wordTranslate: string,
-  textMeaningTranslate: string,
-  textExampleTranslate: string
-}
-
-export interface ISprintWord {
-  word: string,
-  wordTranslate: string,
-  correct: boolean
-}
-
-export interface IUser {
-  name: string,
-  email: string,
-  password: string
-}
-
-export interface IAuthObject {
-  message: string,
-  token: string,
-  refreshToken: string,
-  userId: string,
-  name: string
-}
-
-export interface ISprintStatObj {
-  correctWords: Array<IWordData>,
-  incorrectWords: Array<IWordData>,
-  learnedWords: Array<IWordData>,
-  maxStreak: number
+  id: string;
+  sprintTimer: number;
+  sprintStatData: ISprintStatObj;
+  updateSprintStatData: (
+    correctWord: IWordData | null,
+    incorrectWord: IWordData | null,
+    learnedWord: IWordData | null,
+    streak: number
+  ) => void;
+  sprintScore: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  wordTranslate: string;
+  textMeaningTranslate: string;
+  textExampleTranslate: string;
 }
 
 export type IWordsData = IWordData[];
+
+export enum EPage {
+  auth = "auth",
+  main = "main",
+  electronBook = "electronBook",
+  audiocall = "audiocall",
+  sprint = "sprint",
+  statistics = "statistics",
+  sprintStat = "sprint-stat",
+  sprintDifficulty = "sprint-difficulty",
+}
+
+export interface IWordData {
+  id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  wordTranslate: string;
+  textMeaningTranslate: string;
+  textExampleTranslate: string;
+}
+
+export interface ISprintWord {
+  word: string;
+  wordTranslate: string;
+  correct: boolean;
+}
+
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IAuthObject {
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
+}
+
+export interface ISprintStatObj {
+  correctWords: Array<IWordData>;
+  incorrectWords: Array<IWordData>;
+  learnedWords: Array<IWordData>;
+  maxStreak: number;
+}

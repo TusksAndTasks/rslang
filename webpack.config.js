@@ -37,7 +37,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|mp3)$/i,
         type: 'asset',
         generator: {
           filename: 'assets/static/[hash][ext][query]',

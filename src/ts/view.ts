@@ -1,5 +1,5 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, ISprint, ISprintDifficulty, ISprintStat, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader, IAudiocall, ISprint, ISprintDifficulty, ISprintStat, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -7,13 +7,13 @@ export class View {
   private auth: IAuth;
   private main: ITemplate;
   private electronBook: ITemplate;
-  private audiocall: ITemplate;
+  private audiocall: IAudiocall;
   private sprint: ISprint;
   private sprintStat: ISprintStat;
   private sprintDifficulty: ISprintDifficulty;
   private statistics: ITemplate;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: ITemplate, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: IAudiocall, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -28,33 +28,33 @@ export class View {
 
   public renderApp(): void {
     const body = document.body;
-    const app = document.createElement('div');
+    const app = document.createElement("div");
 
-    app.setAttribute('id', 'app');
-    app.classList.add('app');
+    app.setAttribute("id", "app");
+    app.classList.add("app");
 
-    app.innerHTML = /*html*/`
+    app.innerHTML = /*html*/ `
       <header id="header" class="header"></header>
       <main id="content" class="content"></main>
       <footer id="footer" class="footer"></foot>
     `;
 
-    body.innerHTML = '';
+    body.innerHTML = "";
     body.append(app);
   }
 
   public renderHeader(): void {
-    const headerEl = document.querySelector('#header') as HTMLElement;
+    const headerEl = document.querySelector("#header") as HTMLElement;
     headerEl!.innerHTML = this.header.getHTML(model.auth);
   }
 
   public renderFooter(): void {
-    const footerEl = document.querySelector('#footer') as HTMLElement;
+    const footerEl = document.querySelector("#footer") as HTMLElement;
     footerEl!.innerHTML = this.footer.getHTML();
   }
 
   public renderContent(activePage: string = EPage.main): void {
-    const contentEl = document.querySelector('#content') as HTMLElement;
+    const contentEl = document.querySelector("#content") as HTMLElement;
 
     switch (activePage) {
       case EPage.auth:
@@ -70,7 +70,7 @@ export class View {
         break;
 
       case EPage.audiocall:
-        contentEl!.innerHTML = this.audiocall.getHTML();
+        this.audiocall.initAudiocall();
         break;
 
       case EPage.sprint:
