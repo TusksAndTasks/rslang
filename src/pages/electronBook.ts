@@ -32,7 +32,7 @@ export class ElectronBook {
               </div>
             </div>
           </div>
-          <div class="row pagination align-items-center">
+          <div id="pagination" class="row pagination align-items-center">
             <button id="pagination-prev" class="btn">Пред.</button>
             <div id="pagination-page" class="pagination__number"></div>
             <button id="pagination-next" class="btn">След.</button>
@@ -67,6 +67,12 @@ export class ElectronBook {
     this.initNextBtn();
     this.initPageNumber();
     this.switchPage();
+
+    if (model.electronBookGroup === 6) {
+      this.hidePagination();
+    } else {
+      this.showPagination();
+    }
   }
 
   public initPrevBtn(): void {
@@ -339,5 +345,15 @@ export class ElectronBook {
       model.activePage = EPage.sprintDifficulty;
       view.renderContent(model.activePage);
     };
+  }
+
+  public hidePagination(): void {
+    const pagination = document.getElementById('pagination') as HTMLElement;
+    pagination.style.display = 'none';
+  }
+
+  public showPagination(): void {
+    const pagination = document.getElementById('pagination') as HTMLElement;
+    pagination.style.display = 'flex';
   }
 }
