@@ -2,25 +2,10 @@ import { IAuthObject, IUser } from "../types/types";
 import { IWordData, IWordsData } from "../types/types";
 
 class API {
-  public baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
+  public baseUrl: string = "https://react-learnwords-example.herokuapp.com";
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
   private words: string = `${this.baseUrl}/words`;
-
- public getWords = async (
-    group: number,
-    page: number
-  ): Promise<IWordsData> | never => {
-    const response: Response = await fetch(
-      `${this.words}?group=${group}&page=${page}`
-    );
-    return (await response.json()) as IWordsData;
-  };
-
-  public getWord = async (id: string): Promise<IWordData> | never => {
-    const response: Response = await fetch(`${this.words}/${id}`);
-    return (await response.json()) as IWordData;
-  };
 
   public getWords = async (
     group: number,
@@ -33,9 +18,7 @@ class API {
   };
 
   public getWord = async (id: string): Promise<IWordData> | never => {
-    const response: Response = await fetch(`${this.words}/${id}`, {
-      method: "GET",
-    });
+    const response: Response = await fetch(`${this.words}/${id}`);
     return (await response.json()) as IWordData;
   };
 
