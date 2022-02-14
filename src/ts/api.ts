@@ -12,18 +12,13 @@ class API {
     page: number
   ): Promise<IWordsData> | never => {
     const response: Response = await fetch(
-      `${this.words}?group=${group}&page=${page}`,
-      {
-        method: "GET",
-      }
+      `${this.words}?group=${group}&page=${page}`
     );
     return (await response.json()) as IWordsData;
   };
 
   public getWord = async (id: string): Promise<IWordData> | never => {
-    const response: Response = await fetch(`${this.words}/${id}`, {
-      method: "GET",
-    });
+    const response: Response = await fetch(`${this.words}/${id}`);
     return (await response.json()) as IWordData;
   };
 
