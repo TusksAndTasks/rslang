@@ -1,7 +1,8 @@
 import { api } from "../../ts/api";
-import { IWordData, IWordsData, numberOfQuestion } from "../../types/types";
+import { IWordData, IWordsData } from "../../types/types";
 import { lastPage } from "./last-page";
-import { ValueButtonNext } from "./types-for-audiocall";
+import { NameBtnAudiocall } from "../../types/types";
+import { model } from "../../ts";
 
 const stepForProgress = 5;
 const stepForCurrentIndex = 1;
@@ -103,9 +104,9 @@ class GamePage {
     });
     const buttonNext = document.getElementById("next") as HTMLElement;
 
-    if (this.currentIndex + 1 === numberOfQuestion) {
-      buttonNext.textContent = ValueButtonNext.last;
-    } else buttonNext.textContent = ValueButtonNext.next;
+    if (this.currentIndex + 1 === model.numberOfQuestion) {
+      buttonNext.textContent = NameBtnAudiocall.last;
+    } else buttonNext.textContent = NameBtnAudiocall.next;
 
     const correctWord = document.getElementById("correct-word") as HTMLElement;
     const audioButton = document.getElementById(
@@ -150,7 +151,7 @@ class GamePage {
     ) as HTMLButtonElement;
     const buttonNext = document.getElementById("next") as HTMLElement;
     document.onkeyup = (e: KeyboardEvent) => {
-      const numberKey: number = Number(e.code.slice(-1));
+      const numberKey: number = Number(e.key);
       if (numberKey > 0 && numberKey < 5) {
         buttonsAnswers[numberKey - 1].click();
       }
@@ -188,15 +189,15 @@ class GamePage {
   }
 
   private listenerForNext(buttonNext: HTMLButtonElement, words: IWordsData) {
-    if (this.currentIndex + 1 === numberOfQuestion) {
+    if (this.currentIndex + 1 === model.numberOfQuestion) {
       this.currentIndex = 0;
       this.currentProgress = 5;
       lastPage.renderLastPage(words, this.checkAnswers);
     } else {
-      if (buttonNext.textContent === ValueButtonNext.dontKnow) {
+      if (buttonNext.textContent === NameBtnAudiocall.dontKnow) {
         this.checkAnswers.push(false);
       } else {
-        buttonNext.textContent = ValueButtonNext.dontKnow;
+        buttonNext.textContent = NameBtnAudiocall.dontKnow;
       }
       this.currentIndex += stepForCurrentIndex;
       this.currentProgress += stepForProgress;

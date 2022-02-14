@@ -1,6 +1,8 @@
 import { EPage, IAuthObject, IWordData, IWordsData } from "../types/types";
 
 export class Model {
+  public numberOfPages = 30;
+  public numberOfQuestion = 20;
   private _activePage: string = EPage.main;
   private _auth: IAuthObject | null =
     this.getAuthObjectFromLocalStorage() || null;

@@ -5,6 +5,12 @@ export interface IAudiocall {
   initAudiocall: () => void;
 }
 
+export enum NameBtnAudiocall {
+  dontKnow = "Не знаю",
+  next = "Дальше",
+  last = "Результат",
+}
+
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }
@@ -78,5 +84,4 @@ export interface IAuthObject {
   name: string;
 }
 
-export const numberOfPages = 30;
-export const numberOfQuestion = 20;
+

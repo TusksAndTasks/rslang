@@ -1,6 +1,6 @@
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
-import { IWordData, IWordsData, numberOfQuestion } from "../../types/types";
+import { IWordData, IWordsData } from "../../types/types";
 
 class LastPage {
   public getHTML(): string {
@@ -48,11 +48,11 @@ class LastPage {
     let current = 0;
     const firstIndex = arr.indexOf(true);
     if (firstIndex !== -1) {
-      arr.forEach((el, i) => {
-        if (el === true) {
+      arr.forEach((el) => {
+        if (el) {
           current++;
-        } else {
           max = Math.max(max, current);
+        } else {
           current = 0;
         }
       });
@@ -119,7 +119,7 @@ class LastPage {
       (val) => val === true
     ).length;
     const percentOfValid = Math.round(
-      (numberValidAnswer * 100) / numberOfQuestion
+      (numberValidAnswer * 100) / model.numberOfQuestion
     );
     const animateElement = document.getElementById(
       "statistic_circle-wive"
@@ -143,7 +143,9 @@ class LastPage {
     ) as HTMLElement;
     textStatistic.textContent = `${percentOfValid}%`;
     totalValid.textContent = `Верных ответов ${numberValidAnswer}`;
-    totalInvalid.textContent = `Ошибок ${numberOfQuestion - numberValidAnswer}`;
+    totalInvalid.textContent = `Ошибок ${
+      model.numberOfQuestion - numberValidAnswer
+    }`;
     answersInRow.textContent = `Верных ответов подряд ${this.getNumberAnswersInRow(
       arrForCheckAnswers
     )}`;
