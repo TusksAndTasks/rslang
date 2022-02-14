@@ -16,6 +16,10 @@
       cursor: pointer;
       white-space: nowrap;
 
+      &.menu-item-active {
+        color: var(--blue);
+      }
+
       & + li {
         margin: 0 0 0 20px;
       }

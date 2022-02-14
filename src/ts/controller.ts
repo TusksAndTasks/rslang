@@ -14,7 +14,6 @@ export class Controller {
     this.view.renderHeader();
     this.view.renderFooter();
     this.view.renderContent(EPage.main);
-    // this.view.renderContent(EPage.electronBook);
     this.addHeaderListeners();
   }
 
@@ -27,6 +26,8 @@ export class Controller {
     const autBtn = document.getElementById('logout-btn') || document.getElementById('login-btn') as HTMLElement;
     const statisticsBtn = document.getElementById('statistics-btn') as HTMLElement;
     const iconMenu = document.getElementById('icon-menu') as HTMLElement;
+
+    this.setActiveMenuItem(mainBtn);
 
     iconMenu.addEventListener('click', () => {
       if (iconMenu.classList.contains('icon-menu--active')) {
@@ -47,6 +48,7 @@ export class Controller {
       this.model.activePage = EPage.main;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
+      this.setActiveMenuItem(mainBtn);
     });
 
     electronBookBtn.addEventListener('click', (): void => {
@@ -54,6 +56,8 @@ export class Controller {
       this.model.activePage = EPage.electronBook;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
+      this.setActiveMenuItem(electronBookBtn);
+
     });
 
     audioCallBtn.addEventListener('click', (): void => {
@@ -61,6 +65,7 @@ export class Controller {
       this.model.activePage = EPage.audiocall;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
+      this.setActiveMenuItem(audioCallBtn);
     });
 
     sprintBtn.addEventListener('click', (): void => {
@@ -68,6 +73,7 @@ export class Controller {
       this.model.activePage = EPage.sprint;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
+      this.setActiveMenuItem(sprintBtn);
     });
 
     statisticsBtn.addEventListener('click', (): void => {
@@ -75,7 +81,16 @@ export class Controller {
       this.model.activePage = EPage.statistics;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
+      this.setActiveMenuItem(statisticsBtn);
     });
+  }
+
+  public setActiveMenuItem(menuItem: HTMLElement): void {
+    const bodyMenu = document.querySelector('.body-menu') as HTMLElement;
+    const menuItems = [...bodyMenu.children] as HTMLElement[];
+
+    menuItems.forEach(li => li.classList.remove('menu-item-active'));
+    menuItem.classList.add('menu-item-active');
   }
 
   public toggleHeaderMenu(action: string) {

@@ -200,7 +200,13 @@ export class ElectronBook {
                 <div class="word-card__exampletranslate">${word.textExampleTranslate}</div>
               </div>
 
-              ${model.auth ? '<div class="word-card__buttons"><button class="word-card__difficult btn">Сложное</button><button class="word-card__delete btn">Удалить</button></div>' : ''}
+              ${model.auth 
+                ? 
+                  `<div class="word-card__buttons">
+                    <button class="word-card__difficult btn">Сложное</button>
+                  </div>`
+                : ''
+              }
             </div>
           </div>
         `;
@@ -288,7 +294,9 @@ export class ElectronBook {
     groups.innerHTML = '';
 
     if (model.auth) {
-      this.groupsCount = 7
+      this.groupsCount = 7;
+    } else {
+      this.groupsCount = 6;
     }
 
     for (let i = 0; i < this.groupsCount; i++) {

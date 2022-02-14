@@ -151,6 +151,7 @@ export class Auth {
         model.auth = loginObj;
         localStorage.setItem('authObject', JSON.stringify(loginObj));
         this.setLogoutButton();
+        this.backToActivePage();
       })
       .catch(() => {
         this.showAuthStatusMessage('Неверный логин или пароль', false);
@@ -184,8 +185,8 @@ export class Auth {
   public backToActivePage(): void {
     if (model.previousPage) {
       model.activePage = model.previousPage;
+      view.renderContent(model.activePage);
     }
-    view.renderContent(model.activePage);
   }
 
   public showAuthStatusMessage(status: string, isSuccess: boolean): void {
@@ -237,5 +238,6 @@ export class Auth {
     model.auth = null;
     this.setLoginButton();
     this.showAuthStatusMessage('Вы вышли из аккаунта', false);
+    this.backToActivePage();
   }
 }
