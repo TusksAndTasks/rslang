@@ -2,6 +2,18 @@ export interface ITemplate {
   getHTML: () => string;
 }
 
+export interface ISprint extends ITemplate {
+  startSprint: () => void;
+}
+
+export interface ISprintStat extends ITemplate {
+  showStatWords: () => void;
+}
+
+export interface ISprintDifficulty extends ITemplate {
+  setDifficultyListeners: () => void;
+}
+
 export interface IHeader {
   getHTML: (auth: IAuthObject | null) => string;
 }
@@ -55,6 +67,10 @@ export interface IModel {
   auth: IAuthObject | null
   electronBookPage: number;
   electronBookGroup: number;
+  sprintTimer: number;
+  sprintStatData: ISprintStatObj;
+  updateSprintStatData: (correctWord: IWordData | null, incorrectWord: IWordData | null, learnedWord: IWordData | null, streak: number) => void;
+  sprintScore: string;
 }
 
 export enum EPage {
@@ -63,7 +79,32 @@ export enum EPage {
   electronBook = 'electronBook',
   audiocall = 'audiocall',
   sprint = 'sprint',
-  statistics = 'statistics'
+  sprintStat = 'sprint-stat',
+  sprintDifficulty = 'sprint-difficulty', 
+  statistics = 'statistics',
+}
+
+export interface IWordData {
+  id: string,
+  group: number,
+  page: number,
+  word: string,
+  image: string,
+  audio: string,
+  audioMeaning: string,
+  audioExample: string,
+  textMeaning: string,
+  textExample: string,
+  transcription: string,
+  wordTranslate: string,
+  textMeaningTranslate: string,
+  textExampleTranslate: string
+}
+
+export interface ISprintWord {
+  word: string,
+  wordTranslate: string,
+  correct: boolean
 }
 
 export interface IUser {
@@ -98,6 +139,20 @@ export interface IWord {
 }
 
 export interface INewWord {
-  difficulty: string,
-  optional: object
+  difficulty: string;
+  optional: object;
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
 }
+
+export interface ISprintStatObj {
+  correctWords: Array<IWordData>,
+  incorrectWords: Array<IWordData>,
+  learnedWords: Array<IWordData>,
+  maxStreak: number
+}
+
+export type IWordsData = IWordData[];

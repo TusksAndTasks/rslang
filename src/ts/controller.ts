@@ -70,7 +70,7 @@ export class Controller {
 
     sprintBtn.addEventListener('click', (): void => {
       this.model.previousPage = this.model.activePage;
-      this.model.activePage = EPage.sprint;
+      this.model.activePage = EPage.sprintDifficulty;
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
       this.setActiveMenuItem(sprintBtn);

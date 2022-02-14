@@ -1,11 +1,16 @@
 import { model } from ".";
-import { IAuthObject, INewWord, IUser, IWord } from "../types/types";
+import { IAuthObject, INewWord, IUser, IWord, IWordData } from "../types/types";
 
 class API {
-  private baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
+  public baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
   private words: string = `${this.baseUrl}/words`;
+
+  public getWord = async (id: string): Promise<IWordData> | never => {
+    const response: Response = await fetch(`${this.words}/${id}`);
+    return (await response.json()) as IWordData;
+  };
 
   public createUser = async (name: string, email: string, password: string): Promise<IUser> | never => {
     const response: Response = await fetch(this.users, {

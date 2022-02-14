@@ -336,7 +336,7 @@ export class ElectronBook {
 
     electronBookSprintBtn.onclick = () => {
       model.previousPage = model.activePage;
-      model.activePage = EPage.sprint;
+      model.activePage = EPage.sprintDifficulty;
       view.renderContent(model.activePage);
     };
   }
