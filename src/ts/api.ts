@@ -61,12 +61,34 @@ class API {
     return await response.json();
   }
 
+  public getAggregatedWords = async (userId: string, group: number = 0, page: number = 0, wordsPerPage: number = 20, filter: string = ''): Promise<IWord[]> | never => {
+    const response: Response = await fetch(`${this.users}/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    
+
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
+
+    const data = await response.json()
+    const aggregatedWords = data[0].paginatedResults;
+
+    return aggregatedWords;
+  }
+
+
   public createUserWord = async (userId: string, wordId: string, word: INewWord) => {
     const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
-      // withCredentials: true,
       headers: {
-        'Authorization': `Bearer ${model.auth?.token}`,
+        'Authorization': `Bearer ${model.auth!.token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
@@ -74,6 +96,20 @@ class API {
     });
 
     return await response.json();
+  };
+
+  public deleteUserWord = async (userId: string, wordId: string, word: INewWord) => {
+    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
+    });
+
+    return response;
   };
 }
 

@@ -248,6 +248,30 @@
     .btn + .btn {
       margin: 0 0 0 20px;
     }
+
+    .btn-hard-active {
+      background: #c71515;
+    }
+
+    .btn-easy-active {
+      background: #b6ffae;
+    }
+  }
+
+  &.word-card--hard {
+    background: #c71515;
+    color: var(--white);
+    .word-card__translate {
+      color: var(--white);
+    }
+  }
+
+  &.word-card--easy {
+    background: #b6ffae;
+    color: var(--black);
+    .word-card__translate {
+      color: var(--black);
+    }
   }
 }
 
@@ -294,7 +318,8 @@
   }
 
   .word-card {
-    &__top, &__bottom {
+    &__top,
+    &__bottom {
       margin: 0 0 20px 0;
     }
 

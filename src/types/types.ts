@@ -136,16 +136,15 @@ export interface IWord {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  userWord?: {
+    difficulty: string
+    optional: object
+  }
 }
 
 export interface INewWord {
   difficulty: string;
   optional: object;
-  message: string;
-  token: string;
-  refreshToken: string;
-  userId: string;
-  name: string;
 }
 
 export interface ISprintStatObj {

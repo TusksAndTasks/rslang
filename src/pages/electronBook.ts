@@ -153,12 +153,28 @@ export class ElectronBook {
     const wordsList = document.getElementById('electron-book-words') as HTMLElement;
     wordsList.innerHTML = '<div class="loader"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>';
 
-    api.getWords(group, page)
-      .then((words: IWord[]) => {
-        this.words = words;
-        this.sortWordsByNumber(this.words);
-        this.renderWordsList();
-      });
+    if (model.auth) {
+      api.getAggregatedWords(
+        model.auth.userId, 
+        group === 6 ? 0 : group, 
+        group === 6 ? 0 : page, 
+        group === 6 ? 3600 : 20,
+        group === 6 ? '%7B%22userWord.difficulty%22%3A%22hard%22%7D' : ''
+      )
+        .then((words: IWord[]) => {
+          this.words = words;
+          this.sortWordsByNumber(this.words);
+          this.renderWordsList();
+        });
+    } else {
+      api.getWords(group, page)
+        .then((words: IWord[]) => {
+          this.words = words;
+          this.sortWordsByNumber(this.words);
+          this.renderWordsList();
+        });
+    }
+
   }
 
   public renderWordsList(): void {
@@ -180,6 +196,9 @@ export class ElectronBook {
         const imgHTML = wordCard.innerHTML;
 
         wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
+
+        console.log(word);
+        
 
         wordCard.innerHTML = /*html*/`
           <div class="row word-card">
@@ -206,20 +225,21 @@ export class ElectronBook {
                 <div class="word-card__exampletranslate">${word.textExampleTranslate}</div>
               </div>
 
-              ${model.auth 
-                ? 
-                  `<div class="word-card__buttons">
-                    <button id="word-card-difficult" class="btn">Сложное</button>
-                    <button id="word-card-learned" class="btn">Изучено</button>
+              ${model.auth
+            ?
+            `<div class="word-card__buttons">
+                    <button class="btn btn-hard">Сложное</button>
+                    <button class="btn btn-easy">Изучено</button>
                   </div>`
-                : ''
-              }
+            : ''
+          }
             </div>
           </div>
         `;
       })
       .then(() => {
         this.initAudioPlayerBtn(wordCard, word);
+        this.initCardDifficultyButtons(wordCard, word);
       });
 
     return wordCard;
@@ -285,6 +305,43 @@ export class ElectronBook {
           }
         });
       });
+  }
+
+  public initCardDifficultyButtons(wordCard: HTMLElement, word: IWord) {
+    const hardBtn = wordCard.querySelector('.btn-hard') as HTMLElement;
+    const easyBtn = wordCard.querySelector('.btn-easy') as HTMLElement;
+
+    hardBtn.onclick = () => {
+      if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--hard')) {
+        api.deleteUserWord(model.auth!.userId, word.id, { difficulty: 'hard', optional: {} })
+          .then(() => {
+            (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--hard');
+            hardBtn.classList.remove('btn-hard-active');
+          });
+      } else {
+        api.createUserWord(model.auth!.userId, word.id, { difficulty: 'hard', optional: {} })
+          .then(() => {
+            (wordCard.firstElementChild as HTMLElement).classList.add('word-card--hard');
+            hardBtn.classList.add('btn-hard-active');
+          });
+      }
+    };
+
+    easyBtn.onclick = () => {
+      if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--easy')) {
+        api.deleteUserWord(model.auth!.userId, word.id, { difficulty: 'easy', optional: {} })
+          .then(() => {
+            (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--easy');
+            hardBtn.classList.remove('btn-easy-active');
+          });
+      } else {
+        api.createUserWord(model.auth!.userId, word.id, { difficulty: 'easy', optional: {} })
+          .then(() => {
+            (wordCard.firstElementChild as HTMLElement).classList.add('word-card--easy');
+            hardBtn.classList.add('btn-easy-active');
+          });
+      }
+    };
   }
 
   public sortWordsByNumber(arr: IWord[]): void {
