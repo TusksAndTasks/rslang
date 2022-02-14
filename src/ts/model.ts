@@ -67,11 +67,7 @@ export class Model {
 
   private getElectronBookGroupFromLocalStorage(): number {
     if (localStorage.getItem('electronBookGroup')) {
-      const electronBookGroup = +JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
-
-      if (this.auth || !this.auth && electronBookGroup < 7) {
-        return electronBookGroup;
-      }
+      return +JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
     }
 
     return 0;

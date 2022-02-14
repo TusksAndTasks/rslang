@@ -235,6 +235,9 @@ export class Auth {
 
   public logoutUser(): void {
     localStorage.removeItem('authObject');
+
+    if (model.auth && model.electronBookGroup === 6) model.electronBookGroup--;
+
     model.auth = null;
     this.setLoginButton();
     this.showAuthStatusMessage('Вы вышли из аккаунта', false);

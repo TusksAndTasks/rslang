@@ -203,7 +203,8 @@ export class ElectronBook {
               ${model.auth 
                 ? 
                   `<div class="word-card__buttons">
-                    <button class="word-card__difficult btn">Сложное</button>
+                    <button id="word-card-difficult" class="btn">Сложное</button>
+                    <button id="word-card-learned" class="btn">Изучено</button>
                   </div>`
                 : ''
               }

@@ -244,10 +244,10 @@
 
   &__buttons {
     margin: 20px 0 0 0;
-  }
 
-  &__difficult {
-    margin: 0 20px 0 0;
+    .btn + .btn {
+      margin: 0 0 0 20px;
+    }
   }
 }
 
