@@ -21,6 +21,7 @@ export class SprintDifficulty {
 
     public setDifficultyListeners() {
          const buttonsContainer = document.querySelector('.sprint-difficulty') as HTMLElement;
+         const header = document.getElementById('header') as HTMLElement;
          buttonsContainer.addEventListener('click', (e) => {
             if ((e.target as HTMLElement).classList.contains('sprint-difficulty__button')) {
                 this.startSprintGame(+((e.target as HTMLElement).id.slice(2) as string));
@@ -32,6 +33,12 @@ export class SprintDifficulty {
                 this.startSprintGame(+(e.key as string) - 1);
             }
         }
+
+        header.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).id !== 'sprint-btn' && (e.target as HTMLElement).tagName === 'LI'){
+                document.onkeyup = null;
+            }
+        })
          
     }
 
