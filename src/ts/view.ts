@@ -1,5 +1,5 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, IAudiocall, ITemplate } from "../types/types";
+import { EPage, IAuth, IHeader, IAudiocall, ISprint, ISprintDifficulty, ISprintStat, ITemplate } from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -8,19 +8,12 @@ export class View {
   private main: ITemplate;
   private electronBook: ITemplate;
   private audiocall: IAudiocall;
-  private sprint: ITemplate;
+  private sprint: ISprint;
+  private sprintStat: ISprintStat;
+  private sprintDifficulty: ISprintDifficulty;
   private statistics: ITemplate;
 
-  constructor(
-    header: IHeader,
-    footer: ITemplate,
-    auth: IAuth,
-    main: ITemplate,
-    electronBook: ITemplate,
-    audiocall: IAudiocall,
-    sprint: ITemplate,
-    statistics: ITemplate
-  ) {
+  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: IAudiocall, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -28,6 +21,8 @@ export class View {
     this.electronBook = electronBook;
     this.audiocall = audiocall;
     this.sprint = sprint;
+    this.sprintStat = sprintStat;
+    this.sprintDifficulty = sprintDifficulty;
     this.statistics = statistics;
   }
 
@@ -80,6 +75,17 @@ export class View {
 
       case EPage.sprint:
         contentEl!.innerHTML = this.sprint.getHTML();
+        this.sprint.startSprint();
+        break;
+
+      case EPage.sprintStat: 
+        contentEl!.innerHTML = this.sprintStat.getHTML();
+        this.sprintStat.showStatWords();
+        break;
+
+      case EPage.sprintDifficulty: 
+        contentEl!.innerHTML = this.sprintDifficulty.getHTML();
+        this.sprintDifficulty.setDifficultyListeners();
         break;
 
       case EPage.statistics:
