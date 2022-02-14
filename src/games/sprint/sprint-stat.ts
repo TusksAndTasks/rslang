@@ -26,6 +26,7 @@ export class SprintStat {
         const scoreSection = document.getElementById('sprint-score-stat') as HTMLElement;
         streakSection.innerHTML = `Лучшая серия за раунд: ${(model.sprintStatData.maxStreak).toString()}`;
         scoreSection.innerHTML = `Ваш счет за раунд: ${model.sprintScore}`;
+        document.onkeyup = null; 
         this.showCorrectWords();
         this.showIncorrectWords();
         this.setAudioListeners();

@@ -28,7 +28,7 @@ export class SprintDifficulty {
         });
 
         document.onkeyup = (e) => {
-            if(e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4' || e.key === '5' || e.key === '6'){
+            if(+(e.key) >= 1 && +(e.key) <= 6){
                 this.startSprintGame(+(e.key as string) - 1);
             }
         }
@@ -36,7 +36,8 @@ export class SprintDifficulty {
     }
 
     private getRandomPage(){
-        return Math.floor(Math.random() * 30);
+        const pageAmount = 30;
+        return Math.floor(Math.random() * pageAmount);
     }
 
     private async setWordsArray(group: number) {

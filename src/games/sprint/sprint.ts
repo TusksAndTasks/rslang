@@ -99,78 +99,68 @@ export class Sprint {
   }
 
   private countCorrectAnswer(word: HTMLElement): void {
-     const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
-     const score = document.getElementById('sprint-score') as HTMLElement;
-     const streak = document.getElementById('sprint-streak') as HTMLElement;
+     let modifier = 0;
      const rightAudio = new Audio();
      rightAudio.src = '../../assets/sounds/Right-answer.mp3'
      let wordName = word.innerHTML;
      let correctWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
      model.updateSprintStatData(correctWord);
      rightAudio.play();
-     const cloneCurrentCount = currentCount.cloneNode() as HTMLElement;
-     const cloneScore = score.cloneNode() as HTMLElement;
+    
 
      switch(this.streak) {
        case 0:
        case 1:
        case 2: 
-        this.streak++
-        cloneCurrentCount.innerHTML = '+50';
-        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
-        cloneScore.innerHTML = (+score.innerHTML + 50).toString();
-        score.parentNode?.replaceChild(cloneScore, score);
-        streak.innerHTML = '<span class="dope">D</span>ope!';
-        model.sprintScore = cloneScore.innerHTML;
+        modifier = 1;
+        this.correctAnswerDisplay(modifier);
         break;
        
        case 3:
        case 4: 
        case 5:
-        this.streak++
-        cloneCurrentCount.innerHTML = '+100';
-        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
-        cloneScore.innerHTML = (+score.innerHTML + 100).toString();
-        score.parentNode?.replaceChild(cloneScore, score);
-        streak.innerHTML = '<span class="cool">C</span>ool!';
-        model.sprintScore = cloneScore.innerHTML;
+        modifier = 2;
+        this.correctAnswerDisplay(modifier);
         break;
 
        case 6:
        case 7: 
        case 8:
-        this.streak++
-        cloneCurrentCount.innerHTML = '+150';
-        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
-        cloneScore.innerHTML = (+score.innerHTML + 150).toString();
-        score.parentNode?.replaceChild(cloneScore, score);
-        streak.innerHTML = '<span class="brilliant">B</span>rilliant!';
-        model.sprintScore = cloneScore.innerHTML;
+        modifier = 3;
+        this.correctAnswerDisplay(modifier);
         break; 
 
        case 9:
        case 10: 
        case 11:
-        this.streak++
-        cloneCurrentCount.innerHTML = '+200';
-        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
-        cloneScore.innerHTML = (+score.innerHTML + 200).toString();
-        score.parentNode?.replaceChild(cloneScore, score);
-        streak.innerHTML = '<span class="amazing">A</span>mazing!';
-        model.sprintScore = cloneScore.innerHTML;
+        modifier = 4;
+        this.correctAnswerDisplay(modifier);
         break;
         
        default: 
-        this.streak++
-        cloneCurrentCount.innerHTML = '+250';
-        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
-        cloneScore.innerHTML = (+score.innerHTML + 250).toString();
-        score.parentNode?.replaceChild(cloneScore, score);
-        streak.innerHTML = '<span class="spectacular">S</span>pectacular!';
-        model.sprintScore = cloneScore.innerHTML;
+       modifier = 5;
+       this.correctAnswerDisplay(modifier);
         break;
      }
   }
+
+  private correctAnswerDisplay(modifier: number){
+    const ratingsArray = ['', '<span class="dope">D</span>ope!', '<span class="cool">C</span>ool!', '<span class="brilliant">B</span>rilliant!', '<span class="amazing">A</span>mazing!', '<span class="spectacular">S</span>pectacular!']
+    const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
+    const score = document.getElementById('sprint-score') as HTMLElement;
+    const streak = document.getElementById('sprint-streak') as HTMLElement;
+    const cloneCurrentCount = currentCount.cloneNode() as HTMLElement;
+    const cloneScore = score.cloneNode() as HTMLElement;
+    const baseScore = 50;
+        this.streak++
+        cloneCurrentCount.innerHTML = `+${baseScore * modifier}`;
+        currentCount.parentNode?.replaceChild(cloneCurrentCount, currentCount);
+        cloneScore.innerHTML = (+score.innerHTML + (baseScore * modifier)).toString();
+        score.parentNode?.replaceChild(cloneScore, score);
+        streak.innerHTML = ratingsArray[modifier];
+        model.sprintScore = cloneScore.innerHTML;
+  } 
+
 
   private countIncorrectAnswer(word: HTMLElement) {
     const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
@@ -208,27 +198,25 @@ export class Sprint {
 
 
   private correctListener(word: HTMLElement, translation: HTMLElement, questionsArray: ISprintWord[]){
+    this.index++;
     if (this.sprintCorrectness){
       this.countCorrectAnswer(word);
-      this.index++;
       this.setWord(word, translation, questionsArray);
     }
-    else if (!this.sprintCorrectness) {
+    else if(!this.sprintCorrectness){
       this.countIncorrectAnswer(word);
-      this.index++;
       this.setWord(word, translation, questionsArray);
     }
   }
 
   private incorrectListener(word: HTMLElement, translation: HTMLElement, questionsArray: ISprintWord[]){
+    this.index++;
     if (!this.sprintCorrectness){
       this.countCorrectAnswer(word);
-      this.index++;
       this.setWord(word, translation, questionsArray);
     }
-    else if (this.sprintCorrectness) {
+    else if (this.sprintCorrectness){
       this.countIncorrectAnswer(word);
-      this.index++;
       this.setWord(word, translation, questionsArray);
     }
   }
