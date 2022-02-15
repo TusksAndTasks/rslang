@@ -91,7 +91,7 @@ class API {
   }
 
 
-  public createUserWord = async (userId: string, wordId: string, word: INewWord) => {
+  public createUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
     const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -105,7 +105,7 @@ class API {
     return await response.json();
   };
 
-  public deleteUserWord = async (userId: string, wordId: string, word: INewWord) => {
+  public deleteUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
     const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'DELETE',
       headers: {

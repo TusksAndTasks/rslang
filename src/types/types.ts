@@ -137,6 +137,7 @@ export interface IAuthObject {
 
 export interface IWord {
   id: string;
+  _id?: string;
   group: 0;
   page: 0;
   word: string;

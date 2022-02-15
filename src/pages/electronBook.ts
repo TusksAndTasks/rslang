@@ -155,9 +155,9 @@ export class ElectronBook {
 
     if (model.auth) {
       api.getAggregatedWords(
-        model.auth.userId, 
-        group === 6 ? 0 : group, 
-        group === 6 ? 0 : page, 
+        model.auth.userId,
+        group === 6 ? 0 : group,
+        group === 6 ? 0 : page,
         group === 6 ? 3600 : 20,
         group === 6 ? '%7B%22userWord.difficulty%22%3A%22hard%22%7D' : ''
       )
@@ -197,9 +197,6 @@ export class ElectronBook {
 
         wordCard.classList.add(`group-${model.electronBookGroup + 1}`);
 
-        console.log(word);
-        
-
         wordCard.innerHTML = /*html*/`
           <div class="row word-card">
             <div class="word-card__image">
@@ -225,24 +222,39 @@ export class ElectronBook {
                 <div class="word-card__exampletranslate">${word.textExampleTranslate}</div>
               </div>
 
-              ${model.auth
-            ?
-            `<div class="word-card__buttons">
-                    <button class="btn btn-hard">Сложное</button>
-                    <button class="btn btn-easy">Изучено</button>
-                  </div>`
-            : ''
-          }
+              ${model.auth && model.electronBookGroup !== 6
+                ?
+                `<div class="word-card__buttons">
+                        <button class="btn btn-hard">Сложное</button>
+                        <button class="btn btn-easy">Изучено</button>
+                      </div>`
+                : ''
+              }
             </div>
           </div>
         `;
+
+        this.addDifficultyCardClass(wordCard, word);
       })
       .then(() => {
         this.initAudioPlayerBtn(wordCard, word);
-        this.initCardDifficultyButtons(wordCard, word);
+
+        if (model.electronBookGroup !== 6) {
+          this.initCardDifficultyButtons(wordCard, word);
+        }
       });
 
     return wordCard;
+  }
+
+  public addDifficultyCardClass(wordCard: HTMLElement, word: IWord): void {
+    if (word.userWord) {
+      const card = (wordCard.firstElementChild as HTMLElement);
+      card.classList.add(`word-card--${word.userWord.difficulty}`);
+
+      const btn = wordCard.querySelector(`.btn-${word.userWord.difficulty}`) as HTMLElement;
+      btn.classList.add(`btn-${word.userWord.difficulty}-active`);
+    }
   }
 
   public async getWordImage(word: IWord): Promise<HTMLImageElement> {
@@ -311,37 +323,48 @@ export class ElectronBook {
     const hardBtn = wordCard.querySelector('.btn-hard') as HTMLElement;
     const easyBtn = wordCard.querySelector('.btn-easy') as HTMLElement;
 
-    hardBtn.onclick = () => {
+    hardBtn.onclick = () => this.toggleWordToDifficultWords(wordCard, word, hardBtn, easyBtn);
+    easyBtn.onclick = () => this.toggleWordToEasyWords(wordCard, word, hardBtn, easyBtn);
+  }
+
+  public toggleWordToDifficultWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
+    if (!easyBtn.classList.contains('btn-easy-active')) {
       if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--hard')) {
-        api.deleteUserWord(model.auth!.userId, word.id, { difficulty: 'hard', optional: {} })
+        api.deleteUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {} })
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--hard');
             hardBtn.classList.remove('btn-hard-active');
           });
       } else {
-        api.createUserWord(model.auth!.userId, word.id, { difficulty: 'hard', optional: {} })
+        api.createUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {} })
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.add('word-card--hard');
             hardBtn.classList.add('btn-hard-active');
           });
-      }
-    };
+      }      
+    } else {
+      console.log('Изменить сложность слова, PATCH');
+    }
+  }
 
-    easyBtn.onclick = () => {
+  public toggleWordToEasyWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
+    if (!hardBtn.classList.contains('btn-hard-active')) {
       if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--easy')) {
-        api.deleteUserWord(model.auth!.userId, word.id, { difficulty: 'easy', optional: {} })
+        api.deleteUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {} })
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--easy');
-            hardBtn.classList.remove('btn-easy-active');
+            easyBtn.classList.remove('btn-easy-active');
           });
       } else {
-        api.createUserWord(model.auth!.userId, word.id, { difficulty: 'easy', optional: {} })
+        api.createUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {} })
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.add('word-card--easy');
-            hardBtn.classList.add('btn-easy-active');
+            easyBtn.classList.add('btn-easy-active');
           });
       }
-    };
+    } else {
+      console.log('Изменить сложность слова, PATCH');
+    }
   }
 
   public sortWordsByNumber(arr: IWord[]): void {
