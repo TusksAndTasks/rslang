@@ -61,6 +61,9 @@ export interface IElectronBook {
   initGroups(): void;
   switchGroup(group: number): void;
   initGamesButtons(): void;
+  checkEasyWordsCount(): void;
+  hidePagination(): void;
+  showPagination(): void
 }
 
 export interface IView {

@@ -58,7 +58,6 @@ export class Controller {
       this.view.renderContent(this.model.activePage);
       this.toggleHeaderMenu('close');
       this.setActiveMenuItem(electronBookBtn);
-
     });
 
     audioCallBtn.addEventListener('click', (): void => {
