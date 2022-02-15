@@ -13,7 +13,7 @@ class ChangeLevel {
     <button data-level=4 class="btn btn-blue"> 5 </button>
     <button data-level=5 class="btn btn-blue"> 6 </button>
   </div>
-</div>
+  </div>
     `;
   }
 }

@@ -1,5 +1,15 @@
 import { model } from ".";
-import { EPage, IAuth, IHeader, IAudiocall, ISprint, ISprintDifficulty, ISprintStat, ITemplate } from "../types/types";
+import {
+  EPage,
+  IAuth,
+  IHeader,
+  IAudiocall,
+  ISprint,
+  ISprintDifficulty,
+  ISprintStat,
+  ITemplate,
+  IStatistics,
+} from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -11,9 +21,20 @@ export class View {
   private sprint: ISprint;
   private sprintStat: ISprintStat;
   private sprintDifficulty: ISprintDifficulty;
-  private statistics: ITemplate;
+  private statistics: IStatistics;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: ITemplate, electronBook: ITemplate, audiocall: IAudiocall, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
+  constructor(
+    header: IHeader,
+    footer: ITemplate,
+    auth: IAuth,
+    main: ITemplate,
+    electronBook: ITemplate,
+    audiocall: IAudiocall,
+    sprint: ISprint,
+    sprintStat: ISprintStat,
+    sprintDifficulty: ISprintDifficulty,
+    statistics: IStatistics
+  ) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -78,18 +99,18 @@ export class View {
         this.sprint.startSprint();
         break;
 
-      case EPage.sprintStat: 
+      case EPage.sprintStat:
         contentEl!.innerHTML = this.sprintStat.getHTML();
         this.sprintStat.showStatWords();
         break;
 
-      case EPage.sprintDifficulty: 
+      case EPage.sprintDifficulty:
         contentEl!.innerHTML = this.sprintDifficulty.getHTML();
         this.sprintDifficulty.setDifficultyListeners();
         break;
 
       case EPage.statistics:
-        contentEl!.innerHTML = this.statistics.getHTML();
+        this.statistics.initStatistics();
         break;
 
       default:
