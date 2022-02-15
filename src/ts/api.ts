@@ -2,7 +2,7 @@ import { model } from ".";
 import { IAuthObject, INewWord, IUser, IWord, IWordData } from "../types/types";
 
 class API {
-  public baseUrl: string = 'https://react-learnwords-example.herokuapp.com';
+  public baseUrl: string = "https://react-learnwords-example.herokuapp.com";
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
   private words: string = `${this.baseUrl}/words`;
@@ -12,40 +12,47 @@ class API {
     return (await response.json()) as IWordData;
   };
 
-  public createUser = async (name: string, email: string, password: string): Promise<IUser> | never => {
+  public createUser = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<IUser> | never => {
     const response: Response = await fetch(this.users, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: name,
         email: email,
-        password: password
-      })
-    })
+        password: password,
+      }),
+    });
 
     if (!response.ok) {
-      console.error(response.status, response.statusText)
+      console.error(response.status, response.statusText);
     }
 
     return await response.json();
-  }
+  };
 
-  public signIn = async (email: string, password: string): Promise<IAuthObject> | never => {
+  public signIn = async (
+    email: string,
+    password: string
+  ): Promise<IAuthObject> | never => {
     const response: Response = await fetch(this.signin, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: email,
-        password: password
-      })
-    })
+        password: password,
+      }),
+    });
 
     if (!response.ok) {
-      console.error(response.status, response.statusText)
+      console.error(response.status, response.statusText);
     }
 
     return await response.json();

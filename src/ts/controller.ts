@@ -37,6 +37,7 @@ export class Controller {
       }
     });
 
+      
     autBtn.addEventListener('click', (): void => {
       this.model.previousPage = this.model.activePage;
       this.model.activePage = EPage.auth;

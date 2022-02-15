@@ -1,6 +1,15 @@
 export interface ITemplate {
   getHTML: () => string;
 }
+export interface IAudiocall {
+  initAudiocall: () => void;
+}
+
+export enum NameBtnAudiocall {
+  dontKnow = "Не знаю",
+  next = "Дальше",
+  last = "Результат",
+}
 
 export interface ISprint extends ITemplate {
   startSprint: () => void;
@@ -67,44 +76,49 @@ export interface IModel {
   auth: IAuthObject | null
   electronBookPage: number;
   electronBookGroup: number;
-  sprintTimer: number;
-  sprintStatData: ISprintStatObj;
-  updateSprintStatData: (correctWord: IWordData | null, incorrectWord: IWordData | null, learnedWord: IWordData | null, streak: number) => void;
-  sprintScore: string;
-}
-
-export enum EPage {
-  auth = 'auth',
-  main = 'main',
-  electronBook = 'electronBook',
-  audiocall = 'audiocall',
-  sprint = 'sprint',
-  sprintStat = 'sprint-stat',
-  sprintDifficulty = 'sprint-difficulty', 
-  statistics = 'statistics',
 }
 
 export interface IWordData {
-  id: string,
-  group: number,
-  page: number,
-  word: string,
-  image: string,
-  audio: string,
-  audioMeaning: string,
-  audioExample: string,
-  textMeaning: string,
-  textExample: string,
-  transcription: string,
-  wordTranslate: string,
-  textMeaningTranslate: string,
-  textExampleTranslate: string
+  id: string;
+  sprintTimer: number;
+  sprintStatData: ISprintStatObj;
+  updateSprintStatData: (
+    correctWord: IWordData | null,
+    incorrectWord: IWordData | null,
+    learnedWord: IWordData | null,
+    streak: number
+  ) => void;
+  sprintScore: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  wordTranslate: string;
+  textMeaningTranslate: string;
+  textExampleTranslate: string;
+}
+
+export enum EPage {
+  auth = "auth",
+  main = "main",
+  electronBook = "electronBook",
+  audiocall = "audiocall",
+  sprint = "sprint",
+  statistics = "statistics",
+  sprintStat = "sprint-stat",
+  sprintDifficulty = "sprint-difficulty",
 }
 
 export interface ISprintWord {
-  word: string,
-  wordTranslate: string,
-  correct: boolean
+  word: string;
+  wordTranslate: string;
+  correct: boolean;
 }
 
 export interface IUser {
@@ -148,10 +162,10 @@ export interface INewWord {
 }
 
 export interface ISprintStatObj {
-  correctWords: Array<IWordData>,
-  incorrectWords: Array<IWordData>,
-  learnedWords: Array<IWordData>,
-  maxStreak: number
+  correctWords: Array<IWordData>;
+  incorrectWords: Array<IWordData>;
+  learnedWords: Array<IWordData>;
+  maxStreak: number;
 }
 
 export type IWordsData = IWordData[];
