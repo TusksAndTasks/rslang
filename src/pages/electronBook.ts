@@ -9,6 +9,8 @@ export class ElectronBook {
   private pageLimitIdx: number = 29;
   private groupsCount: number = 5;
   private difficultWordsGroup: number = 6;
+  private totalWordsCount: number = 3600;
+  private wordsPerPageLimit: number = 20;
 
   public getHTML(): string {
     return /*html*/`
@@ -67,6 +69,7 @@ export class ElectronBook {
     this.initNextBtn();
     this.initPageNumber();
     this.switchPage();
+    this.disablePagination();
 
     if (model.electronBookGroup === this.difficultWordsGroup) {
       this.hidePagination();
@@ -77,12 +80,6 @@ export class ElectronBook {
 
   public initPrevBtn(): void {
     const prevBtn = document.getElementById('pagination-prev') as HTMLElement;
-
-    if (model.electronBookPage === this.firstPageIdx) {
-      prevBtn.setAttribute('disabled', '');
-    } else {
-      prevBtn.removeAttribute('disabled');
-    }
 
     prevBtn.onclick = () => {
       if (model.electronBookPage > this.firstPageIdx) {
@@ -97,12 +94,6 @@ export class ElectronBook {
   public initNextBtn(): void {
     const nextBtn = document.getElementById('pagination-next') as HTMLElement;
 
-    if (model.electronBookPage === this.pageLimitIdx) {
-      nextBtn.setAttribute('disabled', '');
-    } else {
-      nextBtn.removeAttribute('disabled');
-    }
-
     nextBtn.onclick = () => {
       if (model.electronBookPage < this.pageLimitIdx) {
         model.electronBookPage++;
@@ -111,6 +102,34 @@ export class ElectronBook {
         this.initGroups();
       }
     };
+  }
+
+  public disablePagination(): void {
+    const prevBtn = document.getElementById('pagination-prev') as HTMLElement;
+    const nextBtn = document.getElementById('pagination-next') as HTMLElement;
+
+    prevBtn.setAttribute('disabled', '');
+    nextBtn.setAttribute('disabled', '');
+  }
+
+  public enablePagination(): void {
+    const prevBtn = document.getElementById('pagination-prev') as HTMLElement;
+    const nextBtn = document.getElementById('pagination-next') as HTMLElement;
+
+    prevBtn.removeAttribute('disabled');
+    nextBtn.removeAttribute('disabled');
+
+    if (model.electronBookPage === this.firstPageIdx) {
+      prevBtn.setAttribute('disabled', '');
+    } else {
+      prevBtn.removeAttribute('disabled');
+    }
+
+    if (model.electronBookPage === this.pageLimitIdx) {
+      nextBtn.setAttribute('disabled', '');
+    } else {
+      nextBtn.removeAttribute('disabled');
+    }
   }
 
   public initPageNumber(): void {
@@ -158,7 +177,7 @@ export class ElectronBook {
         model.auth.userId,
         group === this.difficultWordsGroup ? '' : group,
         group === this.difficultWordsGroup ? '' : page,
-        group === this.difficultWordsGroup ? 3600 : 20,
+        group === this.difficultWordsGroup ? this.totalWordsCount : this.wordsPerPageLimit,
         group === this.difficultWordsGroup ? '%7B%22userWord.difficulty%22%3A%22hard%22%7D' : ''
       )
         .then((words: IWord[]) => {
@@ -166,7 +185,8 @@ export class ElectronBook {
           this.sortWordsByNumber(this.words);
           this.renderWordsList();
           this.initGamesButtons();
-        });
+        })
+        .then(() => this.enablePagination());
     } else {
       api.getWords(group, page)
         .then((words: IWord[]) => {
@@ -174,7 +194,8 @@ export class ElectronBook {
           this.sortWordsByNumber(this.words);
           this.renderWordsList();
           this.initGamesButtons();
-        });
+        })
+        .then(() => this.enablePagination());
     }
 
   }
@@ -463,7 +484,7 @@ export class ElectronBook {
     const electronBookAudiocallBtn = document.getElementById('electron-book-audiocall') as HTMLElement;
     const electronBookSprintBtn = document.getElementById('electron-book-sprint') as HTMLElement;
 
-    if (this.words.every(word => word.userWord?.difficulty === 'easy') || document.querySelectorAll('.word-card--easy').length === 20) {
+    if (this.words.every(word => word.userWord?.difficulty === 'easy') || document.querySelectorAll('.word-card--easy').length === this.wordsPerPageLimit) {
       electronBookAudiocallBtn.setAttribute('disabled', '');
       electronBookSprintBtn.setAttribute('disabled', '');
     } else {
