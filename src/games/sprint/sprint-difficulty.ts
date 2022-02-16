@@ -62,6 +62,7 @@ export class SprintDifficulty {
     private async startSprintGame(group: number) {
         try{
             this.setWordsArray(group).then(() => {
+                model.previousPage = model.activePage;
                 model.activePage = EPage.sprint;
                 view.renderContent(model.activePage);
             })

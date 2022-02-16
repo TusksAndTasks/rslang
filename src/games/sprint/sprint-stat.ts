@@ -80,6 +80,7 @@ export class SprintStat {
     private setAgainButtonListener(){
         const againBtn = document.getElementById('sprint-again-button') as HTMLElement;
         againBtn.addEventListener('click', () => {
+            model.previousPage = model.activePage;
             model.activePage = EPage.sprintDifficulty;
             view.renderContent(model.activePage);
         })

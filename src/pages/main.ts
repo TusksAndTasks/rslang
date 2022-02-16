@@ -1,5 +1,8 @@
+import { controller, model, view } from "../ts";
+import { EPage } from "../types/types";
+
 export class Main {
-  static getHTML(): string {
+  public getHTML(): string {
     return /*html*/`
       <div class="main">
         <div class="container">
@@ -9,7 +12,7 @@ export class Main {
               <div class="about__info">
                 <div class="about__subtitle title">Изучение английского языка еще никогда не было таким легким!</div>
                 <div class="about__text">Изучение английских слов может быть веселым и интересным. Играйте в игры, прослушивайте произношение, улучшайте свои знания. С нашим приложением изучение учеба - это одно удовольствие</div>
-                <button class="btn btn-blue">Начать</button>
+                <button id="start" class="btn btn-blue">Начать</button>
               </div>
             </div>
           </div>
@@ -108,5 +111,25 @@ export class Main {
         </div>
       </div>
     `;
+  }
+
+  public init() {
+    const contentEl = document.querySelector('#content') as HTMLElement;
+    contentEl.innerHTML = this.getHTML();
+    this.initStartBtn();
+  }
+
+  public initStartBtn() {
+    const startBtn = document.getElementById('start') as HTMLElement;
+
+    startBtn.onclick = () => {
+      const electronBookBtn = document.getElementById('electron-book-btn') as HTMLElement;
+
+      model.previousPage = model.activePage;
+      model.activePage = EPage.electronBook;
+      view.renderContent(model.activePage);
+      controller.toggleHeaderMenu('close');
+      controller.setActiveMenuItem(electronBookBtn);
+    };
   }
 }

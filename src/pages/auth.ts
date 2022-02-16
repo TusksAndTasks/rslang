@@ -265,6 +265,7 @@ export class Auth {
     header.append(loginBtn);
 
     loginBtn.addEventListener("click", () => {
+      model.previousPage = model.activePage;
       model.activePage = EPage.auth;
       view.renderContent(model.activePage);
       this.init();
@@ -279,6 +280,6 @@ export class Auth {
     model.auth = null;
     this.setLoginButton();
     this.showAuthStatusMessage('Вы вышли из аккаунта', false);
-    this.backToActivePage();
+    view.renderContent(model.activePage);
   }
 }

@@ -66,6 +66,12 @@ export interface IElectronBook {
   showPagination(): void
 }
 
+export interface IMain {
+  getHTML: () => string;
+  init: () => void;
+  initStartBtn: () => void;
+}
+
 export interface IView {
   renderApp: () => void;
   renderHeader: () => void;

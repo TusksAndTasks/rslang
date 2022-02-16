@@ -26,7 +26,7 @@ import { Statistics } from '../pages/statistics';
 import { SprintStat } from '../games/sprint/sprint-stat';
 import { SprintDifficulty } from '../games/sprint/sprint-difficulty';
 
-export const view = new View(new Header(), Footer, new Auth(), Main, new ElectronBook(), new Audiocall(), new Sprint(), new SprintStat(), new SprintDifficulty(), Statistics);
+export const view = new View(new Header(), Footer, new Auth(), new Main(), new ElectronBook(), new Audiocall(), new Sprint(), new SprintStat(), new SprintDifficulty(), Statistics);
 export const model = new Model();
  
 
