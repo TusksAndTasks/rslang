@@ -175,10 +175,10 @@ export class ElectronBook {
     if (model.auth) {
       api.getAggregatedWords(
         model.auth.userId,
-        group === this.difficultWordsGroup ? '' : group,
-        group === this.difficultWordsGroup ? '' : page,
         group === this.difficultWordsGroup ? this.totalWordsCount : this.wordsPerPageLimit,
-        group === this.difficultWordsGroup ? '%7B%22userWord.difficulty%22%3A%22hard%22%7D' : ''
+        group === this.difficultWordsGroup 
+          ? '%7B%22userWord.difficulty%22%3A%22hard%22%7D'
+          : `%7B%22%24and%22%3A%5B%7B%22page%22%3A%20${page}%7D%2C%20%7B%22group%22%3A%20${group}%7D%5D%7D`
       )
         .then((words: IWord[]) => {
           this.words = words;

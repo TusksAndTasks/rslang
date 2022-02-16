@@ -68,8 +68,8 @@ class API {
     return await response.json();
   }
 
-  public getAggregatedWords = async (userId: string, group: number | string = 0, page: number | string = 0, wordsPerPage: number = 20, filter: string = ''): Promise<IWord[]> | never => {
-    const response: Response = await fetch(`${this.users}/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
+  public getAggregatedWords = async (userId: string, wordsPerPage: number = 20, filter: string = ''): Promise<IWord[]> | never => {
+    const response: Response = await fetch(`${this.users}/${userId}/aggregatedWords?&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${model.auth!.token}`,
