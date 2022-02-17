@@ -4,8 +4,11 @@ export class Model {
   public numberOfPages = 30;
   public numberOfQuestion = 20;
   private _activePage: string = EPage.main;
+  private _previousPage: string | null = null;
+  private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage();
+  private _electronBookPage: number = this.getElectronBookPageFromLocalStorage();
+  private _electronBookGroup: number = this.getElectronBookGroupFromLocalStorage();
   private _sprintTimer: number = 59;
-  private _auth: IAuthObject | null =this.getAuthObjectFromLocalStorage() || null;
   private _sprintStatData: ISprintStatObj = {
     correctWords: [],
     incorrectWords: [],
@@ -23,6 +26,14 @@ export class Model {
     this._activePage = page;
   }
 
+  get previousPage() {
+    return this._previousPage;
+  }
+
+  set previousPage(page: string | null) {
+    this._previousPage = page;
+  }
+  
   get sprintTimer() {
     return this._sprintTimer;
   }
@@ -70,13 +81,45 @@ export class Model {
     this._auth = loginObj;
   }
 
-  private getAuthObjectFromLocalStorage() {
-    if (localStorage.getItem("authObject")) {
-      return JSON.parse(
-        localStorage.getItem("authObject") as string
-      ) as IAuthObject;
+  get electronBookPage() {
+    return this._electronBookPage;
+  }
+
+  set electronBookPage(page: number) {
+    this._electronBookPage = page;
+    localStorage.setItem('electronBookPage', JSON.stringify(this._electronBookPage));
+  }
+
+  get electronBookGroup() {
+    return this._electronBookGroup;
+  }
+
+  set electronBookGroup(group: number) {
+    this._electronBookGroup = group;
+    localStorage.setItem('electronBookGroup', JSON.stringify(this._electronBookGroup));
+  }
+
+  private getAuthObjectFromLocalStorage(): IAuthObject | null {
+    if (localStorage.getItem('authObject')) {
+      return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
     }
 
     return null;
+  }
+
+  private getElectronBookPageFromLocalStorage(): number {
+    if (localStorage.getItem('electronBookPage')) {
+      return +JSON.parse(localStorage.getItem('electronBookPage') as string) as number;
+    }
+
+    return 0;
+  }
+
+  private getElectronBookGroupFromLocalStorage(): number {
+    if (localStorage.getItem('electronBookGroup')) {
+      return +JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
+    }
+
+    return 0;
   }
 }

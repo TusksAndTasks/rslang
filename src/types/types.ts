@@ -35,11 +35,41 @@ export interface IAuth {
   loginUser: (email: string, password: string) => void;
   validateEmail: (email: string) => RegExpMatchArray | null;
   showError: (input: HTMLInputElement) => void;
-  backToMainPage: () => void;
+  backToActivePage: () => void;
   showAuthStatusMessage: (status: string, isSuccess: boolean) => void;
   setLogoutButton: () => void;
   setLoginButton: () => void;
   logoutUser: () => void;
+}
+
+export interface IElectronBook {
+  getHTML: () => string;
+  init: () => void;
+  initPagination: () => void;
+  initPrevBtn(): void;
+  initNextBtn(): void;
+  initPageNumber(): void;
+  switchPage(): void;
+  validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void;
+  initWords(group: number, page: number): void
+  renderWordsList(): void;
+  getWordCard(word: IWord): HTMLElement;
+  getWordImage(word: IWord): Promise<HTMLImageElement>;
+  getWordAudio(src: string): Promise<HTMLAudioElement>;
+  initAudioPlayerBtn(wordCard: HTMLElement, word: IWord): void;
+  sortWordsByNumber(arr: IWord[]): void;
+  initGroups(): void;
+  switchGroup(group: number): void;
+  initGamesButtons(): void;
+  checkEasyWordsCount(): void;
+  hidePagination(): void;
+  showPagination(): void
+}
+
+export interface IMain {
+  getHTML: () => string;
+  init: () => void;
+  initStartBtn: () => void;
 }
 
 export interface IView {
@@ -50,8 +80,11 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string;
-  auth: IAuthObject | null;
+  activePage: string
+  previousPage: string | null;
+  auth: IAuthObject | null
+  electronBookPage: number;
+  electronBookGroup: number;
 }
 
 export interface IWordData {
@@ -80,8 +113,6 @@ export interface IWordData {
   textExampleTranslate: string;
 }
 
-export type IWordsData = IWordData[];
-
 export enum EPage {
   auth = "auth",
   main = "main",
@@ -91,23 +122,6 @@ export enum EPage {
   statistics = "statistics",
   sprintStat = "sprint-stat",
   sprintDifficulty = "sprint-difficulty",
-}
-
-export interface IWordData {
-  id: string;
-  group: number;
-  page: number;
-  word: string;
-  image: string;
-  audio: string;
-  audioMeaning: string;
-  audioExample: string;
-  textMeaning: string;
-  textExample: string;
-  transcription: string;
-  wordTranslate: string;
-  textMeaningTranslate: string;
-  textExampleTranslate: string;
 }
 
 export interface ISprintWord {
@@ -130,9 +144,38 @@ export interface IAuthObject {
   name: string;
 }
 
+export interface IWord {
+  id: string;
+  _id?: string;
+  group: 0;
+  page: 0;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  wordTranslate: string;
+  textMeaningTranslate: string;
+  textExampleTranslate: string;
+  userWord?: {
+    difficulty: string
+    optional: object
+  }
+}
+
+export interface INewWord {
+  difficulty: string;
+  optional: object;
+}
+
 export interface ISprintStatObj {
   correctWords: Array<IWordData>;
   incorrectWords: Array<IWordData>;
   learnedWords: Array<IWordData>;
   maxStreak: number;
 }
+
+export type IWordsData = IWordData[];

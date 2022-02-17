@@ -1,21 +1,11 @@
-import { IAuthObject, IUser } from "../types/types";
-import { IWordData, IWordsData } from "../types/types";
+import { model } from ".";
+import { IAuthObject, INewWord, IUser, IWord, IWordData } from "../types/types";
 
 class API {
   public baseUrl: string = "https://react-learnwords-example.herokuapp.com";
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
   private words: string = `${this.baseUrl}/words`;
-
-  public getWords = async (
-    group: number,
-    page: number
-  ): Promise<IWordsData> | never => {
-    const response: Response = await fetch(
-      `${this.words}?group=${group}&page=${page}`
-    );
-    return (await response.json()) as IWordsData;
-  };
 
   public getWord = async (id: string): Promise<IWordData> | never => {
     const response: Response = await fetch(`${this.words}/${id}`);
@@ -64,6 +54,81 @@ class API {
     if (!response.ok) {
       console.error(response.status, response.statusText);
     }
+
+    return await response.json();
+  }
+
+  public getWords = async (group: number = 0, page: number = 0): Promise<IWord[]> | never => {
+    const response: Response = await fetch(`${this.words}?group=${group}&page=${page}`);
+
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
+    return await response.json();
+  }
+
+  public getAggregatedWords = async (userId: string, wordsPerPage: number = 20, filter: string = ''): Promise<IWord[]> | never => {
+    const response: Response = await fetch(`${this.users}/${userId}/aggregatedWords?&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    
+
+    if (!response.ok) {
+      console.error(response.status, response.statusText)
+    }
+
+
+    const data = await response.json()
+    const aggregatedWords = data[0].paginatedResults;
+
+    return aggregatedWords;
+  }
+
+
+  public createUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
+    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
+    });
+
+    return await response.json();
+  };
+
+  public deleteUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
+    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
+    });
+
+    return response;
+  };
+
+  public updateUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
+    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
+    });
 
     return await response.json();
   };

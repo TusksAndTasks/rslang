@@ -225,11 +225,11 @@ class GamePage {
     const contentEl = document.querySelector("#content") as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.renderProgress();
-    api.getWords(group, page).then((words: IWordsData) => {
-      this.renderGame(words);
+    api.getWords(group, page).then((words) => {
+      this.renderGame(words as IWordsData);
       const buttonNext = document.getElementById("next") as HTMLButtonElement;
       buttonNext.onclick = () => {
-        this.listenerForNext(buttonNext, words);
+        this.listenerForNext(buttonNext, words as IWordsData);
       };
     });
   }

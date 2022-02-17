@@ -7,6 +7,8 @@ import '../scss/sprint.scss';
 import '../scss/main.scss';
 import '../scss/header.scss';
 import '../scss/footer.scss';
+import '../scss/electronBook.scss';
+import '../scss/loader.scss';
 
 import "airbnb-browser-shims/browser-only";
 
@@ -24,7 +26,7 @@ import { Statistics } from '../pages/statistics';
 import { SprintStat } from '../games/sprint/sprint-stat';
 import { SprintDifficulty } from '../games/sprint/sprint-difficulty';
 
-export const view = new View(new Header(), Footer, new Auth(), Main, ElectronBook, new Audiocall(), new Sprint(), new SprintStat(), new SprintDifficulty(), Statistics);
+export const view = new View(new Header(), Footer, new Auth(), new Main(), new ElectronBook(), new Audiocall(), new Sprint(), new SprintStat(), new SprintDifficulty(), Statistics);
 export const model = new Model();
  
 

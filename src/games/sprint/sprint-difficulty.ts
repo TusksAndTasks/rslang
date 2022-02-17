@@ -1,3 +1,4 @@
+import { IWordData, IWordsData } from './../../types/types';
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
 import { EPage } from "../../types/types";
@@ -51,7 +52,7 @@ export class SprintDifficulty {
        try{
          const page = this.getRandomPage();
          const response = await api.getWords(group, page);
-         model.sprintWordsArray = response;
+         model.sprintWordsArray = response as IWordsData;
        }
        catch (err){
            throw err;
@@ -61,6 +62,7 @@ export class SprintDifficulty {
     private async startSprintGame(group: number) {
         try{
             this.setWordsArray(group).then(() => {
+                model.previousPage = model.activePage;
                 model.activePage = EPage.sprint;
                 view.renderContent(model.activePage);
             })
