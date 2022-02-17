@@ -1,6 +1,17 @@
 import { model } from ".";
-import { EPage, IAuth, IElectronBook, IHeader, ISprint, ISprintDifficulty, ISprintStat,  Statistics, IAudiocall, IMain } from "../types/types";
-
+import {
+  EPage,
+  IAuth,
+  IElectronBook,
+  IHeader,
+  ISprint,
+  ISprintDifficulty,
+  ISprintStat,
+  IStatistics,
+  IAudiocall,
+  IMain,
+  ITemplate,
+} from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -14,8 +25,18 @@ export class View {
   private sprintDifficulty: ISprintDifficulty;
   private statistics: IStatistics;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: IMain, electronBook: IElectronBook, audiocall: IAudiocall, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: IStatistics) {
-) {
+  constructor(
+    header: IHeader,
+    footer: ITemplate,
+    auth: IAuth,
+    main: IMain,
+    electronBook: IElectronBook,
+    audiocall: IAudiocall,
+    sprint: ISprint,
+    sprintStat: ISprintStat,
+    sprintDifficulty: ISprintDifficulty,
+    statistics: IStatistics
+  ) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
