@@ -117,7 +117,6 @@ export class View {
 
       default:
         contentEl!.innerHTML = this.main.getHTML();
-
         break;
     }
   }
