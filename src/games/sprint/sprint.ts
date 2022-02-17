@@ -82,6 +82,7 @@ export class Sprint {
   }
 
   private stopSprint(){
+    model.previousPage = model.activePage;
     model.activePage = EPage.sprintStat;
     view.renderContent(model.activePage);
     model.updateSprintStatData(null, null, null, this.streak);

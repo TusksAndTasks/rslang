@@ -76,7 +76,7 @@ export class Auth {
         this.showError(loginPasswordInput);
       } else {
         this.loginUser(loginEmailInput.value, loginPasswordInput.value);
-        this.backToMainPage();
+        this.backToActivePage();
       }
     });
   }
@@ -129,12 +129,8 @@ export class Auth {
       } else if (registrationPasswordInput.value.length < 8) {
         this.showError(registrationPasswordInput);
       } else {
-        this.registrateUser(
-          registrationNameInput.value,
-          registrationEmailInput.value,
-          registrationPasswordInput.value
-        );
-        this.backToMainPage();
+        this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
+        this.backToActivePage();
       }
     });
   }
@@ -156,7 +152,7 @@ export class Auth {
         target.classList.contains("modal__close") ||
         target.classList.contains("auth__cancel")
       ) {
-        this.backToMainPage();
+        this.backToActivePage();
       } else if (target === loginToggleBtn) {
         this.showLogin();
       } else if (target === registrationToggleBtn) {
@@ -171,7 +167,7 @@ export class Auth {
       .then((newUser: IUser) => {
         this.showAuthStatusMessage("Пользователь зарегистрирован", true);
         this.loginUser(newUser.email, password);
-        this.backToMainPage();
+        this.backToActivePage();
       })
       .catch(() => {
         this.showAuthStatusMessage(
@@ -189,6 +185,7 @@ export class Auth {
         model.auth = loginObj;
         localStorage.setItem("authObject", JSON.stringify(loginObj));
         this.setLogoutButton();
+        this.backToActivePage();
       })
       .catch(() => {
         this.showAuthStatusMessage("Неверный логин или пароль", false);
@@ -219,9 +216,11 @@ export class Auth {
     }
   }
 
-  public backToMainPage(): void {
-    model.activePage = EPage.main;
-    view.renderContent(model.activePage);
+  public backToActivePage(): void {
+    if (model.previousPage) {
+      model.activePage = model.previousPage;
+      view.renderContent(model.activePage);
+    }
   }
 
   public showAuthStatusMessage(status: string, isSuccess: boolean): void {
@@ -266,6 +265,7 @@ export class Auth {
     header.append(loginBtn);
 
     loginBtn.addEventListener("click", () => {
+      model.previousPage = model.activePage;
       model.activePage = EPage.auth;
       view.renderContent(model.activePage);
       this.init();
@@ -273,9 +273,13 @@ export class Auth {
   }
 
   public logoutUser(): void {
-    localStorage.removeItem("authObject");
+    localStorage.removeItem('authObject');
+
+    if (model.auth && model.electronBookGroup === 6) model.electronBookGroup--;
+
     model.auth = null;
     this.setLoginButton();
-    this.showAuthStatusMessage("Вы вышли из аккаунта", false);
+    this.showAuthStatusMessage('Вы вышли из аккаунта', false);
+    view.renderContent(model.activePage);
   }
 }

@@ -16,6 +16,10 @@
       cursor: pointer;
       white-space: nowrap;
 
+      &.menu-item-active {
+        color: var(--blue);
+      }
+
       & + li {
         margin: 0 0 0 20px;
       }
@@ -40,6 +44,7 @@
       transform: translate(-100%, 0);
       transition: all 0.5s;
       background: #071a2f;
+      z-index: 4000;
 
       li {
         text-align: center;
@@ -66,7 +71,7 @@
   width: 30px;
   height: 18px;
   cursor: pointer;
-  z-index: 100;
+  z-index: 5000;
 
   span {
     transition: all 0.5s;

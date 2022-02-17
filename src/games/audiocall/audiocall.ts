@@ -14,6 +14,16 @@ export class Audiocall {
         gamePage.startGame(page, group);
       }
     };
+    const header = document.getElementById("header") as HTMLElement;
+    header.addEventListener("click", (e: Event) => {
+      if (
+        ((e.target as HTMLElement).id !== "audio-call-btn" &&
+          (e.target as HTMLElement).tagName === "LI") ||
+        (e.target as HTMLElement).id === "login-btn"
+      ) {
+        document.onkeyup = null;
+      }
+    });
     levels.addEventListener("click", (e: Event): void => {
       const group = Number((e.target as HTMLElement).dataset.level);
       const page = Math.floor(Math.random() * (model.numberOfPages + 1));
