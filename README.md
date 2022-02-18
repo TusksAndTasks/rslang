@@ -9,7 +9,7 @@ https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang
 - [Светлана @Swettlana](https://github.com/Swettlana) - Frontend developer
 - [Александр @TusksAndTasks](https://github.com/TusksAndTasks) - Frontend developer
 
-![](https://.jpg)
+![](![image](https://user-images.githubusercontent.com/64466023/154623368-5ded8be8-bac1-45c1-bdd3-744ede5d08e8.png))
 #### Deploy: 
 - https://
 
