@@ -501,7 +501,7 @@ export class ElectronBook {
 
     electronBookSprintBtn.onclick = () => {
       if(model.auth){
-        AggArrayCreator.testArray().then(() => {
+        AggArrayCreator.sprintGameArray().then(() => {
           model.previousPage = model.activePage;
           model.activePage = EPage.sprint;
           view.renderContent(model.activePage);

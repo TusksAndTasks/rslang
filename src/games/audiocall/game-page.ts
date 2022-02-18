@@ -120,13 +120,13 @@ class GamePage {
       button.style.background = "#00FF7F";
       this.audio.src = "../../assets/valid.mp3";
       this.audio.play();
-      this.updateCorrectUserWord(currentWord);
+      if(model.auth){this.updateCorrectUserWord(currentWord);}
       this.checkAnswers.push(true);
     } else {
       button.style.background = "#CD5C5C";
       this.audio.src = "../../assets/error.mp3";
       this.audio.play();
-      this.updateIncorrectUserWord(currentWord);
+      if(model.auth){this.updateIncorrectUserWord(currentWord);}
       this.checkAnswers.push(false);
     }
   }
@@ -147,9 +147,11 @@ class GamePage {
       userInfo.optional.correctCount++;
       userInfo.optional.totalCorrectCount++;
        if(userInfo.difficulty === 'normal' && userInfo.optional.correctCount >= 3){
+         model.audiocallStatData++
          userInfo.difficulty = 'easy';
        }
        else if (userInfo.difficulty === 'hard' && userInfo.optional.correctCount >= 5){
+        model.audiocallStatData++
         userInfo.difficulty = 'easy';
        }
       api.updateUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userInfo);     

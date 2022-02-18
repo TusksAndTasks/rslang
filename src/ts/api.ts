@@ -1,5 +1,5 @@
 import { model } from ".";
-import { IAuthObject, INewWord, IUser, IWord, IWordData } from "../types/types";
+import { IAuthObject, INewWord, IStatisticsObj, IUser, IWord, IWordData } from "../types/types";
 
 class API {
   public baseUrl: string = "https://react-learnwords-example.herokuapp.com";
@@ -152,6 +152,47 @@ class API {
      throw err;
   }
 };
+  
+  
+  public async updateStatistics(statistic: IStatisticsObj){
+    try{
+      console.log(JSON.stringify(statistic))
+      await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/statistics`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${model.auth!.token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(statistic)
+      });
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  public async getStatistics(){
+    try{
+      const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/statistics`, {
+        headers: {
+          'Authorization': `Bearer ${model.auth!.token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      });
+      if (response.ok){
+        return await response.json() as IStatisticsObj;
+      } else {
+        return null;
+      }
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+
 
 }
 

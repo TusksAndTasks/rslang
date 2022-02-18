@@ -185,4 +185,26 @@ export interface ISprintStatObj {
   maxStreak: number;
 }
 
+export interface IStatisticsObj {
+  id?: string;
+  learnedWords: number;
+  optional: {
+    sprint: {
+      correctWords: number;
+      incorrectWords: number;
+      streak: number;
+    }
+    audiocall: {
+      correctWords: number;
+      incorrectWords: number;
+      streak: number;
+    }
+  }
+}
+
+export interface IAggResponse {
+  paginatedResults: Array<IWord>, totalCount: Array<any>;
+}
+
+
 export type IWordsData = IWordData[];

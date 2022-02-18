@@ -87,7 +87,6 @@ export class Sprint {
     model.activePage = EPage.sprintStat;
     view.renderContent(model.activePage);
     model.updateSprintStatData(null, null, model.sprintStatData.learnedWords, this.streak);
-    model.sprintTimer = -1;
   }
 
   private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>): void{
@@ -106,7 +105,7 @@ export class Sprint {
      rightAudio.src = '../../assets/sounds/Right-answer.mp3'
      let wordName = word.innerHTML;
      let correctWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
-     this.updateCorrectUserWord(correctWord);
+     if (model.auth){this.updateCorrectUserWord(correctWord);}
      model.updateSprintStatData(correctWord);
      rightAudio.play();
     
@@ -224,7 +223,7 @@ export class Sprint {
     wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3';
     let wordName = word.innerHTML;
     let incorrectWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
-    this.updateIncorrectUserWord(incorrectWord);
+    if(model.auth){this.updateIncorrectUserWord(incorrectWord);}
     model.updateSprintStatData(null, incorrectWord, model.sprintStatData.learnedWords, this.streak);
     this.streak = 0;
     wrongAudio.play();

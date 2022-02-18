@@ -15,6 +15,7 @@ export class Model {
     learnedWords: 0,
     maxStreak: 0
 };
+  private _audiocallStatData: number = 0;
   private _sprintWordsArray: Array<IWordData | IWord> = [] ;
   private _audiocallWordsArray: Array<IWordData | IWord> = [] ;
   private _sprintScore: string = '0';
@@ -66,6 +67,15 @@ export class Model {
   set audiocallWordsArray(arr: Array<IWordData | IWord>){
     this._audiocallWordsArray = arr;
   }
+
+  get audiocallStatData() {
+    return this._audiocallStatData;
+  }
+
+  set audiocallStatData(stat: number) {
+    this._audiocallStatData = stat;
+  }
+
 
   get sprintScore(){
     return this._sprintScore;

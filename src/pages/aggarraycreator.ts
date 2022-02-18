@@ -1,18 +1,16 @@
 import { model } from "../ts";
 import { api } from "../ts/api";
-import { IWord } from "../types/types";
+import { IAggResponse, IWord } from "../types/types";
 
 
-interface responce{
-    paginatedResults: Array<any>, totalCount: Array<any>;
-}
+
 
 export class AggArrayCreator {
 
-   static async testArray() {
+   static async sprintGameArray() {
        const page = model.electronBookPage;
-       let test =  await this.createArray(page) as IWord[];
-       model.sprintWordsArray = test;
+       let sprintArray =  await this.createArray(page) as IWord[];
+       model.sprintWordsArray = sprintArray;
    } 
 
    static async audioGameArray() {
@@ -21,10 +19,9 @@ export class AggArrayCreator {
     model.audiocallWordsArray = arrayAudioGame;
    }
 
-   static async createArray(page: number): Promise<any[] | undefined> {
-       let resp: Array<responce> = await api.createAggregatedWords(page);
+   static async createArray(page: number): Promise<IWord[] | undefined> {
+       let resp: Array<IAggResponse> = await api.createAggregatedWords(page);
        let arr = resp[0].paginatedResults
-       console.log(resp);
 
        if (arr.length === 20){
            return arr;
@@ -35,7 +32,7 @@ export class AggArrayCreator {
            if(page < 0){
                return arr;
            }; 
-           let secondResp = await this.createArray(page) as Array<any>;
+           let secondResp = await this.createArray(page) as Array<IWord>;
            let secondArr = secondResp;
            let finalArr = arr.concat(secondArr);
            if (finalArr.length > 20){

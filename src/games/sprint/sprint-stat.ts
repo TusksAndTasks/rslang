@@ -22,7 +22,7 @@ export class SprintStat {
     }
 
     public showStatWords() {
-        console.log(model.sprintStatData);
+        if(model.auth){this.changeStatistics()}
         const streakSection = document.getElementById('sprint-streak-stat') as HTMLElement;
         const scoreSection = document.getElementById('sprint-score-stat') as HTMLElement;
         streakSection.innerHTML = `Лучшая серия за раунд: ${(model.sprintStatData.maxStreak).toString()}`;
@@ -34,8 +34,33 @@ export class SprintStat {
         this.setAgainButtonListener();
     }
 
-    private changeStatistics(){
-        
+    private async changeStatistics(){
+      let statistic = await api.getStatistics();
+      
+      if(!statistic){
+          statistic = {learnedWords: model.sprintStatData.learnedWords,
+          optional: {
+              audiocall: {
+                 correctWords: 0,
+                 incorrectWords: 0,
+                 streak: 0
+              },
+              sprint: {
+                  correctWords: model.sprintStatData.correctWords.length,
+                  incorrectWords: model.sprintStatData.incorrectWords.length,
+                  streak: model.sprintStatData.maxStreak
+              }
+          }
+        }
+      } else {
+          delete statistic.id;
+          statistic.learnedWords += model.sprintStatData.learnedWords;
+          statistic.optional.sprint.correctWords += model.sprintStatData.correctWords.length;
+          statistic.optional.sprint.incorrectWords += model.sprintStatData.incorrectWords.length;
+          statistic.optional.sprint.streak = statistic.optional.sprint.streak < model.sprintStatData.maxStreak ? model.sprintStatData.maxStreak : statistic.optional.sprint.streak
+      }
+      
+      api.updateStatistics(statistic);
     }
 
     private showCorrectWords(){
