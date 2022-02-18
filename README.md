@@ -24,7 +24,7 @@ https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang
 1. Typescript - https://www.typescriptlang.org/
 
 ### Used libs:  
-1. styled-components - https://styled-components.com/ https://askd.rocks/pres/styled-gdg/  
+1. styled-components - https:// 
 
 ### Linters:
 - eslint
