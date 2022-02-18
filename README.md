@@ -11,7 +11,7 @@ https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang
 
 ![image](https://user-images.githubusercontent.com/64466023/154623368-5ded8be8-bac1-45c1-bdd3-744ede5d08e8.png)
 #### Deploy: 
-- https://
+- https://pdnsite.ru/rslang/
 
 #### Video
 - https://
