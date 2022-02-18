@@ -1,5 +1,6 @@
-import { IWordData, ISprintWord, EPage} from "../../types/types";
+import { IWordData, ISprintWord, EPage, IWord, IAuthObject, IUserWord} from "../../types/types";
 import { model, view } from "../../ts";
+import { api } from "../../ts/api";
 
 export class Sprint {
   
@@ -42,7 +43,7 @@ export class Sprint {
     model.sprintStatData = {
       correctWords: [],
       incorrectWords: [],
-      learnedWords: [],
+      learnedWords: 0,
       maxStreak: 0
     };
     this.viewChanged = false;
@@ -56,7 +57,7 @@ export class Sprint {
     return Math.random() < 0.5 ? -1 : 1;
   }
 
-  private sortWords(): Array<IWordData> {
+  private sortWords(): Array<IWordData | IWord> {
     return [...model.sprintWordsArray].sort((firstWord, secondWord) => {
       return this.createRandomNumber();
     })
@@ -85,7 +86,7 @@ export class Sprint {
     model.previousPage = model.activePage;
     model.activePage = EPage.sprintStat;
     view.renderContent(model.activePage);
-    model.updateSprintStatData(null, null, null, this.streak);
+    model.updateSprintStatData(null, null, model.sprintStatData.learnedWords, this.streak);
     model.sprintTimer = -1;
   }
 
@@ -105,6 +106,7 @@ export class Sprint {
      rightAudio.src = '../../assets/sounds/Right-answer.mp3'
      let wordName = word.innerHTML;
      let correctWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
+     this.updateCorrectUserWord(correctWord);
      model.updateSprintStatData(correctWord);
      rightAudio.play();
     
@@ -145,6 +147,58 @@ export class Sprint {
      }
   }
 
+  private updateCorrectUserWord(word: IWord | IWordData | undefined ){
+    if(!(word as IWord).userWord){
+       const userWordData = {
+         difficulty: 'normal',
+         optional: {
+           correctCount: 1,
+           totalCorrectCount: 1,
+           totalIncorrectCount: 0
+         } 
+      }
+       api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
+    } else {
+      const userInfo = ((word as IWord).userWord as IUserWord)
+      userInfo.optional.correctCount++;
+      userInfo.optional.totalCorrectCount++;
+       if(userInfo.difficulty === 'normal' && userInfo.optional.correctCount >= 3){
+         model.sprintStatData.learnedWords++
+         userInfo.difficulty = 'easy';
+       }
+       else if (userInfo.difficulty === 'hard' && userInfo.optional.correctCount >= 5){
+        model.sprintStatData.learnedWords++
+        userInfo.difficulty = 'easy';
+       }
+      api.updateUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userInfo);     
+    }
+
+  }
+
+  private updateIncorrectUserWord(word: IWord | IWordData | undefined ){
+    if(!(word as IWord).userWord){
+       const userWordData = {
+         difficulty: 'normal',
+         optional: {
+           correctCount: 0,
+           totalCorrectCount: 0,
+           totalIncorrectCount: 1
+         } 
+      }
+       api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
+    } else {
+      const userInfo = ((word as IWord).userWord as IUserWord)
+      userInfo.optional.totalIncorrectCount++;
+       if (userInfo.difficulty === 'easy'){
+        userInfo.difficulty = 'normal';
+        userInfo.optional.correctCount = 0;
+       }
+      api.updateUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userInfo);     
+    }
+
+  }
+
+
   private correctAnswerDisplay(modifier: number){
     const ratingsArray = ['', '<span class="dope">D</span>ope!', '<span class="cool">C</span>ool!', '<span class="brilliant">B</span>rilliant!', '<span class="amazing">A</span>mazing!', '<span class="spectacular">S</span>pectacular!']
     const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
@@ -170,7 +224,8 @@ export class Sprint {
     wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3';
     let wordName = word.innerHTML;
     let incorrectWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
-    model.updateSprintStatData(null, incorrectWord, null, this.streak);
+    this.updateIncorrectUserWord(incorrectWord);
+    model.updateSprintStatData(null, incorrectWord, model.sprintStatData.learnedWords, this.streak);
     this.streak = 0;
     wrongAudio.play();
     currentCount.innerHTML = '+0';

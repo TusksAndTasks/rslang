@@ -92,9 +92,9 @@ export interface IWordData {
   sprintTimer: number;
   sprintStatData: ISprintStatObj;
   updateSprintStatData: (
-    correctWord: IWordData | null,
-    incorrectWord: IWordData | null,
-    learnedWord: IWordData | null,
+    correctWord: IWordData | IWord | null,
+    incorrectWord: IWordData | IWord | null,
+    learnedWord: IWordData | IWord | null,
     streak: number
   ) => void;
   sprintScore: string;
@@ -160,11 +160,18 @@ export interface IWord {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
-  userWord?: {
-    difficulty: string
-    optional: object
-  }
+  userWord?: IUserWord;
 }
+
+export interface IUserWord{
+  difficulty: string
+  optional: {
+    correctCount: number;
+    totalIncorrectCount: number;
+    totalCorrectCount: number;
+}
+}
+
 
 export interface INewWord {
   difficulty: string;
@@ -172,9 +179,9 @@ export interface INewWord {
 }
 
 export interface ISprintStatObj {
-  correctWords: Array<IWordData>;
-  incorrectWords: Array<IWordData>;
-  learnedWords: Array<IWordData>;
+  correctWords: Array<IWordData | IWord>;
+  incorrectWords: Array<IWordData | IWord>;
+  learnedWords: number;
   maxStreak: number;
 }
 
