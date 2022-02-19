@@ -77,6 +77,8 @@ export interface IView {
   renderHeader: () => void;
   renderFooter: () => void;
   renderContent: (content: string) => void;
+  showFooter: () => void;
+  hideFooter: () => void;
 }
 
 export interface IModel {

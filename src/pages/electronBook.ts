@@ -497,6 +497,7 @@ export class ElectronBook {
       gamePage.startGame(model.electronBookPage, model.electronBookGroup);
       controller.setActiveMenuItem(audioCallBtn);
       }
+      view.hideFooter();
     };
 
     electronBookSprintBtn.onclick = () => {

@@ -116,10 +116,6 @@ class GamePage {
     audioButton.classList.add("after-select");
     correctWord.classList.remove("hide");
     correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
-
-   
-    
-
     if ((button.textContent as string).includes(currentWord.wordTranslate)) {
       button.style.background = "#00FF7F";
       this.audio.src = "../../assets/valid.mp3";
@@ -270,9 +266,6 @@ class GamePage {
       }
       this.currentIndex += stepForCurrentIndex;
       this.currentProgress += stepForProgress;
-
-     
-
       this.renderProgress();
       const answers = document.getElementById("answers") as HTMLElement;
       answers.innerHTML = "";

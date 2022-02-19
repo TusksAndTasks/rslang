@@ -173,7 +173,7 @@ class API {
   }
 
   public async getStatistics(){
-    try{
+
       const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/statistics`, {
         headers: {
           'Authorization': `Bearer ${model.auth!.token}`,
@@ -184,15 +184,11 @@ class API {
       if (response.ok){
         return await response.json() as IStatisticsObj;
       } else {
-        return null;
+      console.warn('Статистика отсутствует.Новая статисктика была создана.');
+      return null;
       }
-    }
-    catch (err) {
-      throw err;
-    }
+
   }
-
-
 
 }
 
