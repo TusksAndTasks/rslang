@@ -45,7 +45,7 @@ export class SprintDifficulty {
 
     private getRandomPage(){
         const pageAmount = 30;
-        return Math.floor(Math.random() * pageAmount);
+        return Math.floor(Math.random() * model.numberOfPages);
     }
 
     private async setWordsArray(group: number) {

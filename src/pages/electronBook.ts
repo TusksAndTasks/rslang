@@ -254,7 +254,6 @@ export class ElectronBook {
               <div class="word-card__tracker">
                  <div class="word-card__correctTrack">Верно угадано: ${word.userWord ? word.userWord.optional.totalCorrectCount : 0}</div>
                  <div class="word-card__incorrectTrack">Неверено угадано: ${word.userWord ? word.userWord.optional.totalIncorrectCount : 0}</div>
-                 <div class="word-card__Track">Тест: ${word.userWord ? word.userWord.optional.correctCount : 0}</div>
               </div>
 
               ${model.auth && model.electronBookGroup !== this.difficultWordsGroup
