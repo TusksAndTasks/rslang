@@ -1,4 +1,5 @@
 import { controller, model, view } from "../ts";
+import { api } from "../ts/api";
 import { EPage } from "../types/types";
 
 export class Main {
@@ -114,9 +115,39 @@ export class Main {
   }
 
   public init() {
+    this.statisticReset();
     const contentEl = document.querySelector('#content') as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.initStartBtn();
+  }
+
+  private statisticReset(){
+    let now = new Date()
+    if(!localStorage.getItem('date')){
+      localStorage.setItem('date', now.getTime().toString());
+    } else {
+       let startDate = +(localStorage.getItem('date') as string);
+       if (now.getTime() - startDate > 86400000){
+        let stat = {
+          learnedWords: 0,
+          optional: {
+              audiocall: {
+                 correctWords: 0,
+                 incorrectWords: 0,
+                 streak: 0,
+                 newWords: +0
+              },
+              sprint: {
+                  correctWords: 0,
+                  incorrectWords: 0,
+                  streak: 0,
+                  newWords: +0
+              }
+          }
+        }
+         api.updateStatistics(stat);
+       }
+    }
   }
 
   public initStartBtn() {

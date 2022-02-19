@@ -76,6 +76,16 @@ export class View {
     footerEl!.innerHTML = this.footer.getHTML();
   }
 
+  public showFooter(): void {
+    const footerEl = document.querySelector("#footer") as HTMLElement;
+    footerEl.classList.remove('hidden');
+  }
+
+  public hideFooter(): void {
+    const footerEl = document.querySelector("#footer") as HTMLElement;
+    footerEl.classList.add('hidden');
+  }
+
   public renderContent(activePage: string = EPage.main): void {
     const contentEl = document.querySelector("#content") as HTMLElement;
 
@@ -86,17 +96,21 @@ export class View {
 
       case EPage.main:
         this.main.init();
+        this.showFooter();
         break;
 
       case EPage.electronBook:
         this.electronBook.init();
+        this.showFooter();
         break;
 
       case EPage.audiocall:
+        this.hideFooter();
         this.audiocall.initAudiocall();
         break;
 
       case EPage.sprint:
+        this.hideFooter();
         contentEl!.innerHTML = this.sprint.getHTML();
         this.sprint.startSprint();
         break;
@@ -107,15 +121,17 @@ export class View {
         break;
 
       case EPage.sprintDifficulty:
+        this.hideFooter();
         contentEl!.innerHTML = this.sprintDifficulty.getHTML();
         this.sprintDifficulty.setDifficultyListeners();
         break;
 
       case EPage.statistics:
-        this.statistics.initStatistics();
+        this.showFooter();
         break;
 
       default:
+        this.showFooter();
         contentEl!.innerHTML = this.main.getHTML();
         break;
     }

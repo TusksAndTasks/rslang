@@ -1,4 +1,5 @@
 import { model } from "../../ts";
+import { api } from "../../ts/api";
 import { changeLevel } from "./change-level";
 import { gamePage } from "./game-page";
 
@@ -11,13 +12,27 @@ export class Audiocall {
       const group = Number(e.code.slice(-1)) - 1;
       if (group >= 0 && group < 6) {
         const page = Math.floor(Math.random() * (model.numberOfPages + 1));
+        if(model.auth){
+          api.getAggregatedWords(model.auth.userId, 20, `%7B%22%24and%22%3A%5B%7B%22group%22%3A${group}%2C%20%22page%22%3A${page}%7D%5D%7D`).then((resp) => {
+           model.audiocallWordsArray = resp;
+           gamePage.startGame(page, group);
+          })
+        } else {
         gamePage.startGame(page, group);
+        }
       }
     };
     levels.addEventListener("click", (e: Event): void => {
       const group = Number((e.target as HTMLElement).dataset.level);
       const page = Math.floor(Math.random() * (model.numberOfPages + 1));
-      gamePage.startGame(page, group);
+      if(model.auth){
+        api.getAggregatedWords(model.auth.userId, 20, `%7B%22%24and%22%3A%5B%7B%22group%22%3A${group}%2C%20%22page%22%3A${page}%7D%5D%7D`).then((resp) => {
+         model.audiocallWordsArray = resp;
+         gamePage.startGame(page, group);
+        })
+      } else {
+        gamePage.startGame(page, group);
+      }
     });
   }
 }

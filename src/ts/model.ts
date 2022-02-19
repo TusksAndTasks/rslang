@@ -1,4 +1,4 @@
-import { EPage, IAuthObject, ISprintStatObj, IWordData, IWordsData } from "../types/types";
+import { EPage, IAuthObject, ISprintStatObj, IWord, IWordData, IWordsData } from "../types/types";
 
 export class Model {
   public numberOfPages = 30;
@@ -12,11 +12,33 @@ export class Model {
   private _sprintStatData: ISprintStatObj = {
     correctWords: [],
     incorrectWords: [],
-    learnedWords: [],
+    learnedWords: 0,
     maxStreak: 0
 };
-  private _sprintWordsArray: IWordsData = [];
+  private _audiocallStatData: number = 0;
+  private _sprintWordsArray: Array<IWordData | IWord> = [] ;
+  private _audiocallWordsArray: Array<IWordData | IWord> = [] ;
   private _sprintScore: string = '0';
+  private _sprintNewWords: number = 0;
+  private _audiocallNewWords: number = 0;
+  private _audiocallCurrent: IWord | null = null;
+  private _audiocallBackupArray: IWord[] = [];
+
+  get audiocallBackupArray() {
+    return this._audiocallBackupArray as IWord[];
+  }
+
+  set audiocallBackupArray(words: IWord[]) {
+    this._audiocallBackupArray= words;
+  }
+
+  get audiocallCurrent() {
+    return this._audiocallCurrent as IWord;
+  }
+
+  set audiocallCurrent(word: IWord) {
+    this._audiocallCurrent = word;
+  }
 
   get activePage() {
     return this._activePage;
@@ -54,9 +76,44 @@ export class Model {
     return this._sprintWordsArray;
   }
 
-  set sprintWordsArray(arr: IWordsData){
+  set sprintWordsArray(arr: Array<IWordData | IWord>){
     this._sprintWordsArray = arr;
   }
+
+  get sprintNewWords() {
+    return this._sprintNewWords;
+  }
+
+  set sprintNewWords(stat: number) {
+    this._sprintNewWords = stat;
+  }
+
+
+  get audiocallNewWords() {
+    return this._audiocallNewWords;
+  }
+
+  set audiocallNewWords(stat: number) {
+    this._audiocallNewWords = stat;
+  }
+
+
+  get audiocallWordsArray(){
+    return this._audiocallWordsArray;
+  }
+
+  set audiocallWordsArray(arr: Array<IWordData | IWord>){
+    this._audiocallWordsArray = arr;
+  }
+
+  get audiocallStatData() {
+    return this._audiocallStatData;
+  }
+
+  set audiocallStatData(stat: number) {
+    this._audiocallStatData = stat;
+  }
+
 
   get sprintScore(){
     return this._sprintScore;
@@ -66,10 +123,10 @@ export class Model {
     this._sprintScore = score;
   }
 
-  public updateSprintStatData(correctWord: IWordData | null = null, incorrectWord: IWordData | null = null, learnedWord: IWordData | null = null, streak: number = 0) {
+ public updateSprintStatData(correctWord: IWordData | IWord | null = null, incorrectWord: IWordData | IWord | null = null, learnedWord: number = 0, streak: number = 0) {
     if (correctWord) { this._sprintStatData.correctWords.push(correctWord) };
     if (incorrectWord) { this._sprintStatData.incorrectWords.push(incorrectWord) };
-    if (learnedWord) { this._sprintStatData.learnedWords.push(learnedWord) };
+    if (learnedWord) { this._sprintStatData.learnedWords = learnedWord };
     this._sprintStatData.maxStreak = streak > this._sprintStatData.maxStreak ? streak : this._sprintStatData.maxStreak
   }
 
