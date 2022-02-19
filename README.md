@@ -17,14 +17,13 @@ https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang
 - https://
 
 #### Backend 
-- deploy https://rs-lang-react.herokuapp.com/
-- swagger https://rs-lang-react.herokuapp.com/doc/
+- deploy https://rss-lang-application.herokuapp.com/
 
 ### Stack:  
 1. Typescript - https://www.typescriptlang.org/
 
 ### Used libs:  
-1. styled-components - https:// 
+1. libname - https:// 
 
 ### Linters:
 - eslint
