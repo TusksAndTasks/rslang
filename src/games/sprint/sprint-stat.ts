@@ -43,12 +43,14 @@ export class SprintStat {
               audiocall: {
                  correctWords: 0,
                  incorrectWords: 0,
-                 streak: 0
+                 streak: 0,
+                 newWords: +0
               },
               sprint: {
                   correctWords: model.sprintStatData.correctWords.length,
                   incorrectWords: model.sprintStatData.incorrectWords.length,
-                  streak: model.sprintStatData.maxStreak
+                  streak: model.sprintStatData.maxStreak,
+                  newWords: model.sprintNewWords
               }
           }
         }
@@ -57,7 +59,8 @@ export class SprintStat {
           statistic.learnedWords += model.sprintStatData.learnedWords;
           statistic.optional.sprint.correctWords += model.sprintStatData.correctWords.length;
           statistic.optional.sprint.incorrectWords += model.sprintStatData.incorrectWords.length;
-          statistic.optional.sprint.streak = statistic.optional.sprint.streak < model.sprintStatData.maxStreak ? model.sprintStatData.maxStreak : statistic.optional.sprint.streak
+          statistic.optional.sprint.streak = statistic.optional.sprint.streak < model.sprintStatData.maxStreak ? model.sprintStatData.maxStreak : statistic.optional.sprint.streak,
+          statistic.optional.sprint.newWords += model.sprintNewWords
       }
       
       api.updateStatistics(statistic);

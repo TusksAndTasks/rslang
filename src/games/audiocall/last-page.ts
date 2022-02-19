@@ -177,12 +177,14 @@ class LastPage {
             audiocall: {
                correctWords: correctNumbers,
                incorrectWords: incorrectAnswers,
-               streak: streak
+               streak: streak,
+               newWords: model.audiocallNewWords
             },
             sprint: {
                 correctWords: 0,
                 incorrectWords: 0,
-                streak: 0
+                streak: 0,
+                newWords: +0
             }
         }
       }
@@ -191,9 +193,11 @@ class LastPage {
         statistic.learnedWords += model.audiocallStatData;
         statistic.optional.audiocall.correctWords += correctNumbers;
         statistic.optional.audiocall.incorrectWords += incorrectAnswers;
-        statistic.optional.audiocall.streak = statistic.optional.sprint.streak < streak ? streak : statistic.optional.sprint.streak
+        statistic.optional.audiocall.streak = statistic.optional.sprint.streak < streak ? streak : statistic.optional.sprint.streak;
+        statistic.optional.audiocall.newWords += model.audiocallNewWords;
     }
     
+    model.audiocallNewWords = 0;
     api.updateStatistics(statistic);
   }
 

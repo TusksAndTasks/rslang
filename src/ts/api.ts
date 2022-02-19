@@ -2,7 +2,7 @@ import { model } from ".";
 import { IAuthObject, INewWord, IStatisticsObj, IUser, IWord, IWordData } from "../types/types";
 
 class API {
-  public baseUrl: string = "https://react-learnwords-example.herokuapp.com";
+  public baseUrl: string = "https://rss-lang-application.herokuapp.com";
   private users: string = `${this.baseUrl}/users`;
   private signin: string = `${this.baseUrl}/signin`;
   private words: string = `${this.baseUrl}/words`;
@@ -101,7 +101,7 @@ class API {
       },
       body: JSON.stringify(word)
     });
-
+    
     return await response.json();
   };
 

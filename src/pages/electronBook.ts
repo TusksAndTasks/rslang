@@ -1,8 +1,8 @@
 import { gamePage } from "../games/audiocall/game-page";
 import { controller, model, view } from "../ts";
 import { api } from "../ts/api";
-import { EPage, IWord } from "../types/types";
-import { AggArrayCreator } from "./aggarraycreator";
+import { EPage, IWord, IWordsData } from "../types/types";
+import { AggArrayCreator } from "./agg-array-creator";
 
 export class ElectronBook {
   private words: IWord[] = [];
@@ -488,13 +488,13 @@ export class ElectronBook {
     electronBookAudiocallBtn.onclick = () => {
       if(model.auth){
         AggArrayCreator.audioGameArray().then(() => {
+          model.previousPage = model.activePage;
           gamePage.startGame(model.electronBookPage, model.electronBookGroup);
           controller.setActiveMenuItem(audioCallBtn);
         })
      } else {
       model.previousPage = model.activePage;
-      model.activePage = EPage.audiocall;
-      view.renderContent(model.activePage);
+      gamePage.startGame(model.electronBookPage, model.electronBookGroup);
       controller.setActiveMenuItem(audioCallBtn);
       }
     };
@@ -509,13 +509,21 @@ export class ElectronBook {
           });
       } else {
       model.previousPage = model.activePage;
-      model.activePage = EPage.sprintDifficulty;
-      view.renderContent(model.activePage);
-      controller.setActiveMenuItem(sprintBtn);
+      this.createSprintPageArray().then(() => {
+        model.activePage = EPage.sprint;
+        view.renderContent(model.activePage);
+        controller.setActiveMenuItem(sprintBtn);
+      })
       }
     };
 
     this.checkEasyWordsCount();
+  }
+
+
+  private async createSprintPageArray(){
+      const response = await api.getWords(model.electronBookGroup, model.electronBookPage);
+      model.sprintWordsArray = response as IWordsData;
   }
 
   public checkEasyWordsCount(): void {

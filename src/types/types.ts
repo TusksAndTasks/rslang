@@ -193,11 +193,13 @@ export interface IStatisticsObj {
       correctWords: number;
       incorrectWords: number;
       streak: number;
+      newWords: number;
     }
     audiocall: {
       correctWords: number;
       incorrectWords: number;
       streak: number;
+      newWords: number;
     }
   }
 }

@@ -4,7 +4,7 @@ import { lastPage } from "./last-page";
 import { NameBtnAudiocall } from "../../types/types";
 import { model } from "../../ts";
 
-const stepForProgress = 5;
+let stepForProgress = 5;
 const stepForCurrentIndex = 1;
 
 class GamePage {
@@ -49,7 +49,7 @@ class GamePage {
     circle.style.strokeDashoffset = `${length}`;
     const offset = length - (this.currentProgress / 100) * length;
     circle.style.strokeDashoffset = String(offset);
-    contentProgress.textContent = `${this.currentIndex + 1}/20`;
+    contentProgress.textContent = `${this.currentIndex + 1}/${model.auth ? model.audiocallWordsArray.length : 20}`;
   }
 
   private startAudio(src: string): void {
@@ -83,8 +83,9 @@ class GamePage {
     words: Array<IWord | IWordData>
   ): Array<IWord | IWordData> => {
     const arrOfAnswerers = [correctWord];
-    const arrWrongAnswers = words.filter(
+    const arrWrongAnswers = words.length >= 4 ? words.filter(
       (wordData) => wordData.word !== correctWord.word
+    ) : model.audiocallBackupArray.filter((wordData) => wordData.word !== correctWord.word
     );
     const randomAnswers = this.getRandomArray(arrWrongAnswers);
     for (let index = 0; index < this.numberWrongAnswers; index += 1) {
@@ -102,7 +103,7 @@ class GamePage {
       btn.disabled = true;
       btn.style.cursor = "default";
     });
-    const buttonNext = document.getElementById("next") as HTMLElement;
+    const buttonNext = document.getElementById("next") as HTMLElement;    
 
     if (this.currentIndex + 1 === model.numberOfQuestion) {
       buttonNext.textContent = NameBtnAudiocall.last;
@@ -115,6 +116,9 @@ class GamePage {
     audioButton.classList.add("after-select");
     correctWord.classList.remove("hide");
     correctWord.innerText = `${currentWord.word}  ${currentWord.transcription}`;
+
+   
+    
 
     if ((button.textContent as string).includes(currentWord.wordTranslate)) {
       button.style.background = "#00FF7F";
@@ -133,6 +137,7 @@ class GamePage {
 
   private updateCorrectUserWord(word: IWord | IWordData | undefined ){
     if(!(word as IWord).userWord){
+      model.audiocallNewWords++
        const userWordData = {
          difficulty: 'normal',
          optional: {
@@ -143,6 +148,7 @@ class GamePage {
       }
        api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
     } else {
+      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.audiocallNewWords++};
       const userInfo = ((word as IWord).userWord as IUserWord)
       userInfo.optional.correctCount++;
       userInfo.optional.totalCorrectCount++;
@@ -161,6 +167,7 @@ class GamePage {
 
   private updateIncorrectUserWord(word: IWord | IWordData | undefined ){
     if(!(word as IWord).userWord){
+      model.audiocallNewWords++
        const userWordData = {
          difficulty: 'normal',
          optional: {
@@ -171,6 +178,7 @@ class GamePage {
       }
        api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
     } else {
+      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.audiocallNewWords++};
       const userInfo = ((word as IWord).userWord as IUserWord)
       userInfo.optional.totalIncorrectCount++;
        if (userInfo.difficulty === 'easy'){
@@ -224,7 +232,7 @@ class GamePage {
 
   private renderGame(words: Array<IWord | IWordData>) {
     const currentWord: IWordData | IWord = words[this.currentIndex];
-
+   if (model.auth){model.audiocallCurrent = currentWord as IWord}
     const audioButton = document.getElementById(
       "sound-btn"
     ) as HTMLButtonElement;
@@ -244,18 +252,26 @@ class GamePage {
   }
 
   private listenerForNext(buttonNext: HTMLButtonElement, words: Array<IWord | IWordData>) {
+    
     if (this.currentIndex + 1 === (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion)) {
+      if (buttonNext.textContent === NameBtnAudiocall.dontKnow) {
+        this.checkAnswers.push(false);
+        if(model.auth){this.updateIncorrectUserWord(model.audiocallCurrent)};
+      } 
       this.currentIndex = 0;
       this.currentProgress = 5;
       lastPage.renderLastPage(words, this.checkAnswers);
     } else {
       if (buttonNext.textContent === NameBtnAudiocall.dontKnow) {
         this.checkAnswers.push(false);
+        if(model.auth){this.updateIncorrectUserWord(model.audiocallCurrent)};
       } else {
         buttonNext.textContent = NameBtnAudiocall.dontKnow;
       }
       this.currentIndex += stepForCurrentIndex;
       this.currentProgress += stepForProgress;
+
+     
 
       this.renderProgress();
       const answers = document.getElementById("answers") as HTMLElement;
@@ -268,13 +284,15 @@ class GamePage {
       ) as HTMLButtonElement;
       audioButton.classList.remove("after-select");
       correctWord.classList.add("hide");
+      
       this.renderGame(words);
     }
   }
 
   public startGame(page: number, group: number) {
     this.currentIndex = 0;
-    this.currentProgress = 5;
+    this.currentProgress = !model.auth ? 5 : (100 / model.audiocallWordsArray.length);
+    stepForProgress = this.currentProgress;
     this.checkAnswers = [];
 
     const contentEl = document.querySelector("#content") as HTMLElement;

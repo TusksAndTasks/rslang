@@ -19,6 +19,26 @@ export class Model {
   private _sprintWordsArray: Array<IWordData | IWord> = [] ;
   private _audiocallWordsArray: Array<IWordData | IWord> = [] ;
   private _sprintScore: string = '0';
+  private _sprintNewWords: number = 0;
+  private _audiocallNewWords: number = 0;
+  private _audiocallCurrent: IWord | null = null;
+  private _audiocallBackupArray: IWord[] = [];
+
+  get audiocallBackupArray() {
+    return this._audiocallBackupArray as IWord[];
+  }
+
+  set audiocallBackupArray(words: IWord[]) {
+    this._audiocallBackupArray= words;
+  }
+
+  get audiocallCurrent() {
+    return this._audiocallCurrent as IWord;
+  }
+
+  set audiocallCurrent(word: IWord) {
+    this._audiocallCurrent = word;
+  }
 
   get activePage() {
     return this._activePage;
@@ -59,6 +79,24 @@ export class Model {
   set sprintWordsArray(arr: Array<IWordData | IWord>){
     this._sprintWordsArray = arr;
   }
+
+  get sprintNewWords() {
+    return this._sprintNewWords;
+  }
+
+  set sprintNewWords(stat: number) {
+    this._sprintNewWords = stat;
+  }
+
+
+  get audiocallNewWords() {
+    return this._audiocallNewWords;
+  }
+
+  set audiocallNewWords(stat: number) {
+    this._audiocallNewWords = stat;
+  }
+
 
   get audiocallWordsArray(){
     return this._audiocallWordsArray;

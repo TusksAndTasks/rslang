@@ -40,6 +40,7 @@ export class Sprint {
   }
 
   private clearProperties(){
+    model.sprintNewWords = 0;
     model.sprintStatData = {
       correctWords: [],
       incorrectWords: [],
@@ -148,6 +149,7 @@ export class Sprint {
 
   private updateCorrectUserWord(word: IWord | IWordData | undefined ){
     if(!(word as IWord).userWord){
+       model.sprintNewWords++;
        const userWordData = {
          difficulty: 'normal',
          optional: {
@@ -158,6 +160,7 @@ export class Sprint {
       }
        api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
     } else {
+      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.sprintNewWords++};
       const userInfo = ((word as IWord).userWord as IUserWord)
       userInfo.optional.correctCount++;
       userInfo.optional.totalCorrectCount++;
@@ -176,6 +179,7 @@ export class Sprint {
 
   private updateIncorrectUserWord(word: IWord | IWordData | undefined ){
     if(!(word as IWord).userWord){
+      model.sprintNewWords++;
        const userWordData = {
          difficulty: 'normal',
          optional: {
@@ -186,6 +190,7 @@ export class Sprint {
       }
        api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
     } else {
+      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.sprintNewWords++};
       const userInfo = ((word as IWord).userWord as IUserWord)
       userInfo.optional.totalIncorrectCount++;
        if (userInfo.difficulty === 'easy'){
