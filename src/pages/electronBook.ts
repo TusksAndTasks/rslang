@@ -1,6 +1,8 @@
+import { gamePage } from "../games/audiocall/game-page";
 import { controller, model, view } from "../ts";
 import { api } from "../ts/api";
-import { EPage, IWord } from "../types/types";
+import { EPage, IWord, IWordsData } from "../types/types";
+import { AggArrayCreator } from "./agg-array-creator";
 
 export class ElectronBook {
   private words: IWord[] = [];
@@ -249,6 +251,11 @@ export class ElectronBook {
                 <div class="word-card__exampletranslate">${word.textExampleTranslate}</div>
               </div>
 
+              <div class="word-card__tracker">
+                 <div class="word-card__correctTrack">Верно угадано: ${word.userWord ? word.userWord.optional.totalCorrectCount : 0}</div>
+                 <div class="word-card__incorrectTrack">Неверено угадано: ${word.userWord ? word.userWord.optional.totalIncorrectCount : 0}</div>
+              </div>
+
               ${model.auth && model.electronBookGroup !== this.difficultWordsGroup
             ?
             `<div class="word-card__buttons">
@@ -277,7 +284,7 @@ export class ElectronBook {
   }
 
   public addDifficultyCardClass(wordCard: HTMLElement, word: IWord): void {
-    if (word.userWord) {
+    if (word.userWord && word.userWord.difficulty !== 'normal') {
       const card = (wordCard.firstElementChild as HTMLElement);
       card.classList.add(`word-card--${word.userWord.difficulty}`);
 
@@ -357,53 +364,66 @@ export class ElectronBook {
   }
 
   public toggleWordToDifficultWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
-    if (!easyBtn.classList.contains('btn-easy-active')) {
+    if(!word.userWord){
+      api.createUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0} })
+      .then(() => {
+        word.userWord = {difficulty: 'hard', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0}};
+        (wordCard.firstElementChild as HTMLElement).classList.add('word-card--hard');
+        hardBtn.classList.add('btn-hard-active');
+        this.checkEasyWordsCount();
+      });
+    }
+    else {
+      const userWordData = word.userWord;
       if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--hard')) {
-        api.deleteUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {} })
+        userWordData.difficulty = 'normal';
+        userWordData.optional.correctCount = 0;
+        api.updateUserWord(model.auth!.userId, word._id, userWordData)
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--hard');
             hardBtn.classList.remove('btn-hard-active');
             this.checkEasyWordsCount();
           });
-      } else {
-        api.createUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {} })
+      }
+      else {
+        userWordData.difficulty = 'hard';
+        userWordData.optional.correctCount = 0;
+        api.updateUserWord(model.auth!.userId, word._id, userWordData)
           .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.add('word-card--hard');
             hardBtn.classList.add('btn-hard-active');
-            this.checkEasyWordsCount();
-          });
-      }
-    } else {
-      api.updateUserWord(model.auth!.userId, word._id, { difficulty: 'hard', optional: {} })
-        .then(() => {
-          (wordCard.firstElementChild as HTMLElement).classList.add('word-card--hard');
-          hardBtn.classList.add('btn-hard-active');
-          (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--easy');
-          easyBtn.classList.remove('btn-easy-active');
-          this.checkEasyWordsCount();
-        });
-    }
-  }
-
-  public toggleWordToEasyWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
-    if (!hardBtn.classList.contains('btn-hard-active')) {
-      if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--easy')) {
-        api.deleteUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {} })
-          .then(() => {
             (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--easy');
             easyBtn.classList.remove('btn-easy-active');
             this.checkEasyWordsCount();
           });
-      } else {
-        api.createUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {} })
-          .then(() => {
-            (wordCard.firstElementChild as HTMLElement).classList.add('word-card--easy');
-            easyBtn.classList.add('btn-easy-active');
-            this.checkEasyWordsCount();
-          });
       }
+    } 
+  }
+
+  public toggleWordToEasyWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
+    if(!word.userWord){
+      api.createUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0} })
+      .then(() => {
+        word.userWord = {difficulty: 'easy', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0}};
+        (wordCard.firstElementChild as HTMLElement).classList.add('word-card--easy');
+        easyBtn.classList.add('btn-easy-active');
+        this.checkEasyWordsCount();
+      });
     } else {
-      api.updateUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {} })
+      const userWordData = word.userWord;
+        if ((wordCard.firstElementChild as HTMLElement).classList.contains('word-card--easy')) {
+          userWordData.difficulty = 'normal';
+          userWordData.optional.correctCount = 0;
+          api.updateUserWord(model.auth!.userId, word._id, userWordData)
+            .then(() => {
+              (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--easy');
+              easyBtn.classList.remove('btn-easy-active');
+              this.checkEasyWordsCount();
+            });
+        }  else {
+      userWordData.difficulty = 'easy';
+      userWordData.optional.correctCount = 0;
+      api.updateUserWord(model.auth!.userId, word._id, userWordData)
         .then(() => {
           (wordCard.firstElementChild as HTMLElement).classList.remove('word-card--hard');
           hardBtn.classList.remove('btn-hard-active');
@@ -412,6 +432,7 @@ export class ElectronBook {
           this.checkEasyWordsCount();
         });
     }
+  }
   }
 
   public sortWordsByNumber(arr: IWord[]): void {
@@ -464,20 +485,45 @@ export class ElectronBook {
     const sprintBtn = document.getElementById('sprint-btn') as HTMLElement;
 
     electronBookAudiocallBtn.onclick = () => {
+      if(model.auth){
+        AggArrayCreator.audioGameArray().then(() => {
+          model.previousPage = model.activePage;
+          gamePage.startGame(model.electronBookPage, model.electronBookGroup);
+          controller.setActiveMenuItem(audioCallBtn);
+        })
+     } else {
       model.previousPage = model.activePage;
-      model.activePage = EPage.audiocall;
-      view.renderContent(model.activePage);
+      gamePage.startGame(model.electronBookPage, model.electronBookGroup);
       controller.setActiveMenuItem(audioCallBtn);
+      }
+      view.hideFooter();
     };
 
     electronBookSprintBtn.onclick = () => {
+      if(model.auth){
+        AggArrayCreator.sprintGameArray().then(() => {
+          model.previousPage = model.activePage;
+          model.activePage = EPage.sprint;
+          view.renderContent(model.activePage);
+          controller.setActiveMenuItem(sprintBtn);
+          });
+      } else {
       model.previousPage = model.activePage;
-      model.activePage = EPage.sprintDifficulty;
-      view.renderContent(model.activePage);
-      controller.setActiveMenuItem(sprintBtn);
+      this.createSprintPageArray().then(() => {
+        model.activePage = EPage.sprint;
+        view.renderContent(model.activePage);
+        controller.setActiveMenuItem(sprintBtn);
+      })
+      }
     };
 
     this.checkEasyWordsCount();
+  }
+
+
+  private async createSprintPageArray(){
+      const response = await api.getWords(model.electronBookGroup, model.electronBookPage);
+      model.sprintWordsArray = response as IWordsData;
   }
 
   public checkEasyWordsCount(): void {

@@ -1,6 +1,6 @@
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
-import { EPage, IWordData } from "../../types/types";
+import { EPage, IWord, IWordData } from "../../types/types";
 
 export class SprintStat {
 
@@ -22,6 +22,7 @@ export class SprintStat {
     }
 
     public showStatWords() {
+        if(model.auth){this.changeStatistics()}
         const streakSection = document.getElementById('sprint-streak-stat') as HTMLElement;
         const scoreSection = document.getElementById('sprint-score-stat') as HTMLElement;
         streakSection.innerHTML = `Лучшая серия за раунд: ${(model.sprintStatData.maxStreak).toString()}`;
@@ -33,13 +34,45 @@ export class SprintStat {
         this.setAgainButtonListener();
     }
 
+    private async changeStatistics(){
+      let statistic = await api.getStatistics();
+      
+      if(!statistic){
+          statistic = {learnedWords: model.sprintStatData.learnedWords,
+          optional: {
+              audiocall: {
+                 correctWords: 0,
+                 incorrectWords: 0,
+                 streak: 0,
+                 newWords: +0
+              },
+              sprint: {
+                  correctWords: model.sprintStatData.correctWords.length,
+                  incorrectWords: model.sprintStatData.incorrectWords.length,
+                  streak: model.sprintStatData.maxStreak,
+                  newWords: model.sprintNewWords
+              }
+          }
+        }
+      } else {
+          delete statistic.id;
+          statistic.learnedWords += model.sprintStatData.learnedWords;
+          statistic.optional.sprint.correctWords += model.sprintStatData.correctWords.length;
+          statistic.optional.sprint.incorrectWords += model.sprintStatData.incorrectWords.length;
+          statistic.optional.sprint.streak = statistic.optional.sprint.streak < model.sprintStatData.maxStreak ? model.sprintStatData.maxStreak : statistic.optional.sprint.streak,
+          statistic.optional.sprint.newWords += model.sprintNewWords
+      }
+      
+      api.updateStatistics(statistic);
+    }
+
     private showCorrectWords(){
         const correctSection = document.getElementById('sprint-correct-stat') as HTMLElement;
 
         model.sprintStatData.correctWords.forEach((elem) => {
             correctSection.innerHTML += `<div class="sprint-stat__correct-word">
             ${elem.word} --- ${elem.wordTranslate} 
-            <button class="sprint-stat__correct-audio" id="${elem.id}">Прослушать</button>
+            <button class="sprint-stat__correct-audio" id="${!model.auth ? (elem as IWordData).id : (elem as IWord)._id}">Прослушать</button>
             </div>`
         });
     }
@@ -50,7 +83,7 @@ export class SprintStat {
         model.sprintStatData.incorrectWords.forEach((elem) => {
             incorrectSection.innerHTML += `<div class="sprint-stat__incorrect-word">
             ${elem.word} --- ${elem.wordTranslate} 
-            <button class="sprint-stat__incorrect-audio" id="${elem.id}">Прослушать</button>
+            <button class="sprint-stat__incorrect-audio" id="${!model.auth ? (elem as IWordData).id : (elem as IWord)._id}">Прослушать</button>
             </div>`
         })  
     }
@@ -61,7 +94,7 @@ export class SprintStat {
 
            correctAudioBtn.forEach((elem) => {
             const audio = new Audio();
-            audio.src = `${api.baseUrl}/${(model.sprintStatData.correctWords.find((el) => el.id === elem.id) as IWordData).audio}`
+            audio.src = `${api.baseUrl}/${(model.sprintStatData.correctWords.find((el) => (model.auth ? (el as IWord)._id : (el as IWordData).id) === elem.id) as IWordData | IWord).audio}`
               elem.addEventListener('click', function(){
                   audio.play();
               })
@@ -69,7 +102,7 @@ export class SprintStat {
 
            incorrectAudioBtn.forEach((elem) => {
             const audio = new Audio();
-            audio.src = `${api.baseUrl}/${(model.sprintStatData.incorrectWords.find((el) => el.id === elem.id) as IWordData).audio}`
+            audio.src = `${api.baseUrl}/${(model.sprintStatData.incorrectWords.find((el) => (model.auth ? (el as IWord)._id : (el as IWordData).id) === elem.id) as IWordData | IWord).audio}`
               elem.addEventListener('click', function(){
                   audio.play();
               })

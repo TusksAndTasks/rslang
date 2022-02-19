@@ -1,4 +1,4 @@
-import { IWordData, IWordsData } from './../../types/types';
+import { IWord, IWordData, IWordsData } from './../../types/types';
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
 import { EPage } from "../../types/types";
@@ -45,14 +45,19 @@ export class SprintDifficulty {
 
     private getRandomPage(){
         const pageAmount = 30;
-        return Math.floor(Math.random() * pageAmount);
+        return Math.floor(Math.random() * model.numberOfPages);
     }
 
     private async setWordsArray(group: number) {
        try{
          const page = this.getRandomPage();
+         if(!model.auth){
          const response = await api.getWords(group, page);
          model.sprintWordsArray = response as IWordsData;
+        } else {
+            const response = await api.getAggregatedWords(model.auth.userId, 20, `%7B%22page%22%3A${page}%7D`);
+            model.sprintWordsArray = response as Array<IWordData | IWord>;
+        }
        }
        catch (err){
            throw err;
