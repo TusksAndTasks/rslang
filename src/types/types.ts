@@ -5,6 +5,10 @@ export interface IAudiocall {
   initAudiocall: () => void;
 }
 
+export interface IStatistics {
+  initStatistics: () => void;
+}
+
 export enum NameBtnAudiocall {
   dontKnow = "Не знаю",
   next = "Дальше",

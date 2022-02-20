@@ -1,5 +1,17 @@
 import { model } from ".";
-import { EPage, IAuth, IElectronBook, IHeader, ISprint, ISprintDifficulty, ISprintStat, ITemplate, IAudiocall, IMain } from "../types/types";
+import {
+  EPage,
+  IAuth,
+  IElectronBook,
+  IHeader,
+  ISprint,
+  ISprintDifficulty,
+  ISprintStat,
+  IStatistics,
+  IAudiocall,
+  IMain,
+  ITemplate,
+} from "../types/types";
 
 export class View {
   private header: IHeader;
@@ -11,9 +23,20 @@ export class View {
   private sprint: ISprint;
   private sprintStat: ISprintStat;
   private sprintDifficulty: ISprintDifficulty;
-  private statistics: ITemplate;
+  private statistics: IStatistics;
 
-  constructor(header: IHeader, footer: ITemplate, auth: IAuth, main: IMain, electronBook: IElectronBook, audiocall: IAudiocall, sprint: ISprint, sprintStat: ISprintStat, sprintDifficulty: ISprintDifficulty, statistics: ITemplate) {
+  constructor(
+    header: IHeader,
+    footer: ITemplate,
+    auth: IAuth,
+    main: IMain,
+    electronBook: IElectronBook,
+    audiocall: IAudiocall,
+    sprint: ISprint,
+    sprintStat: ISprintStat,
+    sprintDifficulty: ISprintDifficulty,
+    statistics: IStatistics
+  ) {
     this.header = header;
     this.footer = footer;
     this.auth = auth;
@@ -55,12 +78,12 @@ export class View {
 
   public showFooter(): void {
     const footerEl = document.querySelector("#footer") as HTMLElement;
-    footerEl.classList.remove('hidden');
+    footerEl.classList.remove("hidden");
   }
 
   public hideFooter(): void {
     const footerEl = document.querySelector("#footer") as HTMLElement;
-    footerEl.classList.add('hidden');
+    footerEl.classList.add("hidden");
   }
 
   public renderContent(activePage: string = EPage.main): void {
@@ -92,12 +115,12 @@ export class View {
         this.sprint.startSprint();
         break;
 
-      case EPage.sprintStat: 
+      case EPage.sprintStat:
         contentEl!.innerHTML = this.sprintStat.getHTML();
         this.sprintStat.showStatWords();
         break;
 
-      case EPage.sprintDifficulty: 
+      case EPage.sprintDifficulty:
         this.hideFooter();
         contentEl!.innerHTML = this.sprintDifficulty.getHTML();
         this.sprintDifficulty.setDifficultyListeners();
@@ -105,13 +128,12 @@ export class View {
 
       case EPage.statistics:
         this.showFooter();
-        contentEl!.innerHTML = this.statistics.getHTML();
+        this.statistics.initStatistics();
         break;
 
       default:
         this.showFooter();
         contentEl!.innerHTML = this.main.getHTML();
-
         break;
     }
   }
