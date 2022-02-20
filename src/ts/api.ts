@@ -100,7 +100,7 @@ class API {
 
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken(userId);
+        this.getNewToken();
         this.getAggregatedWords(userId, wordsPerPage, filter);
       } else {
         console.error(response.status, response.statusText);
@@ -132,7 +132,7 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken(userId);
+        this.getNewToken();
         this.createUserWord(userId, wordId, word);
       } else {
         console.error(response.status, response.statusText);
@@ -160,7 +160,7 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken(userId);
+        this.getNewToken();
         this.deleteUserWord(userId, wordId, word);
       } else {
         console.error(response.status, response.statusText);
@@ -190,7 +190,7 @@ class API {
 
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken(userId);
+        this.getNewToken();
         this.updateUserWord(userId, wordId, word);
       } else {
         console.error(response.status, response.statusText);
@@ -215,8 +215,8 @@ class API {
       }
     );
     if (!response.ok) {
-      if (response.status === 401 && model.auth) {
-        this.getNewToken(model.auth.userId);
+      if (response.status === 401) {
+        this.getNewToken();
         this.createAggregatedWords(page);
       } else {
         console.error(response.status, response.statusText);
@@ -241,8 +241,8 @@ class API {
       }
     );
     if (!response.ok) {
-      if (response.status === 401 && model.auth) {
-        this.getNewToken(model.auth.userId);
+      if (response.status === 401) {
+        this.getNewToken();
         this.updateStatistics(statistic);
       } else {
         console.error(response.status, response.statusText);
@@ -264,8 +264,8 @@ class API {
     if (response.ok) {
       return (await response.json()) as IStatisticsObj;
     } else {
-      if (response.status === 401 && model.auth) {
-        this.getNewToken(model.auth.userId);
+      if (response.status === 401) {
+        this.getNewToken();
         this.getStatistics();
       } else
         console.warn("Статистика отсутствует.Новая статисктика была создана.");
@@ -273,18 +273,21 @@ class API {
     }
   }
 
-  public getNewToken = async (userId: string): Promise<void> => {
-    const response: Response = await fetch(`${this.users}/${userId}/tokens`, {
-      headers: {
-        Authorization: `Bearer ${model.auth!.refreshToken}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+  public getNewToken = async (): Promise<void> => {
+    const response: Response = await fetch(
+      `${this.users}/${(model.auth as IAuthObject).userId}/tokens`,
+      {
+        headers: {
+          Authorization: `Bearer ${model.auth!.refreshToken}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (response.ok) {
       localStorage.setItem("authObject", JSON.stringify(response.json()));
       console.log("Получен новый токен");
-    } else if (response.status === 401) {
+    } else {
       console.log("рефреш токен тоже невалиден - снова залогиниться");
       localStorage.removeItem("authObject");
       view.renderContent(EPage.auth);
