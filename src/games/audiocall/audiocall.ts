@@ -26,6 +26,7 @@ export class Audiocall {
         } else {
           gamePage.startGame(page, group);
         }
+        (e.target as HTMLElement).id !== 'sprint-btn' &&
         document.onkeyup = null;
       }
     };

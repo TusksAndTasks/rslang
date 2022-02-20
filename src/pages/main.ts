@@ -127,7 +127,7 @@ export class Main {
       localStorage.setItem('date', now.getTime().toString());
     } else {
        let startDate = +(localStorage.getItem('date') as string);
-       if (now.getTime() - startDate > 86400000){
+       if ((now.getTime() - startDate) > 86400000){
         let stat = {
           learnedWords: 0,
           optional: {
@@ -145,7 +145,9 @@ export class Main {
               }
           }
         }
-         api.updateStatistics(stat);
+         if(model.auth){
+          localStorage.setItem('date', now.getTime().toString());  
+          api.updateStatistics(stat)};
        }
     }
   }

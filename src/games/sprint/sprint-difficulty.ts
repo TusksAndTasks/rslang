@@ -38,6 +38,7 @@ export class SprintDifficulty {
         this.startSprintGame(+(e.key as string) - 1);
       }
     };
+            if ((e.target as HTMLElement).id !== 'sprint-btn' && (e.target as HTMLElement).id !== 'audio-call-btn' && (e.target as HTMLElement).tagName === 'LI' || (e.target as HTMLElement).id === 'login-btn'){
   }
 
   private getRandomPage() {
