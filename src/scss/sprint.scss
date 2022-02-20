@@ -170,85 +170,156 @@
 }
 
 .sprint-stat {
-    width: 100%;
-    height: 90vh;
+    width: 80%;
+    height: 75vh;
+    margin: 0 auto;
+    background-color: transparent;
     display: flex;
-    flex-flow: column;
-    justify-content: center;
     align-items: center;
-
+    justify-content: center;
+    color: #000;
+    
     &__stat-box {
-        width: 60%;
+        width: 50%;
         height: 60%;
-        border: solid 2px white;
-        padding: 10px;
+        display: flex;
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 20px;
+        background-color: var(--white);
+        border-radius: 10px;
+    }
+
+    &__result{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: space-around;
+    }
+
+    &__full {
+        width: 75%;
+        height: 100%;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        background-color: var(--white);
+        border-radius: 10px;
+    }
+
+    &__streak,
+    &__score,
+    &__correct {
+        color: #3a8140;
+    }
+
+    &__incorrect {
+        color: #8b0000;
+    }
+
+    &__title {
+    font-size: 20px;
+    padding: 0px;
+    text-align: center;
+    }
+    
+
+    &__circle {
+    min-width: 76px;
+    min-height: 76px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 2px solid var(--darkblue);
+    background-color: var(--grey);
+    }
+
+    &__wave {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    left: -31%;
+    top: 101%;
+    background-color: var(--blue);
+    border-radius: 45%;
+    animation: wave 5s linear infinite;
+    }
+
+    &__percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    color: #001e3c;
+    }
+
+    &__buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    }
+
+    &__return-button {
+            width: 5rem;
+            height: 2rem;
+            margin: 5px;
+            background-color: var(--blue);
+            border-radius: 5px;
+            align-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+    }
+
+    &__result-words {
+        width: 100%;
+        height: auto;
         display: flex;
         flex-flow: column;
         overflow-y: scroll;
     }
 
-    &__streak,
-    &__score {
-        display: flex;
-        flex-flow: row;
-        justify-content: center;
-    }
+    &__result-words h2 {
+        text-align: center;
 
-    &__score {
-        font-size: 30px;
-    }
-
-    &__correct-words,
-    &__incorrect-words {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-flow: column;
     }
 
     &__correct-word,
     &__incorrect-word {
+        width: 100%;
         display: flex;
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px;
-        color: black;
-        background-color: white;
-        border-radius: 20px;
-        margin-bottom: 10px;
-        margin-top: 10px;
+        justify-content: space-around;
+        border-bottom: 1px solid rgb(0, 30, 60);
+        margin: 10px 0 10px 0;
     }
 
     &__correct-audio,
     &__incorrect-audio {
-        background-color: rgb(0, 127, 255);
-        border-radius: 4px;
+        width: 1rem;
+        height: 1rem;
         border: none;
-        padding: 5px 20px;
-        margin-left: 20px;
+        background-image: url("../assets/icons/play.png");
+        background-size: contain;
+        background-repeat: no-repeat;
         cursor: pointer;
-        box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
-        font-weight: 600;
-        color: white;
     }
 
-    &__again-button {
-        background-color: rgb(0, 127, 255);
+    &__button {
         border-radius: 4px;
         border: none;
-        padding: 5px 20px;
-        margin-left: 20px;
+        padding: 10px 15px;
         cursor: pointer;
+        font-size: 14px;
+        color: var(--black);
         box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
         font-weight: 600;
-        color: white;
-        height: 100px;
-        width: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: center;
+        background: var(--blue);
+        color: var(--white);
+        width: 8rem;
     }
 }
 
@@ -284,12 +355,6 @@
         &__correct-word,
         &__incorrect-word{
             font-size: 15px;
-        }
-
-        &__correct-audio,
-        &__incorrect-audio {
-            padding: 5px 10px;
-            margin-left: 30px;
         }
     }
     
@@ -369,10 +434,6 @@
         font-size: 12px;
     }
 
-    &__correct-audio,
-    &__incorrect-audio {
-        margin-left: 50px;
-    }
 } 
 }
 
@@ -405,21 +466,6 @@
             font-size: 20px;
         }
 
-        &__correct-audio,
-        &__incorrect-audio {
-            padding: 5px 10px;
-            text-indent:-9999px;
-            width: 30px;
-            background-color: transparent;
-            background-image: url(../../src/assets/icons/sound-on.svg);
-            background-size: cover;
-            margin-left: 20px;
-        }
-
-        &__again-button {
-            margin-left: 0px;
-            width: 150px;
-        }
     } 
 }
 

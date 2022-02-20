@@ -36,7 +36,7 @@ export class SprintDifficulty {
         }
 
         header.addEventListener('click', (e) => {
-            if ((e.target as HTMLElement).id !== 'sprint-btn' && (e.target as HTMLElement).tagName === 'LI' || (e.target as HTMLElement).id === 'login-btn'){
+            if ((e.target as HTMLElement).id !== 'sprint-btn' && (e.target as HTMLElement).id !== 'audio-call-btn' && (e.target as HTMLElement).tagName === 'LI' || (e.target as HTMLElement).id === 'login-btn'){
                 document.onkeyup = null;
             }
         })

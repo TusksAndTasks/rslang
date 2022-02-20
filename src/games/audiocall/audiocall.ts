@@ -26,6 +26,7 @@ export class Audiocall {
     header.addEventListener("click", (e: Event) => {
       if (
         ((e.target as HTMLElement).id !== "audio-call-btn" &&
+        (e.target as HTMLElement).id !== 'sprint-btn' &&
           (e.target as HTMLElement).tagName === "LI") ||
         (e.target as HTMLElement).id === "login-btn"
       ) {

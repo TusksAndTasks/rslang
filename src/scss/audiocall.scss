@@ -294,8 +294,8 @@
   }
 
   &_circle {
-    width: 5rem;
-    height: 5rem;
+    min-width: 76px;
+    min-height: 76px;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
