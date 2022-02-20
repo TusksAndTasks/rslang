@@ -1,6 +1,6 @@
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
-import { IWord, IWordData, IWordsData } from "../../types/types";
+import { EPage, IWord, IWordData, IWordsData } from "../../types/types";
 
 class LastPage {
   public getHTML(): string {
@@ -166,6 +166,8 @@ class LastPage {
       "play-again"
     ) as HTMLButtonElement;
     buttonPlayAgain.addEventListener("click", () => {
+      model.previousPage = model.activePage;
+      model.activePage = EPage.audiocall;
       view.renderContent(model.activePage);
     });
 
