@@ -145,7 +145,7 @@ export class Main {
               }
           }
         }
-         api.updateStatistics(stat);
+         if(model.auth){api.updateStatistics(stat)};
        }
     }
   }
