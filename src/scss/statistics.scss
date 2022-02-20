@@ -109,6 +109,26 @@
     column-gap: 20px;
     align-items: center;
   }
+
+  &__card_learn {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+  }
+   
+  &__learn-wrapper {
+    display: flex;
+    flex-flow: row;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+  }
+  
+  &__learn-wrapper &__words_text {
+    margin-left: 20px;
+
+  }
+
   &__card_new {
     border: 3px solid rgb(250, 170, 186);
   }
