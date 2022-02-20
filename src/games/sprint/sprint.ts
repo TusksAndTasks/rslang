@@ -19,7 +19,6 @@ export class Sprint {
 
   public getHTML(): string {
     return `
-      <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint">
         <div class="sprint__count-box" id="sprint-count-box">
           <div class="sprint__current-count" id="sprint-current-count">0</div>

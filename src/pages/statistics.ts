@@ -43,8 +43,14 @@ export class Statistics {
             <p class="statistics-auth__words_text">новых слов</p>
           </div>
           <div class="statistics-auth__card_learn">
+            <div class="statistics-auth__learn-wrapper">
             <p id="learn-words" class="statistics-auth__words_value">0</p>
             <p class="statistics-auth__words_text">слов изучено в мини-играх</p>
+            </div>
+            <div class="statistics-auth__learn-wrapper">
+            <p id="learn-words-EB" class="statistics-auth__words_value">0</p>
+            <p class="statistics-auth__words_text">слов изучено в учебнике</p>
+            </div>
           </div>
           <div class="statistics-auth__card_percent">
             <div id="statistic_circle" class="audiocall__statistic_circle">
@@ -103,6 +109,9 @@ export class Statistics {
     const animateElementProgress = document.getElementById(
       "statistic_circle-wive-total"
     ) as HTMLElement;
+    const learnWordsEB = document.getElementById(
+      "learn-words-EB"
+    ) as HTMLElement;
 
     api.getStatistics().then((data) => {
       console.log(data);
@@ -152,6 +161,14 @@ export class Statistics {
           }
         );
       }
+    }).then(() => {
+      api.getSettings().then((data) => {
+        if (data) {
+          learnWordsEB.innerHTML = data.optional.learnedWords.toString();
+        } else {
+          learnWordsEB.innerHTML = "0";
+        }
+      });
     });
   }
 }
