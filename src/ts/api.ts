@@ -3,6 +3,7 @@ import {
   EPage,
   IAuthObject,
   INewWord,
+  ISettings,
   IStatisticsObj,
   IUser,
   IWord,
@@ -273,39 +274,49 @@ class API {
     }
   }
 
-  public async getSettings(){
-    const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
-      headers: {
-        'Authorization': `Bearer ${model.auth!.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
-    if (response.ok){
-      return await response.json() as ISettings;
+  public async getSettings() {
+    const response = await fetch(
+      `${this.users}/${(model.auth as IAuthObject).userId}/settings`,
+      {
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      return (await response.json()) as ISettings;
     } else {
-    console.warn('Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня');
-    return null;
+      if (response.status === 401) {
+        this.getNewToken();
+        this.getSettings();
+      } else {
+        console.warn(
+          "Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня"
+        );
+      }
+      return null;
     }
-
   }
 
-
-  public async updateSettings(statistic: ISettings){
-    try{
-      console.log(JSON.stringify(statistic))
-      await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
-        method: 'PUT',
+  public async updateSettings(statistic: ISettings) {
+    console.log(JSON.stringify(statistic));
+    const response = await fetch(
+      `${this.users}/${(model.auth as IAuthObject).userId}/settings`,
+      {
+        method: "PUT",
         headers: {
-          'Authorization': `Bearer ${model.auth!.token}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(statistic)
-      });
-    }
-    catch (err) {
-      throw err;
+        body: JSON.stringify(statistic),
+      }
+    );
+    if (response.status === 401) {
+      this.getNewToken();
+      this.updateSettings(statistic);
     }
   }
 
