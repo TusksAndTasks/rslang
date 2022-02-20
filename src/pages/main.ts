@@ -33,7 +33,7 @@ export class Main {
                   <div class="advanteges-card__subtitle">Аудиовызов</div>
                   <div class="advanteges-card__icon"><img src="./assets/icons/headphones.png" alt=""></div>
                   <div class="advanteges-card__text">
-                    Проверьте свои навыки прослушивания, пытаясь подобрать правильное значение после услышанного слова. Будьте осторожны, так как у вас есть только одна попытка.
+                    Проверьте свои навыки аудирования, выберите правильный перевод услышанного слова. Будьте осторожны, так как у вас есть только одна попытка.
                   </div>
                 </div>
               </div>
