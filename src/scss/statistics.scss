@@ -43,33 +43,24 @@
 
 .statistics-auth {
   width: 98%;
-  height: 75vh;
+  flex-direction: column;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  padding: 30px;
+  padding: 0 30px;
   box-sizing: border-box;
-  background-color: var(--white);
-  border-radius: 10px;
-  align-items: center;
-  row-gap: 15px;
-  color: #000;
+  background-color: transparent;
+  color: rgb(255, 255, 255);
 
-  &__icon {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 0;
-    background-image: url("../assets/icons/bar-chart.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+  & h2 {
+    align-self: center;
+    margin-bottom: 20px;
   }
-
   &__wrapper {
     width: 100%;
-    height: 70%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    column-gap: 10px;
+    color: #000;
 
     @media (max-width: 960px) {
       flex-direction: column;
@@ -79,33 +70,132 @@
       overflow-y: scroll;
     }
   }
+  &__column1 {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  &__column2 {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 10px;
+  }
 
-  &__item {
-    height: 100%;
-    width: 30%;
-    border: 2px solid var(--darkblue);
-    background-color: #eee8aa;
+  &__card_new,
+  &__card_learn,
+  &__card_percent {
+    width: 100%;
+    height: 110px;
+    padding: 15px;
     border-radius: 10px;
-    padding: 20px;
+    background-color: #fff;
+    display: flex;
+    justify-content: start;
+    column-gap: 20px;
+    align-items: center;
+  }
+  &__card_new {
+    border: 3px solid rgb(250, 170, 186);
+  }
+  &__card_learn {
+    border: 3px solid rgb(136, 191, 176);
+  }
+  &__card_percent {
+    flex-direction: column;
+    height: 200px;
+    row-gap: 20px;
+    border: 3px solid rgb(242, 105, 92);
+  }
+  &__words_value {
+    font-size: 70px;
+    font-weight: 500;
+    color: rgb(5, 97, 97);
+    margin: 0;
+    font-size: 32px;
+  }
 
-    @media (max-width: 960px) {
-      padding: 5px;
-      width: 80%;
-    }
+  &__words_text {
+    font-size: 24px;
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+    margin: 0;
+  }
 
-    @media (max-width: 560px) {
-      padding: 5px;
-      width: 98%;
-      font-size: 1rem;
-    }
+  &__card_audio,
+  &__card_sprint {
+    width: 100%;
+    height: 215px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    border: 3px solid rgb(136, 191, 176);
+    justify-content: start;
+    column-gap: 20px;
+    align-items: flex-start;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-weight: 500;
 
-    @media (max-width: 400px) {
-      padding: 3px;
-      font-size: 0.8rem;
+    &-wr {
+      display: flex;
+      column-gap: 20px;
+      align-items: center;
+      margin-bottom: 10px;
+
+      div {
+        width: 50px;
+        height: 50px;
+        background-image: url("../assets/icons/headphones.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      p {
+        color: rgb(242, 105, 92);
+        font-size: 24px;
+        font-weight: 500;
+      }
     }
   }
 
-  @media (max-width: 960px) {
-    padding: 10px;
+  &__card_sprint {
+    border-left: 4px solid rgb(242, 166, 99);
+
+    &-wr {
+      display: flex;
+      column-gap: 20px;
+      align-items: center;
+      margin-bottom: 10px;
+
+      div {
+        width: 50px;
+        height: 50px;
+        background-image: url("../assets/icons/gamepad.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      p {
+        color: rgb(242, 166, 99);
+        font-size: 24px;
+        font-weight: 500;
+      }
+    }
   }
+}
+
+.game_value {
+  color: rgb(5, 97, 97);
+  font-size: 22px;
+  font-weight: 500;
+}
+.game_text {
+  font-size: 18px;
+  margin: 0;
 }
