@@ -23,6 +23,7 @@ export class Model {
   private _audiocallNewWords: number = 0;
   private _audiocallCurrent: IWord | null = null;
   private _audiocallBackupArray: IWord[] = [];
+  public electronBookLearnedWords: number = 0;
 
   get audiocallBackupArray() {
     return this._audiocallBackupArray as IWord[];

@@ -1,5 +1,5 @@
 import { model } from ".";
-import { IAuthObject, INewWord, IStatisticsObj, IUser, IWord, IWordData } from "../types/types";
+import { IAuthObject, INewWord, ISettings, IStatisticsObj, IUser, IWord, IWordData } from "../types/types";
 
 class API {
   public baseUrl: string = "https://rss-lang-application.herokuapp.com";
@@ -188,6 +188,42 @@ class API {
       return null;
       }
 
+  }
+
+  public async getSettings(){
+    const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    if (response.ok){
+      return await response.json() as ISettings;
+    } else {
+    console.warn('Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня');
+    return null;
+    }
+
+  }
+
+
+  public async updateSettings(statistic: ISettings){
+    try{
+      console.log(JSON.stringify(statistic))
+      await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${model.auth!.token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(statistic)
+      });
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
 }

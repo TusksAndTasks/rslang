@@ -1,6 +1,7 @@
 import { model, view } from "../ts";
 import { api } from "../ts/api";
 import { EPage, IAuthObject, IUser } from "../types/types";
+import { ElectronBook } from "./electronBook";
 
 export class Auth {
   public getHTML(): string {
@@ -249,7 +250,7 @@ export class Auth {
     header.append(logoutBtn);
 
     logoutBtn.addEventListener("click", () => {
-      this.logoutUser();
+      setTimeout(() => this.logoutUser(), 1000);  
     });
   }
 
