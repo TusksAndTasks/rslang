@@ -108,7 +108,7 @@ export class Statistics {
       console.log(data);
       if (data) {
         newWords.innerText = `${
-          data.optional.audiocall.newWords || data.optional.sprint.newWords
+          data.optional.audiocall.newWords + data.optional.sprint.newWords
         }`;
         learnedWords.innerHTML = `${data.learnedWords}`;
 
