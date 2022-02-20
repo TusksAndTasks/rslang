@@ -8,6 +8,9 @@ export class SprintDifficulty {
     return `
     <div class="sprint-diff mt-10">
       <h2 class="sprint-title">Мини-игра спринт</h2>
+      <p>Проверьте, сколько очков вы мо&shyже&shyте по&shyлу&shyчить за од&shyну ми&shyну&shyту, 
+      пы&shyта&shyясь 
+      оп&shyре&shyде&shyлить пра&shyвиль&shyный ли пе&shyре&shyвод слова</p>
       <div class="sprint-diff__icon"></div>
       <p> Выберите сложность игры </p>
       <div class="sprint-difficulty">

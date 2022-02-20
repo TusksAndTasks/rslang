@@ -1,6 +1,5 @@
 .sprint-diff {
   width: 50%;
-  height: 45vh;
   margin: 0 auto;
   margin-top: 10%;
   display: flex;
@@ -14,8 +13,8 @@
   color: #000;
 
   &__icon {
-    width: 64px;
-    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
     background-image: url("../assets/icons/gamepad.png");
     background-size: contain;
     background-repeat: no-repeat;

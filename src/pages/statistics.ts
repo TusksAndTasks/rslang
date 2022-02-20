@@ -114,7 +114,9 @@ export class Statistics {
 
         audioNew.innerText = `${data.optional.audiocall.newWords}`;
         audioCorrect.innerHTML = `${
-          (data.optional.audiocall.correctWords * 100) / totalAnswersAudio || 0
+          Math.round(
+            (data.optional.audiocall.correctWords * 100) / totalAnswersAudio
+          ) || 0
         }`;
         audioInRow.innerText = `${data.optional.audiocall.streak}`;
 
@@ -124,7 +126,9 @@ export class Statistics {
 
         sprintNew.innerText = `${data.optional.sprint.newWords}`;
         sprintCorrect.innerHTML = `${
-          (data.optional.sprint.correctWords * 100) / totalAnswersSprint || 0
+          Math.round(
+            (data.optional.sprint.correctWords * 100) / totalAnswersSprint
+          ) || 0
         }`;
         sprintInRow.innerText = `${data.optional.sprint.streak}`;
 
@@ -132,7 +136,8 @@ export class Statistics {
         const totalCorrectAnswer =
           data.optional.audiocall.correctWords +
           data.optional.sprint.correctWords;
-        const totalPercent = (totalCorrectAnswer * 100) / totalAnswers || 0;
+        const totalPercent =
+          Math.round((totalCorrectAnswer * 100) / totalAnswers) || 0;
 
         textStatisticProgress.innerText = `${Math.round(totalPercent)}%`;
         animateElementProgress.animate(
