@@ -148,6 +148,7 @@ export class Main {
         let setting = {
           wordsPerDay: 1,
           optional: {
+            learnedWords: 0,
             dayStats: {},
             dayLearnWords: {},
           },

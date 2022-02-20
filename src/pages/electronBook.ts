@@ -550,7 +550,6 @@ export class ElectronBook {
     const header = document.getElementById('header') as HTMLElement;
     header.onclick = (e) => {
       if((e.target as HTMLElement).id !== 'electron-book-btn' && (e.target as HTMLElement).tagName === 'LI' || (e.target as HTMLElement).id === 'logout-btn'){
-        console.log(21);
          this.updateSettings();
       }
     };
@@ -562,15 +561,13 @@ export class ElectronBook {
       const settings = await api.getSettings();
       if(settings) {
         delete settings.id;
-        settings.wordsPerDay += model.electronBookLearnedWords;
+        settings.optional.learnedWords += model.electronBookLearnedWords;
         api.updateSettings(settings)
       } else {
-        if(model.electronBookLearnedWords === 0){
-          model.electronBookLearnedWords = 1;
-        }
         const newSettings: ISettings = {
-          wordsPerDay: model.electronBookLearnedWords,
+          wordsPerDay: 1,
           optional: {
+            learnedWords: model.electronBookLearnedWords,
             dayStats: {},
             dayLearnWords: {},
           },

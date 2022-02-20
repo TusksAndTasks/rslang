@@ -213,7 +213,8 @@ export interface IAggResponse {
 export interface ISettings {
   id?: string;
   wordsPerDay: number;
-  optional?: {
+  optional: {
+    learnedWords: number;
     dayStats: {[key: string] : IStatisticsObj,};
     dayLearnWords: {[key: string] : number};
   }
