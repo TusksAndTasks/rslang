@@ -1,4 +1,5 @@
 import { model, view } from "../ts";
+import { api } from "../ts/api";
 import { EPage } from "../types/types";
 
 export class Statistics {
@@ -6,6 +7,7 @@ export class Statistics {
     const contentEl = document.getElementById("content") as HTMLElement;
     if (model.auth) {
       contentEl.innerHTML = this.getHTMLFotAuth();
+      this.fillValue();
     } else {
       contentEl.innerHTML = this.getHTMLFotNoAuth();
       const btnBack = document.getElementById(
@@ -54,43 +56,59 @@ export class Statistics {
               <div></div>
               <p>Аудиовызов</p>
             </div>
-          <p class="game_text"><span class="game_value">0</span>  новых слов</p>
-          <p class="game_text"><span class="game_value">0</span>  % правильных ответов</p>
-          <p class="game_text"><span class="game_value">0</span>  cамая длинная серия правильных ответов</p>
+          <p class="game_text"><span id="audio-new-words" class="game_value">0</span>  новых слов</p>
+          <p   class="game_text"><span  id="audio-correct-words" class="game_value">0</span>  % правильных ответов</p>
+          <p  class="game_text"><span id="audio-in-row"  class="game_value">0</span>  cамая длинная серия правильных ответов</p>
           </div> 
           <div class="statistics-auth__card_sprint">
             <div class="statistics-auth__card_sprint-wr">
               <div></div>
               <p>Спринт</p>
             </div>
-            <p class="game_text"><span class="game_value">0</span>  новых слов</p>
-            <p class="game_text"><span class="game_value">0</span>  % правильных ответов</p>
-            <p  class="game_text"><span class="game_value">0</span>  cамая длинная серия правильных ответов</p>
+            <p class="game_text"><span id="sprint-new-words"  class="game_value">0</span>  новых слов</p>
+            <p  class="game_text"><span id="sprint-correct-words" class="game_value">0</span>  % правильных ответов</p>
+            <p class="game_text"><span id="sprint-in-row"  class="game_value">0</span>  cамая длинная серия правильных ответов</p>
           </div>          
         </div>
       </div>   
     </div>
     `;
   }
-}
 
-//<div class="statistics-auth__item">
-//<h2> Игра Аудиовызов </h2>
-//<p>Количество сыгранных игр</p>
-//<p>Количество новых слов</p>
-//<p>Процент правильных ответов</p>
-//<p> Самая длинная серия правильных ответов</p>
-//</div>
-//<div class="statistics-auth__item">
-//<h2> Игра Спринт </h2>
-//<p>Количество сыгранных игр</p>
-//<p>Количество новых слов</p>
-//<p>Процент правильных ответов</p>
-//<p> Самая длинная серия правильных ответов</p>
-//</div>
-//<div class="statistics-auth__item">
-//<h2> Игра Спринт </h2>
-//<p>Количество сыгранных игр</p>
-//<p>Количество новых слов</p>
-//<p>Процент правильных ответов</p>
-//<p> Самая длинная серия правильных ответов</p>
+  private fillValue() {
+    const newWords = document.getElementById("new-words") as HTMLElement;
+    const learnedWords = document.getElementById("learn-words") as HTMLElement;
+
+    const audioNew = document.getElementById("audio-new-words") as HTMLElement;
+    const audioCorrect = document.getElementById(
+      "audio-correct-words"
+    ) as HTMLElement;
+    const audioInRow = document.getElementById("audio-in-row") as HTMLElement;
+
+    const sprintNew = document.getElementById(
+      "sprint-new-words"
+    ) as HTMLElement;
+    const sprintCorrect = document.getElementById(
+      "sprint-correct-words"
+    ) as HTMLElement;
+    const sprintInRow = document.getElementById("sprint-in-row") as HTMLElement;
+
+    api.getStatistics().then((data) => {
+      console.log(data);
+      if (data) {
+        newWords.innerText = `${
+          data.optional.audiocall.newWords || data.optional.sprint.newWords
+        }`;
+        learnedWords.innerHTML = `${data.learnedWords}`;
+
+        audioNew.innerText = `${data.optional.audiocall.newWords}`;
+        audioCorrect.innerHTML = `${data.optional.audiocall.correctWords}`;
+        audioInRow.innerText = `${data.optional.audiocall.streak}`;
+
+        sprintNew.innerText = `${data.optional.sprint.newWords}`;
+        sprintCorrect.innerHTML = `${data.optional.sprint.correctWords}`;
+        sprintInRow.innerText = `${data.optional.sprint.streak}`;
+      }
+    });
+  }
+}
