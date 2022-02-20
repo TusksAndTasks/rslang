@@ -220,63 +220,62 @@
 }
 
 .sprint-stat {
-    width: 80%;
-    height: 75vh;
-    margin: 0 auto;
-    background-color: transparent;
+  width: 80%;
+  height: 75vh;
+  margin: 0 auto;
+  background-color: transparent;
   display: flex;
   align-items: center;
-    justify-content: center;
-    color: #000;
-    
+  justify-content: center;
+  color: #000;
+
   &__stat-box {
-        width: 50%;
+    width: 50%;
     height: 60%;
     display: flex;
-        padding: 15px;
-        flex-direction: column;
-        align-items: center;
-        row-gap: 20px;
-        background-color: var(--white);
-        border-radius: 10px;
-    }
+    padding: 15px;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+  }
 
-    &__result{
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        justify-content: space-around;
-    }
+  &__result {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+  }
 
-    &__full {
-        width: 75%;
-        height: 100%;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        background-color: var(--white);
-        border-radius: 10px;
+  &__full {
+    width: 75%;
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: var(--white);
+    border-radius: 10px;
   }
 
   &__streak,
-    &__score,
-    &__correct {
-        color: #3a8140;
-    }
+  &__score,
+  &__correct {
+    color: #3a8140;
+  }
 
-    &__incorrect {
-        color: #8b0000;
-    }
+  &__incorrect {
+    color: #8b0000;
+  }
 
-    &__title {
+  &__title {
     font-size: 20px;
     padding: 0px;
     text-align: center;
-    }
-    
+  }
 
-    &__circle {
+  &__circle {
     min-width: 76px;
     min-height: 76px;
     position: relative;
@@ -284,9 +283,9 @@
     border-radius: 50%;
     border: 2px solid var(--darkblue);
     background-color: var(--grey);
-    }
+  }
 
-    &__wave {
+  &__wave {
     position: absolute;
     width: 150%;
     height: 150%;
@@ -295,81 +294,79 @@
     background-color: var(--blue);
     border-radius: 45%;
     animation: wave 5s linear infinite;
-    }
+  }
 
-    &__percent {
+  &__percent {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 32px;
     color: #001e3c;
-    }
+  }
 
-    &__buttons {
+  &__buttons {
     display: flex;
     width: 100%;
     justify-content: space-around;
   }
 
-    &__return-button {
-            width: 5rem;
-            height: 2rem;
-            margin: 5px;
-            background-color: var(--blue);
-            border-radius: 5px;
-            align-self: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+  &__return-button {
+    width: 5rem;
+    height: 2rem;
+    margin: 5px;
+    background-color: var(--blue);
+    border-radius: 5px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
   }
 
-    &__result-words {
+  &__result-words {
     width: 100%;
     height: auto;
     display: flex;
     flex-flow: column;
-        overflow-y: scroll;
-    }
+    overflow-y: scroll;
+  }
 
-    &__result-words h2 {
-        text-align: center;
-
+  &__result-words h2 {
+    text-align: center;
   }
 
   &__correct-word,
   &__incorrect-word {
-        width: 100%;
+    width: 100%;
     display: flex;
-        justify-content: space-around;
-        border-bottom: 1px solid rgb(0, 30, 60);
-        margin: 10px 0 10px 0;
+    justify-content: space-around;
+    border-bottom: 1px solid rgb(0, 30, 60);
+    margin: 10px 0 10px 0;
   }
 
   &__correct-audio,
   &__incorrect-audio {
-        width: 1rem;
-        height: 1rem;
+    width: 1rem;
+    height: 1rem;
     border: none;
-        background-image: url("../assets/icons/play.png");
-        background-size: contain;
-        background-repeat: no-repeat;
+    background-image: url("../assets/icons/play.png");
+    background-size: contain;
+    background-repeat: no-repeat;
     cursor: pointer;
-      0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   }
 
-    &__button {
+  &__button {
     border-radius: 4px;
     border: none;
-        padding: 10px 15px;
+    padding: 10px 15px;
     cursor: pointer;
-        font-size: 14px;
-        color: var(--black);
+    font-size: 14px;
+    color: var(--black);
     font-weight: 600;
-        background: var(--blue);
-        color: var(--white);
-        width: 8rem;
+    background: var(--blue);
+    color: var(--white);
+    width: 8rem;
   }
 }
 
@@ -449,7 +446,6 @@
     &__incorrect-word {
       font-size: 12px;
     }
-
   }
 }
 
@@ -474,7 +470,6 @@
     &__score {
       font-size: 20px;
     }
-
   }
 }
 
