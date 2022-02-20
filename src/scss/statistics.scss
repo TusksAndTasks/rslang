@@ -14,8 +14,8 @@
   color: #000;
 
   &__icon {
-    width: 64px;
-    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
     margin-bottom: 10%;
     background-image: url("../assets/icons/bar-chart.png");
     background-size: contain;
