@@ -145,9 +145,18 @@ export class Main {
               }
           }
         }
+        let setting = {
+          wordsPerDay: 1,
+          optional: {
+            learnedWords: 0,
+            dayStats: {},
+            dayLearnWords: {},
+          },
+        }
          if(model.auth){
           localStorage.setItem('date', now.getTime().toString());  
           api.updateStatistics(stat)};
+          api.updateSettings(setting);
        }
     }
   }
