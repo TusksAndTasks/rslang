@@ -31,7 +31,11 @@ export class Statistics {
   private getHTMLFotAuth(): string {
     return /*html*/ `
     <div class="statistics-auth mt-10">
-      <h2> Cтатистика за ${new Date().toLocaleDateString()}</h2>
+      <h2> Cтатистика за ${new Date().toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })}</h2>
       <div class="statistics-auth__wrapper">
         <div class="statistics-auth__column1">
           <div class="statistics-auth__card_new">
