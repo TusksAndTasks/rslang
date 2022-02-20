@@ -121,8 +121,10 @@ export class Main {
     this.initStartBtn();
   }
 
-  private statisticReset(){
+  private async statisticReset(){
     let now = new Date()
+    let statisticsFull = await api.getStatistics();
+    let statisticsWords = await api.getSettings();
     if(!localStorage.getItem('date')){
       localStorage.setItem('date', now.getTime().toString());
     } else {
@@ -154,6 +156,13 @@ export class Main {
           },
         }
          if(model.auth){
+           if(statisticsWords){
+              statisticsWords.optional.dayLearnWords[`${new Date(startDate).getUTCDate()}`] = statisticsWords.optional.learnedWords;
+           if (statisticsFull){
+             statisticsWords.optional.dayStats[`${new Date(startDate).getUTCDate()}`] = statisticsFull; 
+           }
+           await api.updateSettings(statisticsWords);
+          }
           localStorage.setItem('date', now.getTime().toString());  
           api.updateStatistics(stat)};
           api.updateSettings(setting);
