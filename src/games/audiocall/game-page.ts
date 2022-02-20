@@ -1,5 +1,11 @@
 import { api } from "../../ts/api";
-import { IAuthObject, IUserWord, IWord, IWordData, IWordsData } from "../../types/types";
+import {
+  IAuthObject,
+  IUserWord,
+  IWord,
+  IWordData,
+  IWordsData,
+} from "../../types/types";
 import { lastPage } from "./last-page";
 import { NameBtnAudiocall } from "../../types/types";
 import { model } from "../../ts";
@@ -49,10 +55,14 @@ class GamePage {
     circle.style.strokeDashoffset = `${length}`;
     const offset = length - (this.currentProgress / 100) * length;
     circle.style.strokeDashoffset = String(offset);
-    contentProgress.textContent = `${this.currentIndex + 1}/${model.auth ? model.audiocallWordsArray.length : 20}`;
+    contentProgress.textContent = `${this.currentIndex + 1}/${
+      model.auth ? model.audiocallWordsArray.length : 20
+    }`;
   }
 
   private startAudio(src: string): void {
+    const buttonNext = document.getElementById("next") as HTMLButtonElement;
+    buttonNext.disabled = true;
     this.audio.src = src;
     this.audio.play();
     const audioAnimateElement = document.getElementById(
@@ -65,10 +75,15 @@ class GamePage {
       ],
       { duration: 600, iterations: Infinity }
     );
-    this.audio.addEventListener("ended", () => audioAnimate.cancel());
+    this.audio.addEventListener("ended", () => {
+      audioAnimate.cancel();
+      buttonNext.disabled = false;
+    });
   }
 
-  private getRandomArray(arr: Array<IWord | IWordData>): Array<IWord | IWordData> {
+  private getRandomArray(
+    arr: Array<IWord | IWordData>
+  ): Array<IWord | IWordData> {
     for (let index = arr.length - 1; index > 0; index -= 1) {
       let j = Math.floor(Math.random() * (index + 1));
       let elArr = arr[index];
@@ -83,10 +98,12 @@ class GamePage {
     words: Array<IWord | IWordData>
   ): Array<IWord | IWordData> => {
     const arrOfAnswerers = [correctWord];
-    const arrWrongAnswers = words.length >= 4 ? words.filter(
-      (wordData) => wordData.word !== correctWord.word
-    ) : model.audiocallBackupArray.filter((wordData) => wordData.word !== correctWord.word
-    );
+    const arrWrongAnswers =
+      words.length >= 4
+        ? words.filter((wordData) => wordData.word !== correctWord.word)
+        : model.audiocallBackupArray.filter(
+            (wordData) => wordData.word !== correctWord.word
+          );
     const randomAnswers = this.getRandomArray(arrWrongAnswers);
     for (let index = 0; index < this.numberWrongAnswers; index += 1) {
       arrOfAnswerers.push(randomAnswers[index]);
@@ -103,7 +120,7 @@ class GamePage {
       btn.disabled = true;
       btn.style.cursor = "default";
     });
-    const buttonNext = document.getElementById("next") as HTMLElement;    
+    const buttonNext = document.getElementById("next") as HTMLElement;
 
     if (this.currentIndex + 1 === model.numberOfQuestion) {
       buttonNext.textContent = NameBtnAudiocall.last;
@@ -120,73 +137,104 @@ class GamePage {
       button.style.background = "#00FF7F";
       this.audio.src = "../../assets/valid.mp3";
       this.audio.play();
-      if(model.auth){this.updateCorrectUserWord(currentWord);}
+      if (model.auth) {
+        this.updateCorrectUserWord(currentWord);
+      }
       this.checkAnswers.push(true);
     } else {
       button.style.background = "#CD5C5C";
       this.audio.src = "../../assets/error.mp3";
       this.audio.play();
-      if(model.auth){this.updateIncorrectUserWord(currentWord);}
+      if (model.auth) {
+        this.updateIncorrectUserWord(currentWord);
+      }
       this.checkAnswers.push(false);
     }
   }
 
-  private updateCorrectUserWord(word: IWord | IWordData | undefined ){
-    if(!(word as IWord).userWord){
-      model.audiocallNewWords++
-       const userWordData = {
-         difficulty: 'normal',
-         optional: {
-           correctCount: 1,
-           totalCorrectCount: 1,
-           totalIncorrectCount: 0
-         } 
-      }
-       api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
+  private updateCorrectUserWord(word: IWord | IWordData | undefined) {
+    if (!(word as IWord).userWord) {
+      model.audiocallNewWords++;
+      const userWordData = {
+        difficulty: "normal",
+        optional: {
+          correctCount: 1,
+          totalCorrectCount: 1,
+          totalIncorrectCount: 0,
+        },
+      };
+      api.createUserWord(
+        (model.auth as IAuthObject).userId,
+        (word as IWord)._id,
+        userWordData
+      );
     } else {
-      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.audiocallNewWords++};
-      const userInfo = ((word as IWord).userWord as IUserWord)
+      if (
+        (word as IWord).userWord?.optional.totalCorrectCount === 0 &&
+        (word as IWord).userWord?.optional.totalIncorrectCount === 0
+      ) {
+        model.audiocallNewWords++;
+      }
+      const userInfo = (word as IWord).userWord as IUserWord;
       userInfo.optional.correctCount++;
       userInfo.optional.totalCorrectCount++;
-       if(userInfo.difficulty === 'normal' && userInfo.optional.correctCount >= 3){
-         model.audiocallStatData++
-         userInfo.difficulty = 'easy';
-       }
-       else if (userInfo.difficulty === 'hard' && userInfo.optional.correctCount >= 5){
-        model.audiocallStatData++
-        userInfo.difficulty = 'easy';
-       }
-      api.updateUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userInfo);     
-    }
-
-  }
-
-  private updateIncorrectUserWord(word: IWord | IWordData | undefined ){
-    if(!(word as IWord).userWord){
-      model.audiocallNewWords++
-       const userWordData = {
-         difficulty: 'normal',
-         optional: {
-           correctCount: 0,
-           totalCorrectCount: 0,
-           totalIncorrectCount: 1
-         } 
+      if (
+        userInfo.difficulty === "normal" &&
+        userInfo.optional.correctCount >= 3
+      ) {
+        model.audiocallStatData++;
+        userInfo.difficulty = "easy";
+      } else if (
+        userInfo.difficulty === "hard" &&
+        userInfo.optional.correctCount >= 5
+      ) {
+        model.audiocallStatData++;
+        userInfo.difficulty = "easy";
       }
-       api.createUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userWordData);
-    } else {
-      if((word as IWord).userWord?.optional.totalCorrectCount === 0 && (word as IWord).userWord?.optional.totalIncorrectCount === 0){model.audiocallNewWords++};
-      const userInfo = ((word as IWord).userWord as IUserWord)
-      userInfo.optional.totalIncorrectCount++;
-       if (userInfo.difficulty === 'easy'){
-        userInfo.difficulty = 'normal';
-        userInfo.optional.correctCount = 0;
-       }
-      api.updateUserWord((model.auth as IAuthObject).userId, (word as IWord)._id, userInfo);     
+      api.updateUserWord(
+        (model.auth as IAuthObject).userId,
+        (word as IWord)._id,
+        userInfo
+      );
     }
-
   }
 
-
+  private updateIncorrectUserWord(word: IWord | IWordData | undefined) {
+    if (!(word as IWord).userWord) {
+      model.audiocallNewWords++;
+      const userWordData = {
+        difficulty: "normal",
+        optional: {
+          correctCount: 0,
+          totalCorrectCount: 0,
+          totalIncorrectCount: 1,
+        },
+      };
+      api.createUserWord(
+        (model.auth as IAuthObject).userId,
+        (word as IWord)._id,
+        userWordData
+      );
+    } else {
+      if (
+        (word as IWord).userWord?.optional.totalCorrectCount === 0 &&
+        (word as IWord).userWord?.optional.totalIncorrectCount === 0
+      ) {
+        model.audiocallNewWords++;
+      }
+      const userInfo = (word as IWord).userWord as IUserWord;
+      userInfo.optional.totalIncorrectCount++;
+      if (userInfo.difficulty === "easy") {
+        userInfo.difficulty = "normal";
+        userInfo.optional.correctCount = 0;
+      }
+      api.updateUserWord(
+        (model.auth as IAuthObject).userId,
+        (word as IWord)._id,
+        userInfo
+      );
+    }
+  }
 
   private renderAnswersButtons(
     arrAnswers: Array<IWord | IWordData>,
@@ -228,7 +276,9 @@ class GamePage {
 
   private renderGame(words: Array<IWord | IWordData>) {
     const currentWord: IWordData | IWord = words[this.currentIndex];
-   if (model.auth){model.audiocallCurrent = currentWord as IWord}
+    if (model.auth) {
+      model.audiocallCurrent = currentWord as IWord;
+    }
     const audioButton = document.getElementById(
       "sound-btn"
     ) as HTMLButtonElement;
@@ -247,20 +297,29 @@ class GamePage {
     this.renderAnswersButtons(arrayAnswers, currentWord);
   }
 
-  private listenerForNext(buttonNext: HTMLButtonElement, words: Array<IWord | IWordData>) {
-    
-    if (this.currentIndex + 1 === (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion)) {
+  private listenerForNext(
+    buttonNext: HTMLButtonElement,
+    words: Array<IWord | IWordData>
+  ) {
+    if (
+      this.currentIndex + 1 ===
+      (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion)
+    ) {
       if (buttonNext.textContent === NameBtnAudiocall.dontKnow) {
         this.checkAnswers.push(false);
-        if(model.auth){this.updateIncorrectUserWord(model.audiocallCurrent)};
-      } 
+        if (model.auth) {
+          this.updateIncorrectUserWord(model.audiocallCurrent);
+        }
+      }
       this.currentIndex = 0;
       this.currentProgress = 5;
       lastPage.renderLastPage(words, this.checkAnswers);
     } else {
       if (buttonNext.textContent === NameBtnAudiocall.dontKnow) {
         this.checkAnswers.push(false);
-        if(model.auth){this.updateIncorrectUserWord(model.audiocallCurrent)};
+        if (model.auth) {
+          this.updateIncorrectUserWord(model.audiocallCurrent);
+        }
       } else {
         buttonNext.textContent = NameBtnAudiocall.dontKnow;
       }
@@ -277,35 +336,40 @@ class GamePage {
       ) as HTMLButtonElement;
       audioButton.classList.remove("after-select");
       correctWord.classList.add("hide");
-      
+
       this.renderGame(words);
     }
   }
 
   public startGame(page: number, group: number) {
     this.currentIndex = 0;
-    this.currentProgress = !model.auth ? 5 : (100 / model.audiocallWordsArray.length);
+    this.currentProgress = !model.auth
+      ? 5
+      : 100 / model.audiocallWordsArray.length;
     stepForProgress = this.currentProgress;
     this.checkAnswers = [];
 
     const contentEl = document.querySelector("#content") as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.renderProgress();
-    if(!model.auth){
-    api.getWords(group, page).then((words) => {
-      this.renderGame(words as IWordsData);
+    if (!model.auth) {
+      api.getWords(group, page).then((words) => {
+        this.renderGame(words as IWordsData);
+        const buttonNext = document.getElementById("next") as HTMLButtonElement;
+        buttonNext.onclick = () => {
+          this.listenerForNext(buttonNext, words as IWordsData);
+        };
+      });
+    } else {
+      this.renderGame(model.audiocallWordsArray);
       const buttonNext = document.getElementById("next") as HTMLButtonElement;
       buttonNext.onclick = () => {
-        this.listenerForNext(buttonNext, words as IWordsData);
+        this.listenerForNext(
+          buttonNext,
+          model.audiocallWordsArray as Array<IWord | IWordData>
+        );
       };
-    });
-  } else {
-    this.renderGame(model.audiocallWordsArray);
-    const buttonNext = document.getElementById("next") as HTMLButtonElement;
-    buttonNext.onclick = () => {
-      this.listenerForNext(buttonNext, model.audiocallWordsArray as Array<IWord | IWordData>);
-    };
-  }
+    }
   }
 }
 export const gamePage = new GamePage();
