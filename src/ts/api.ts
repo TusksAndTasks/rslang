@@ -1,5 +1,13 @@
-import { model } from ".";
-import { IAuthObject, INewWord, IStatisticsObj, IUser, IWord, IWordData } from "../types/types";
+import { model, view } from ".";
+import {
+  EPage,
+  IAuthObject,
+  INewWord,
+  IStatisticsObj,
+  IUser,
+  IWord,
+  IWordData,
+} from "../types/types";
 
 class API {
   public baseUrl: string = "https://rss-lang-application.herokuapp.com";
@@ -56,140 +64,232 @@ class API {
     }
 
     return await response.json();
-  }
+  };
 
-  public getWords = async (group: number = 0, page: number = 0): Promise<IWord[]> | never => {
-    const response: Response = await fetch(`${this.words}?group=${group}&page=${page}`);
-
-    if (!response.ok) {
-      console.error(response.status, response.statusText)
-    }
-
-    return await response.json();
-  }
-
-  public getAggregatedWords = async (userId: string, wordsPerPage: number = 20, filter: string = ''): Promise<IWord[]> | never => {
-    const response: Response = await fetch(`${this.users}/${userId}/aggregatedWords?&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${model.auth!.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
-    
+  public getWords = async (
+    group: number = 0,
+    page: number = 0
+  ): Promise<IWord[]> | never => {
+    const response: Response = await fetch(
+      `${this.words}?group=${group}&page=${page}`
+    );
 
     if (!response.ok) {
-      console.error(response.status, response.statusText)
+      console.error(response.status, response.statusText);
     }
 
-
-    const data = await response.json()
-    const aggregatedWords = data[0].paginatedResults;
-
-    return aggregatedWords;
-  }
-
-
-  public createUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
-    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${model.auth!.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(word)
-    });
-    
     return await response.json();
   };
 
-  public deleteUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
-    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${model.auth!.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(word)
-    });
+  public getAggregatedWords = async (
+    userId: string,
+    wordsPerPage: number = 20,
+    filter: string = ""
+  ): Promise<IWord[]> | never => {
+    const response: Response = await fetch(
+      `${this.users}/${userId}/aggregatedWords?&wordsPerPage=${wordsPerPage}&filter=${filter}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.getNewToken(userId);
+        this.getAggregatedWords(userId, wordsPerPage, filter);
+      } else {
+        console.error(response.status, response.statusText);
+      }
+    }
+
+    const data = await response.json();
+    const aggregatedWords = data[0].paginatedResults;
+
+    return aggregatedWords;
+  };
+
+  public createUserWord = async (
+    userId: string,
+    wordId: string | undefined,
+    word: INewWord
+  ) => {
+    const response: Response = await fetch(
+      `${this.users}/${userId}/words/${wordId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(word),
+      }
+    );
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.getNewToken(userId);
+        this.createUserWord(userId, wordId, word);
+      } else {
+        console.error(response.status, response.statusText);
+      }
+    }
+    return await response.json();
+  };
+
+  public deleteUserWord = async (
+    userId: string,
+    wordId: string | undefined,
+    word: INewWord
+  ) => {
+    const response: Response = await fetch(
+      `${this.users}/${userId}/words/${wordId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(word),
+      }
+    );
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.getNewToken(userId);
+        this.deleteUserWord(userId, wordId, word);
+      } else {
+        console.error(response.status, response.statusText);
+      }
+    }
 
     return response;
   };
 
-  public updateUserWord = async (userId: string, wordId: string | undefined, word: INewWord) => {
-    const response: Response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${model.auth!.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(word)
-    });
+  public updateUserWord = async (
+    userId: string,
+    wordId: string | undefined,
+    word: INewWord
+  ) => {
+    const response: Response = await fetch(
+      `${this.users}/${userId}/words/${wordId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(word),
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.getNewToken(userId);
+        this.updateUserWord(userId, wordId, word);
+      } else {
+        console.error(response.status, response.statusText);
+      }
+    }
 
     return await response.json();
   };
-  
-  
+
   public async createAggregatedWords(page: number) {
-    try {
-      const filter = `filter=%7B%22%24and%22%3A%5B%7B%22%24or%22%3A%5B%7B%22userWord.difficulty%22%3A%22hard%22%7D%2C%20%7B%22userWord.difficulty%22%3A%22normal%22%7D%2C%20%7B%22userWord%22%3Anull%20%7D%5D%7D%2C%7B%22page%22%3A${page}%7D%5D%7D`;
-      const wordsPerPage = 'wordsPerPage=20&'
-      const group = `group=${model.electronBookGroup}&`
-      const response = await fetch(`${this.users}/${model.auth?.userId}/aggregatedWords?${group}${wordsPerPage}${filter}`, {
+    const filter = `filter=%7B%22%24and%22%3A%5B%7B%22%24or%22%3A%5B%7B%22userWord.difficulty%22%3A%22hard%22%7D%2C%20%7B%22userWord.difficulty%22%3A%22normal%22%7D%2C%20%7B%22userWord%22%3Anull%20%7D%5D%7D%2C%7B%22page%22%3A${page}%7D%5D%7D`;
+    const wordsPerPage = "wordsPerPage=20&";
+    const group = `group=${model.electronBookGroup}&`;
+    const response = await fetch(
+      `${this.users}/${model.auth?.userId}/aggregatedWords?${group}${wordsPerPage}${filter}`,
+      {
         headers: {
-          'Authorization': `Bearer ${model.auth!.token}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       }
-    });
-    return await response.json();
-  }
-  catch (err) {
-     throw err;
-  }
-};
-  
-  
-  public async updateStatistics(statistic: IStatisticsObj){
-    try{
-      console.log(JSON.stringify(statistic))
-      await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/statistics`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${model.auth!.token}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(statistic)
-      });
-    }
-    catch (err) {
-      throw err;
-    }
-  }
-
-  public async getStatistics(){
-
-      const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/statistics`, {
-        headers: {
-          'Authorization': `Bearer ${model.auth!.token}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      });
-      if (response.ok){
-        return await response.json() as IStatisticsObj;
+    );
+    if (!response.ok) {
+      if (response.status === 401 && model.auth) {
+        this.getNewToken(model.auth.userId);
+        this.createAggregatedWords(page);
       } else {
-      console.warn('Статистика отсутствует.Новая статисктика была создана.');
-      return null;
+        console.error(response.status, response.statusText);
       }
 
+      return await response.json();
+    }
   }
 
+  public async updateStatistics(statistic: IStatisticsObj) {
+    console.log(JSON.stringify(statistic));
+    const response = await fetch(
+      `${this.users}/${(model.auth as IAuthObject).userId}/statistics`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(statistic),
+      }
+    );
+    if (!response.ok) {
+      if (response.status === 401 && model.auth) {
+        this.getNewToken(model.auth.userId);
+        this.updateStatistics(statistic);
+      } else {
+        console.error(response.status, response.statusText);
+      }
+    }
+  }
+
+  public async getStatistics() {
+    const response = await fetch(
+      `${this.users}/${(model.auth as IAuthObject).userId}/statistics`,
+      {
+        headers: {
+          Authorization: `Bearer ${model.auth!.token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      return (await response.json()) as IStatisticsObj;
+    } else {
+      if (response.status === 401 && model.auth) {
+        this.getNewToken(model.auth.userId);
+        this.getStatistics();
+      } else
+        console.warn("Статистика отсутствует.Новая статисктика была создана.");
+      return null;
+    }
+  }
+
+  public getNewToken = async (userId: string): Promise<void> => {
+    const response: Response = await fetch(`${this.users}/${userId}/tokens`, {
+      headers: {
+        Authorization: `Bearer ${model.auth!.refreshToken}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      localStorage.setItem("authObject", JSON.stringify(response.json()));
+      console.log("Получен новый токен");
+    } else if (response.status === 401) {
+      console.log("рефреш токен тоже невалиден - снова залогиниться");
+      localStorage.removeItem("authObject");
+      view.renderContent(EPage.auth);
+    }
+  };
 }
 
 export const api = new API();
