@@ -273,6 +273,42 @@ class API {
     }
   }
 
+  public async getSettings(){
+    const response = await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
+      headers: {
+        'Authorization': `Bearer ${model.auth!.token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+    if (response.ok){
+      return await response.json() as ISettings;
+    } else {
+    console.warn('Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня');
+    return null;
+    }
+
+  }
+
+
+  public async updateSettings(statistic: ISettings){
+    try{
+      console.log(JSON.stringify(statistic))
+      await fetch(`${this.users}/${(model.auth as IAuthObject).userId}/settings`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${model.auth!.token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(statistic)
+      });
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
   public getNewToken = async (): Promise<void> => {
     const response: Response = await fetch(
       `${this.users}/${(model.auth as IAuthObject).userId}/tokens`,

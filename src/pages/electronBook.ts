@@ -1,7 +1,8 @@
 import { gamePage } from "../games/audiocall/game-page";
 import { controller, model, view } from "../ts";
 import { api } from "../ts/api";
-import { EPage, IWord, IWordsData } from "../types/types";
+import { Model } from "../ts/model";
+import { EPage, ISettings, IWord, IWordsData } from "../types/types";
 import { AggArrayCreator } from "./agg-array-creator";
 
 export class ElectronBook {
@@ -396,12 +397,14 @@ export class ElectronBook {
             easyBtn.classList.remove('btn-easy-active');
             this.checkEasyWordsCount();
           });
-      }
+      } 
     } 
   }
 
   public toggleWordToEasyWords(wordCard: HTMLElement, word: IWord, hardBtn: HTMLElement, easyBtn: HTMLElement): void {
     if(!word.userWord){
+      model.electronBookLearnedWords++;
+      console.log(model.electronBookLearnedWords);
       api.createUserWord(model.auth!.userId, word._id, { difficulty: 'easy', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0} })
       .then(() => {
         word.userWord = {difficulty: 'easy', optional: {correctCount: 0, totalCorrectCount: 0, totalIncorrectCount: 0}};
@@ -421,6 +424,8 @@ export class ElectronBook {
               this.checkEasyWordsCount();
             });
         }  else {
+      model.electronBookLearnedWords++;
+      console.log(model.electronBookLearnedWords);
       userWordData.difficulty = 'easy';
       userWordData.optional.correctCount = 0;
       api.updateUserWord(model.auth!.userId, word._id, userWordData)
@@ -485,6 +490,7 @@ export class ElectronBook {
     const sprintBtn = document.getElementById('sprint-btn') as HTMLElement;
 
     electronBookAudiocallBtn.onclick = () => {
+      this.updateSettings();
       if(model.auth){
         AggArrayCreator.audioGameArray().then(() => {
           model.previousPage = model.activePage;
@@ -500,6 +506,7 @@ export class ElectronBook {
     };
 
     electronBookSprintBtn.onclick = () => {
+      this.updateSettings();
       if(model.auth){
         AggArrayCreator.sprintGameArray().then(() => {
           model.previousPage = model.activePage;
@@ -516,7 +523,7 @@ export class ElectronBook {
       })
       }
     };
-
+    this.createSettingListeners();
     this.checkEasyWordsCount();
   }
 
@@ -537,6 +544,38 @@ export class ElectronBook {
       electronBookAudiocallBtn.removeAttribute('disabled');
       electronBookSprintBtn.removeAttribute('disabled');
     }
+  }
+
+  private createSettingListeners(){
+    const header = document.getElementById('header') as HTMLElement;
+    header.onclick = (e) => {
+      if((e.target as HTMLElement).id !== 'electron-book-btn' && (e.target as HTMLElement).tagName === 'LI' || (e.target as HTMLElement).id === 'logout-btn'){
+         this.updateSettings();
+      }
+    };
+    document.addEventListener('unload', this.updateSettings); 
+  }
+
+  private async updateSettings(){
+    if(model.auth){
+      const settings = await api.getSettings();
+      if(settings) {
+        delete settings.id;
+        settings.optional.learnedWords += model.electronBookLearnedWords;
+        api.updateSettings(settings)
+      } else {
+        const newSettings: ISettings = {
+          wordsPerDay: 1,
+          optional: {
+            learnedWords: model.electronBookLearnedWords,
+            dayStats: {},
+            dayLearnWords: {},
+          },
+        }
+        api.updateSettings(newSettings);  
+      }
+    }
+    model.electronBookLearnedWords = 0;
   }
 
   public hidePagination(): void {

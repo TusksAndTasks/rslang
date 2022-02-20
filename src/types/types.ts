@@ -5,6 +5,10 @@ export interface IAudiocall {
   initAudiocall: () => void;
 }
 
+export interface IStatistics {
+  initStatistics: () => void;
+}
+
 export enum NameBtnAudiocall {
   dontKnow = "Не знаю",
   next = "Дальше",
@@ -208,6 +212,16 @@ export interface IStatisticsObj {
 
 export interface IAggResponse {
   paginatedResults: Array<IWord>, totalCount: Array<any>;
+}
+
+export interface ISettings {
+  id?: string;
+  wordsPerDay: number;
+  optional: {
+    learnedWords: number;
+    dayStats: {[key: string] : IStatisticsObj,};
+    dayLearnWords: {[key: string] : number};
+  }
 }
 
 

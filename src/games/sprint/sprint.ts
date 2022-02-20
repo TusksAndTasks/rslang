@@ -19,7 +19,6 @@ export class Sprint {
 
   public getHTML(): string {
     return `
-      <h2 class="sprint-title">Мини-игра спринт</h2>
       <div class="sprint">
         <div class="sprint__count-box" id="sprint-count-box">
           <div class="sprint__current-count" id="sprint-current-count">0</div>
@@ -92,6 +91,7 @@ export class Sprint {
 
   private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>): void{
     if (this.index === questionsArray.length){
+      this.viewChanged = true;
       this.stopSprint();
       return
     }
@@ -103,7 +103,7 @@ export class Sprint {
   private countCorrectAnswer(word: HTMLElement): void {
      let modifier = 0;
      const rightAudio = new Audio();
-     rightAudio.src = '../../assets/sounds/Right-answer.mp3'
+     rightAudio.src = '../../assets/valid.mp3'
      let wordName = word.innerHTML;
      let correctWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
      if (model.auth){this.updateCorrectUserWord(correctWord);}
@@ -225,7 +225,7 @@ export class Sprint {
     const currentCount = document.getElementById('sprint-current-count') as HTMLElement;
     const streak = document.getElementById('sprint-streak') as HTMLElement;
     const wrongAudio = new Audio();
-    wrongAudio.src = '../../assets/sounds/Wrong-answer.mp3';
+    wrongAudio.src = '../../assets/error.mp3';
     let wordName = word.innerHTML;
     let incorrectWord = model.sprintWordsArray.find((elem) => elem.word === wordName);
     if(model.auth){this.updateIncorrectUserWord(incorrectWord);}
@@ -294,7 +294,6 @@ export class Sprint {
   timer.innerHTML = model.sprintTimer.toString();
   
   model.sprintTimer--;
-  
     if (model.sprintTimer <= -1){
         this.stopSprint();
         return;     

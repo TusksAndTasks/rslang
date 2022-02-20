@@ -1,6 +1,6 @@
 import { model, view } from "../../ts";
 import { api } from "../../ts/api";
-import { IWord, IWordData, IWordsData } from "../../types/types";
+import { EPage, IWord, IWordData, IWordsData } from "../../types/types";
 
 class LastPage {
   public getHTML(): string {
@@ -60,7 +60,10 @@ class LastPage {
     return max;
   }
 
-  renderPageDetails(words: Array<IWord | IWordData>, arrForCheckAnswers: boolean[]): void {
+  renderPageDetails(
+    words: Array<IWord | IWordData>,
+    arrForCheckAnswers: boolean[]
+  ): void {
     const detailsWrapper = document.getElementById("last-page") as HTMLElement;
     detailsWrapper.innerHTML = "";
     const details = document.createElement("div");
@@ -109,7 +112,10 @@ class LastPage {
     });
   }
 
-  renderLastPage(words: Array<IWord | IWordData>, arrForCheckAnswers: boolean[]) {
+  renderLastPage(
+    words: Array<IWord | IWordData>,
+    arrForCheckAnswers: boolean[]
+  ) {
     document.onkeyup = null;
     const gameAudiocallElement = document.getElementById(
       "game-audio"
@@ -119,7 +125,8 @@ class LastPage {
       (val) => val === true
     ).length;
     const percentOfValid = Math.round(
-      (numberValidAnswer * 100) / (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion)
+      (numberValidAnswer * 100) /
+        (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion)
     );
     const animateElement = document.getElementById(
       "statistic_circle-wive"
@@ -131,7 +138,9 @@ class LastPage {
 
     const streak = this.getNumberAnswersInRow(arrForCheckAnswers);
 
-    if(model.auth){this.changeStatistics(numberValidAnswer, streak)}
+    if (model.auth) {
+      this.changeStatistics(numberValidAnswer, streak);
+    }
 
     const textStatistic = document.getElementById(
       "text-statistic"
@@ -148,7 +157,8 @@ class LastPage {
     textStatistic.textContent = `${percentOfValid}%`;
     totalValid.textContent = `Верных ответов ${numberValidAnswer}`;
     totalInvalid.textContent = `Ошибок ${
-      (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion) - numberValidAnswer
+      (model.auth ? model.audiocallWordsArray.length : model.numberOfQuestion) -
+      numberValidAnswer
     }`;
     answersInRow.textContent = `Верных ответов подряд ${streak}`;
 
@@ -156,6 +166,8 @@ class LastPage {
       "play-again"
     ) as HTMLButtonElement;
     buttonPlayAgain.addEventListener("click", () => {
+      model.previousPage = model.activePage;
+      model.activePage = EPage.audiocall;
       view.renderContent(model.activePage);
     });
 
@@ -166,40 +178,43 @@ class LastPage {
       this.renderPageDetails(words, arrForCheckAnswers);
     });
   }
-   
-  private async changeStatistics(correctNumbers: number, streak: number){
+
+  private async changeStatistics(correctNumbers: number, streak: number) {
     let incorrectAnswers = model.audiocallWordsArray.length - correctNumbers;
     let statistic = await api.getStatistics();
-    
-    if(!statistic){
-        statistic = {learnedWords: model.audiocallStatData,
+
+    if (!statistic) {
+      statistic = {
+        learnedWords: model.audiocallStatData,
         optional: {
-            audiocall: {
-               correctWords: correctNumbers,
-               incorrectWords: incorrectAnswers,
-               streak: streak,
-               newWords: model.audiocallNewWords
-            },
-            sprint: {
-                correctWords: 0,
-                incorrectWords: 0,
-                streak: 0,
-                newWords: +0
-            }
-        }
-      }
+          audiocall: {
+            correctWords: correctNumbers,
+            incorrectWords: incorrectAnswers,
+            streak: streak,
+            newWords: model.audiocallNewWords,
+          },
+          sprint: {
+            correctWords: 0,
+            incorrectWords: 0,
+            streak: 0,
+            newWords: +0,
+          },
+        },
+      };
     } else {
-        delete statistic.id;
-        statistic.learnedWords += model.audiocallStatData;
-        statistic.optional.audiocall.correctWords += correctNumbers;
-        statistic.optional.audiocall.incorrectWords += incorrectAnswers;
-        statistic.optional.audiocall.streak = statistic.optional.sprint.streak < streak ? streak : statistic.optional.sprint.streak;
-        statistic.optional.audiocall.newWords += model.audiocallNewWords;
+      delete statistic.id;
+      statistic.learnedWords += model.audiocallStatData;
+      statistic.optional.audiocall.correctWords += correctNumbers;
+      statistic.optional.audiocall.incorrectWords += incorrectAnswers;
+      statistic.optional.audiocall.streak =
+        statistic.optional.sprint.streak < streak
+          ? streak
+          : statistic.optional.sprint.streak;
+      statistic.optional.audiocall.newWords += model.audiocallNewWords;
     }
-    
+
     model.audiocallNewWords = 0;
     api.updateStatistics(statistic);
   }
-
 }
 export const lastPage = new LastPage();
