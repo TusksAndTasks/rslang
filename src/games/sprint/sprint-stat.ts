@@ -56,13 +56,15 @@ export class SprintStat {
         const percent = document.querySelector('.sprint-stat__percent') as HTMLElement;
         const wave = document.querySelector('.sprint-stat__wave') as HTMLElement;
         const lengthOfWords = model.sprintStatData.correctWords.length + model.sprintStatData.incorrectWords.length;
-        const percentOfCorrectAnswers = Math.floor((model.sprintStatData.correctWords.length * 100) / lengthOfWords);
+        const percentOfCorrectAnswers = !isNaN(Math.floor((model.sprintStatData.correctWords.length * 100) / lengthOfWords)) ? Math.floor((model.sprintStatData.correctWords.length * 100) / lengthOfWords) : 0;
         
         percent.innerHTML = `${percentOfCorrectAnswers}%`;
+        if (!isNaN(Math.floor((model.sprintStatData.correctWords.length * 100) / lengthOfWords))){
         wave.animate(
             [{ top: "100%" }, { top: `${100 - percentOfCorrectAnswers}%` }],
             { duration: 2000, fill: "forwards" }
           ); 
+        }
     }
 
     private async changeStatistics(){
