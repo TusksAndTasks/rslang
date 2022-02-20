@@ -78,12 +78,12 @@ export class View {
 
   public showFooter(): void {
     const footerEl = document.querySelector("#footer") as HTMLElement;
-    footerEl.classList.remove('hidden');
+    footerEl.classList.remove("hidden");
   }
 
   public hideFooter(): void {
     const footerEl = document.querySelector("#footer") as HTMLElement;
-    footerEl.classList.add('hidden');
+    footerEl.classList.add("hidden");
   }
 
   public renderContent(activePage: string = EPage.main): void {
@@ -128,6 +128,7 @@ export class View {
 
       case EPage.statistics:
         this.showFooter();
+        this.statistics.initStatistics();
         break;
 
       default:
