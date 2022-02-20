@@ -26,6 +26,7 @@ export class Audiocall {
         } else {
           gamePage.startGame(page, group);
         }
+        document.onkeyup = null;
       }
     };
     levels.addEventListener("click", (e: Event): void => {
