@@ -40,14 +40,14 @@ export class Statistics {
           </div>
           <div class="statistics-auth__card_learn">
             <p id="learn-words" class="statistics-auth__words_value">0</p>
-            <p class="statistics-auth__words_text">слов изучено</p>
+            <p class="statistics-auth__words_text">слов изучено в мини-играх</p>
           </div>
           <div class="statistics-auth__card_percent">
-            <p class="statistics-auth__words_text">правильных ответов</p>
             <div id="statistic_circle" class="audiocall__statistic_circle">
-              <div id="statistic_circle-wive" class="audiocall__statistic_circle-wive"></div>
-              <div id="text-statistic" class="audiocall__statistic_text"></div>
+              <div id="statistic_circle-wive-total" class="audiocall__statistic_circle-wive"></div>
+              <div id="text-statistic-total" class="audiocall__statistic_text"></div>
             </div>
+            <p class="statistics-auth__words_text">правильных ответов</p>
           </div>
         </div>
         <div class="statistics-auth__column2">
@@ -93,6 +93,13 @@ export class Statistics {
     ) as HTMLElement;
     const sprintInRow = document.getElementById("sprint-in-row") as HTMLElement;
 
+    const textStatisticProgress = document.getElementById(
+      "text-statistic-total"
+    ) as HTMLElement;
+    const animateElementProgress = document.getElementById(
+      "statistic_circle-wive-total"
+    ) as HTMLElement;
+
     api.getStatistics().then((data) => {
       console.log(data);
       if (data) {
@@ -101,13 +108,40 @@ export class Statistics {
         }`;
         learnedWords.innerHTML = `${data.learnedWords}`;
 
+        const totalAnswersAudio =
+          data.optional.audiocall.correctWords +
+          data.optional.audiocall.incorrectWords;
+
         audioNew.innerText = `${data.optional.audiocall.newWords}`;
-        audioCorrect.innerHTML = `${data.optional.audiocall.correctWords}`;
+        audioCorrect.innerHTML = `${
+          (data.optional.audiocall.correctWords * 100) / totalAnswersAudio
+        }`;
         audioInRow.innerText = `${data.optional.audiocall.streak}`;
 
+        const totalAnswersSprint =
+          data.optional.sprint.correctWords +
+          data.optional.sprint.incorrectWords;
+
         sprintNew.innerText = `${data.optional.sprint.newWords}`;
-        sprintCorrect.innerHTML = `${data.optional.sprint.correctWords}`;
+        sprintCorrect.innerHTML = `${
+          (data.optional.sprint.correctWords * 100) / totalAnswersSprint
+        }`;
         sprintInRow.innerText = `${data.optional.sprint.streak}`;
+
+        const totalAnswers = totalAnswersAudio + totalAnswersSprint;
+        const totalCorrectAnswer =
+          data.optional.audiocall.correctWords +
+          data.optional.sprint.correctWords;
+        const totalPercent = (totalCorrectAnswer * 100) / totalAnswers;
+
+        textStatisticProgress.innerText = `${Math.round(totalPercent)}%`;
+        animateElementProgress.animate(
+          [{ top: "100%" }, { top: `${100 - totalPercent}%` }],
+          {
+            duration: 2000,
+            fill: "forwards",
+          }
+        );
       }
     });
   }
