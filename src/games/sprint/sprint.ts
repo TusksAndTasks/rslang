@@ -92,6 +92,7 @@ export class Sprint {
 
   private setWord(word: HTMLElement, translation: HTMLElement, questionsArray: Array<ISprintWord>): void{
     if (this.index === questionsArray.length){
+      this.viewChanged = true;
       this.stopSprint();
       return
     }
@@ -294,7 +295,6 @@ export class Sprint {
   timer.innerHTML = model.sprintTimer.toString();
   
   model.sprintTimer--;
-  
     if (model.sprintTimer <= -1){
         this.stopSprint();
         return;     
