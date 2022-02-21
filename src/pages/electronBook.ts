@@ -277,6 +277,10 @@ export class ElectronBook {
           if (model.auth) {
             this.initCardDifficultyButtons(wordCard, word);
           }
+          else if (!model.auth) {
+            const tracker = document.querySelectorAll('.word-card__tracker');
+            tracker.forEach((elem) => elem.innerHTML = '');
+          }
           this.addDifficultyCardClass(wordCard, word);
         }
       });
