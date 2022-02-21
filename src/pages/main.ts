@@ -123,8 +123,6 @@ export class Main {
 
   private async statisticReset(){
     let now = new Date()
-    let statisticsFull = await api.getStatistics();
-    let statisticsWords = await api.getSettings();
     if(!localStorage.getItem('date')){
       localStorage.setItem('date', now.getTime().toString());
     } else {
@@ -150,22 +148,47 @@ export class Main {
         let setting = {
           wordsPerDay: 1,
           optional: {
-            learnedWords: 0,
-            dayStats: {},
-            dayLearnWords: {},
+            learnedWords: model.electronBookLearnedWords,
+            dayStats: { test: {
+               learnedWords: 1,
+               optional: {
+                 sprint: {
+                   correctWords: 1,
+                   incorrectWords: 1,
+                   streak: 1,
+                   newWords: 1
+                 },
+                 audiocall: {
+                  correctWords: 1,
+                  incorrectWords: 1,
+                  streak: 1,
+                  newWords: 1
+                 }
+               }
+            }},
+            dayLearnWords: {test: 100},
           },
         }
          if(model.auth){
+          let statisticsFull = await api.getStatistics();
+          let statisticsWords = await api.getSettings();
+          const date = new Date(startDate).getUTCDate();
            if(statisticsWords){
+             delete statisticsWords.id;
+             console.log(statisticsWords.optional.dayLearnWords);
               statisticsWords.optional.dayLearnWords[`${new Date(startDate).getUTCDate()}`] = statisticsWords.optional.learnedWords;
+              statisticsWords.optional.learnedWords = 0;
            if (statisticsFull){
              statisticsWords.optional.dayStats[`${new Date(startDate).getUTCDate()}`] = statisticsFull; 
            }
+           console.log(statisticsWords);
            await api.updateSettings(statisticsWords);
+          }
+          if(!statisticsWords){
+          api.updateSettings(setting);
           }
           localStorage.setItem('date', now.getTime().toString());  
           api.updateStatistics(stat)};
-          api.updateSettings(setting);
        }
     }
   }
