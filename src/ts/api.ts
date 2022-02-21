@@ -2,6 +2,7 @@ import { model, view } from ".";
 import {
   EPage,
   IAuthObject,
+  INewToken,
   INewWord,
   ISettings,
   IStatisticsObj,
@@ -101,8 +102,12 @@ class API {
 
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.getAggregatedWords(userId, wordsPerPage, filter);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.getAggregatedWords(userId, wordsPerPage, filter);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -133,8 +138,12 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.createUserWord(userId, wordId, word);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.createUserWord(userId, wordId, word);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -161,8 +170,12 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.deleteUserWord(userId, wordId, word);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.deleteUserWord(userId, wordId, word);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -191,8 +204,12 @@ class API {
 
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.updateUserWord(userId, wordId, word);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.updateUserWord(userId, wordId, word);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -217,8 +234,12 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.createAggregatedWords(page);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.createAggregatedWords(page);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -243,8 +264,12 @@ class API {
     );
     if (!response.ok) {
       if (response.status === 401) {
-        this.getNewToken();
-        this.updateStatistics(statistic);
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.updateStatistics(statistic);
+        } else {
+          this.logOut();
+        }
       } else {
         console.error(response.status, response.statusText);
       }
@@ -266,8 +291,12 @@ class API {
       return (await response.json()) as IStatisticsObj;
     } else {
       if (response.status === 401) {
-        this.getNewToken();
-        this.getStatistics();
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.getStatistics();
+        } else {
+          this.logOut();
+        }
       } else
         console.warn("Статистика отсутствует.Новая статисктика была создана.");
       return null;
@@ -289,8 +318,12 @@ class API {
       return (await response.json()) as ISettings;
     } else {
       if (response.status === 401) {
-        this.getNewToken();
-        this.getSettings();
+        const isValid: boolean = await this.getNewToken();
+        if (isValid) {
+          this.getSettings();
+        } else {
+          this.logOut();
+        }
       } else {
         console.warn(
           "Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня"
@@ -315,12 +348,16 @@ class API {
       }
     );
     if (response.status === 401) {
-      this.getNewToken();
-      this.updateSettings(statistic);
+      const isValid: boolean = await this.getNewToken();
+      if (isValid) {
+        this.updateSettings(statistic);
+      } else {
+        this.logOut();
+      }
     }
   }
 
-  public getNewToken = async (): Promise<void> => {
+  private async getNewToken(): Promise<boolean> {
     const response: Response = await fetch(
       `${this.users}/${(model.auth as IAuthObject).userId}/tokens`,
       {
@@ -332,14 +369,26 @@ class API {
       }
     );
     if (response.ok) {
-      localStorage.setItem("authObject", JSON.stringify(response.json()));
-      console.log("Получен новый токен");
-    } else {
-      console.log("рефреш токен тоже невалиден - снова залогиниться");
-      localStorage.removeItem("authObject");
-      view.renderContent(EPage.auth);
-    }
-  };
+      const newToken = (await response.json()) as INewToken;
+      console.warn("Получен новый токен", newToken);
+      const userObj: IAuthObject = JSON.parse(
+        localStorage.getItem("authObject") as string
+      );
+
+      userObj.token = newToken.token;
+      userObj.refreshToken = newToken.refreshToken;
+
+      localStorage.setItem("authObject", JSON.stringify(userObj));
+      model.auth = userObj;
+      return true;
+    } else return false;
+  }
+
+  private logOut() {
+    console.log("рефреш токен невалиден - войдите снова");
+    localStorage.removeItem("authObject");
+    view.renderContent(EPage.auth);
+  }
 }
 
 export const api = new API();

@@ -54,8 +54,11 @@ export interface IElectronBook {
   initNextBtn(): void;
   initPageNumber(): void;
   switchPage(): void;
-  validatePageNumber(paginationInput: HTMLInputElement, switchPageBtn: HTMLElement): void;
-  initWords(group: number, page: number): void
+  validatePageNumber(
+    paginationInput: HTMLInputElement,
+    switchPageBtn: HTMLElement
+  ): void;
+  initWords(group: number, page: number): void;
   renderWordsList(): void;
   getWordCard(word: IWord): HTMLElement;
   getWordImage(word: IWord): Promise<HTMLImageElement>;
@@ -67,7 +70,7 @@ export interface IElectronBook {
   initGamesButtons(): void;
   checkEasyWordsCount(): void;
   hidePagination(): void;
-  showPagination(): void
+  showPagination(): void;
 }
 
 export interface IMain {
@@ -86,9 +89,9 @@ export interface IView {
 }
 
 export interface IModel {
-  activePage: string
+  activePage: string;
   previousPage: string | null;
-  auth: IAuthObject | null
+  auth: IAuthObject | null;
   electronBookPage: number;
   electronBookGroup: number;
 }
@@ -150,6 +153,11 @@ export interface IAuthObject {
   name: string;
 }
 
+export interface INewToken {
+  refreshToken: string;
+  token: string;
+}
+
 export interface IWord {
   id: string;
   _id?: string;
@@ -169,15 +177,14 @@ export interface IWord {
   userWord?: IUserWord;
 }
 
-export interface IUserWord{
-  difficulty: string
+export interface IUserWord {
+  difficulty: string;
   optional: {
     correctCount: number;
     totalIncorrectCount: number;
     totalCorrectCount: number;
+  };
 }
-}
-
 
 export interface INewWord {
   difficulty: string;
@@ -200,18 +207,19 @@ export interface IStatisticsObj {
       incorrectWords: number;
       streak: number;
       newWords: number;
-    }
+    };
     audiocall: {
       correctWords: number;
       incorrectWords: number;
       streak: number;
       newWords: number;
-    }
-  }
+    };
+  };
 }
 
 export interface IAggResponse {
-  paginatedResults: Array<IWord>, totalCount: Array<any>;
+  paginatedResults: Array<IWord>;
+  totalCount: Array<any>;
 }
 
 export interface ISettings {
@@ -219,10 +227,9 @@ export interface ISettings {
   wordsPerDay: number;
   optional: {
     learnedWords: number;
-    dayStats: {[key: string] : IStatisticsObj,};
-    dayLearnWords: {[key: string] : number};
-  }
+    dayStats: { [key: string]: IStatisticsObj };
+    dayLearnWords: { [key: string]: number };
+  };
 }
-
 
 export type IWordsData = IWordData[];
