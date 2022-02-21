@@ -115,7 +115,9 @@ export class Main {
   }
 
   public init() {
-    this.statisticReset();
+    if (model.auth) {
+      this.statisticReset();
+    }
     const contentEl = document.querySelector("#content") as HTMLElement;
     contentEl.innerHTML = this.getHTML();
     this.initStartBtn();
