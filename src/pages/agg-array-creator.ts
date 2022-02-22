@@ -9,8 +9,8 @@ export class AggArrayCreator {
 
    static async sprintGameArray() {
        if (model.electronBookGroup === 6){
-           let sprintArray = await this.hardWordsArray();
-           model.sprintWordsArray = sprintArray;
+           let hardSprintArray = await this.hardWordsArray();
+           model.sprintWordsArray = hardSprintArray;
        } else {
        const page = model.electronBookPage;
        let sprintArray =  await this.createArray(page) as IWord[];
@@ -20,8 +20,8 @@ export class AggArrayCreator {
 
    static async audioGameArray() {
        if(model.electronBookGroup === 6){
-           let arrayAudioGame = await this.hardWordsArray();
-           model.audiocallWordsArray = arrayAudioGame;
+           let hardArrayAudioGame = await this.hardWordsArray();
+           model.audiocallWordsArray = hardArrayAudioGame;
            if (model.audiocallWordsArray.length < 4) {
                let backupArray = await api.getWords(3, model.electronBookPage);
                model.audiocallBackupArray = backupArray;
@@ -66,7 +66,8 @@ export class AggArrayCreator {
            let finalArr = arr.concat(secondArr);
            if (finalArr.length > 20){
              return finalArr.slice(0, 20);
-           }   
+           } else {
+            return finalArr}
        }
 
    }   
