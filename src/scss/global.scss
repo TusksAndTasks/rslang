@@ -1,0 +1,76 @@
+@import "~normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --blue: rgb(0, 127, 255);
+  --darkblue: rgba(10, 25, 41, 0.72);
+  --success: #3a8140;
+  --grey: #dedede;
+  --error: rgb(208, 0, 0);
+  --disabled: #787873;
+  --overlay: #00000077;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+
+  @media (max-width: 1750px) {
+    width: 10px;
+  }
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: var(--white);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--black);
+  border: 2px solid var(--white);
+}
+
+*,
+*::after,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  color: var(--white);
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.15;
+  background-color: var(--grey);
+  height: 100%;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1 {
+  color: var(--black);
+  text-align: center;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
