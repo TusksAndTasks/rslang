@@ -385,9 +385,10 @@ class API {
   }
 
   private logOut() {
-    console.log("рефреш токен невалиден - войдите снова");
+    console.log("Рефреш токен невалиден - войдите снова");
     localStorage.removeItem("authObject");
-    view.renderContent(EPage.auth);
+    view.renderContent(EPage.main);
+    window.location.reload();
   }
 }
 
