@@ -316,6 +316,10 @@ export class ElectronBook {
             const tracker = document.querySelectorAll(".word-card__tracker");
             tracker.forEach((elem) => (elem.innerHTML = ""));
           }
+        else if (!model.auth) {
+          const tracker = document.querySelectorAll('.word-card__tracker');
+          tracker.forEach((elem) => elem.innerHTML = '');
+        }
           this.addDifficultyCardClass(wordCard, word);
         }
       });
@@ -701,8 +705,24 @@ export class ElectronBook {
           wordsPerDay: 1,
           optional: {
             learnedWords: model.electronBookLearnedWords,
-            dayStats: {},
-            dayLearnWords: {},
+            dayStats: { test: {
+               learnedWords: 1,
+               optional: {
+                 sprint: {
+                   correctWords: 1,
+                   incorrectWords: 1,
+                   streak: 1,
+                   newWords: 1
+                 },
+                 audiocall: {
+                  correctWords: 1,
+                  incorrectWords: 1,
+                  streak: 1,
+                  newWords: 1
+                 }
+               }
+            }},
+            dayLearnWords: {test: 100},
           },
         };
         api.updateSettings(newSettings);

@@ -227,9 +227,15 @@ export interface ISettings {
   wordsPerDay: number;
   optional: {
     learnedWords: number;
+<<<<<<< HEAD
     dayStats: { [key: string]: IStatisticsObj };
-    dayLearnWords: {[key: string] : number | Object};
+    dayLearnWords: { [key: string]: number };
   };
+=======
+    dayStats: {[key: string] : IStatisticsObj,};
+    dayLearnWords: {[key: string] : number | Object};
+  }
+>>>>>>> main
 }
 
 export type IWordsData = IWordData[];
