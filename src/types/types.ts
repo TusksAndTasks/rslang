@@ -220,7 +220,7 @@ export interface ISettings {
   optional: {
     learnedWords: number;
     dayStats: {[key: string] : IStatisticsObj,};
-    dayLearnWords: {[key: string] : number};
+    dayLearnWords: {[key: string] : number | Object};
   }
 }
 

@@ -253,7 +253,6 @@ class API {
 
   public async updateSettings(statistic: ISettings) {
     try {
-      console.log(JSON.stringify(statistic));
       await fetch(
         `${this.users}/${(model.auth as IAuthObject).userId}/settings`,
         {

@@ -127,52 +127,54 @@ export class Main {
     let now = new Date();
     let statisticsFull = await api.getStatistics();
     let statisticsWords = await api.getSettings();
+    let stat = {
+      learnedWords: 0,
+      optional: {
+        audiocall: {
+          correctWords: 0,
+          incorrectWords: 0,
+          streak: 0,
+          newWords: +0,
+        },
+        sprint: {
+          correctWords: 0,
+          incorrectWords: 0,
+          streak: 0,
+          newWords: +0,
+        },
+      },
+    };
+    if (!statisticsFull) {
+      api.updateStatistics(stat);
+    }
     if (!localStorage.getItem("date")) {
       localStorage.setItem("date", now.getTime().toString());
     } else {
       let startDate = +(localStorage.getItem("date") as string);
       if (now.getTime() - startDate > 86400000) {
-        let stat = {
-          learnedWords: 0,
-          optional: {
-            audiocall: {
-              correctWords: 0,
-              incorrectWords: 0,
-              streak: 0,
-              newWords: +0,
-            },
-            sprint: {
-              correctWords: 0,
-              incorrectWords: 0,
-              streak: 0,
-              newWords: +0,
-            },
-          },
-        };
-        let setting = {
-          wordsPerDay: 1,
-          optional: {
-            learnedWords: 0,
-            dayStats: {},
-            dayLearnWords: {},
-          },
-        };
-        if (model.auth) {
           if (statisticsWords) {
             statisticsWords.optional.dayLearnWords[
-              `${new Date(startDate).getUTCDate()}`
+              `${new Date(startDate).toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}`
             ] = statisticsWords.optional.learnedWords;
+            statisticsWords.optional.learnedWords = 0;
+            delete statisticsWords.id 
             if (statisticsFull) {
               statisticsWords.optional.dayStats[
-                `${new Date(startDate).getUTCDate()}`
+                `${new Date(startDate).toLocaleDateString("ru-RU", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}`
               ] = statisticsFull;
             }
             await api.updateSettings(statisticsWords);
           }
           localStorage.setItem("date", now.getTime().toString());
           api.updateStatistics(stat);
-        }
-        api.updateSettings(setting);
       }
     }
   }
