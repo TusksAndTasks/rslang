@@ -113,62 +113,64 @@ export class Statistics {
       "learn-words-EB"
     ) as HTMLElement;
 
-    api.getStatistics().then((data) => {
-      console.log(data);
-      if (data) {
-        newWords.innerText = `${
-          data.optional.audiocall.newWords + data.optional.sprint.newWords
-        }`;
-        learnedWords.innerHTML = `${data.learnedWords}`;
-
-        const totalAnswersAudio =
-          data.optional.audiocall.correctWords +
-          data.optional.audiocall.incorrectWords;
-
-        audioNew.innerText = `${data.optional.audiocall.newWords}`;
-        audioCorrect.innerHTML = `${
-          Math.round(
-            (data.optional.audiocall.correctWords * 100) / totalAnswersAudio
-          ) || 0
-        }`;
-        audioInRow.innerText = `${data.optional.audiocall.streak}`;
-
-        const totalAnswersSprint =
-          data.optional.sprint.correctWords +
-          data.optional.sprint.incorrectWords;
-
-        sprintNew.innerText = `${data.optional.sprint.newWords}`;
-        sprintCorrect.innerHTML = `${
-          Math.round(
-            (data.optional.sprint.correctWords * 100) / totalAnswersSprint
-          ) || 0
-        }`;
-        sprintInRow.innerText = `${data.optional.sprint.streak}`;
-
-        const totalAnswers = totalAnswersAudio + totalAnswersSprint;
-        const totalCorrectAnswer =
-          data.optional.audiocall.correctWords +
-          data.optional.sprint.correctWords;
-        const totalPercent =
-          Math.round((totalCorrectAnswer * 100) / totalAnswers) || 0;
-
-        textStatisticProgress.innerText = `${Math.round(totalPercent)}%`;
-        animateElementProgress.animate(
-          [{ top: "100%" }, { top: `${100 - totalPercent}%` }],
-          {
-            duration: 2000,
-            fill: "forwards",
-          }
-        );
-      }
-    }).then(() => {
-      api.getSettings().then((data) => {
+    api
+      .getStatistics()
+      .then((data) => {
         if (data) {
-          learnWordsEB.innerHTML = data.optional.learnedWords.toString();
-        } else {
-          learnWordsEB.innerHTML = "0";
+          newWords.innerText = `${
+            data.optional.audiocall.newWords + data.optional.sprint.newWords
+          }`;
+          learnedWords.innerHTML = `${data.learnedWords}`;
+
+          const totalAnswersAudio =
+            data.optional.audiocall.correctWords +
+            data.optional.audiocall.incorrectWords;
+
+          audioNew.innerText = `${data.optional.audiocall.newWords}`;
+          audioCorrect.innerHTML = `${
+            Math.round(
+              (data.optional.audiocall.correctWords * 100) / totalAnswersAudio
+            ) || 0
+          }`;
+          audioInRow.innerText = `${data.optional.audiocall.streak}`;
+
+          const totalAnswersSprint =
+            data.optional.sprint.correctWords +
+            data.optional.sprint.incorrectWords;
+
+          sprintNew.innerText = `${data.optional.sprint.newWords}`;
+          sprintCorrect.innerHTML = `${
+            Math.round(
+              (data.optional.sprint.correctWords * 100) / totalAnswersSprint
+            ) || 0
+          }`;
+          sprintInRow.innerText = `${data.optional.sprint.streak}`;
+
+          const totalAnswers = totalAnswersAudio + totalAnswersSprint;
+          const totalCorrectAnswer =
+            data.optional.audiocall.correctWords +
+            data.optional.sprint.correctWords;
+          const totalPercent =
+            Math.round((totalCorrectAnswer * 100) / totalAnswers) || 0;
+
+          textStatisticProgress.innerText = `${Math.round(totalPercent)}%`;
+          animateElementProgress.animate(
+            [{ top: "100%" }, { top: `${100 - totalPercent}%` }],
+            {
+              duration: 2000,
+              fill: "forwards",
+            }
+          );
         }
+      })
+      .then(() => {
+        api.getSettings().then((data) => {
+          if (data) {
+            learnWordsEB.innerHTML = data.optional.learnedWords.toString();
+          } else {
+            learnWordsEB.innerHTML = "0";
+          }
+        });
       });
-    });
   }
 }

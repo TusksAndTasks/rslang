@@ -1,6 +1,5 @@
 import { model, view } from ".";
-import {
-  EPage,
+import { EPage,
   IAuthObject,
   INewToken,
   INewWord,
@@ -136,6 +135,7 @@ class API {
         body: JSON.stringify(word),
       }
     );
+
     if (!response.ok) {
       if (response.status === 401) {
         const isValid: boolean = await this.getNewToken();
@@ -220,21 +220,21 @@ class API {
 
   public async createAggregatedWords(page: number) {
     const filter = `filter=%7B%22%24and%22%3A%5B%7B%22%24or%22%3A%5B%7B%22userWord.difficulty%22%3A%22hard%22%7D%2C%20%7B%22userWord.difficulty%22%3A%22normal%22%7D%2C%20%7B%22userWord%22%3Anull%20%7D%5D%7D%2C%7B%22page%22%3A${page}%7D%5D%7D`;
-    const wordsPerPage = "wordsPerPage=20&";
-    const group = `group=${model.electronBookGroup}&`;
-    const response = await fetch(
-      `${this.users}/${model.auth?.userId}/aggregatedWords?${group}${wordsPerPage}${filter}`,
-      {
-        headers: {
-          Authorization: `Bearer ${model.auth!.token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      const wordsPerPage = "wordsPerPage=20&";
+      const group = `group=${model.electronBookGroup}&`;
+      const response = await fetch(
+        `${this.users}/${model.auth?.userId}/aggregatedWords?${group}${wordsPerPage}${filter}`,
+        {
+          headers: {
+            Authorization: `Bearer ${model.auth!.token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
     if (!response.ok) {
       if (response.status === 401) {
-        const isValid: boolean = await this.getNewToken();
+     const isValid: boolean = await this.getNewToken();
         if (isValid) {
           this.createAggregatedWords(page);
         } else {
@@ -244,13 +244,15 @@ class API {
         console.error(response.status, response.statusText);
       }
 
+
       return await response.json();
     }
-  }
+  }   
+
+
 
   public async updateStatistics(statistic: IStatisticsObj) {
-    console.log(JSON.stringify(statistic));
-    const response = await fetch(
+const response = await fetch(
       `${this.users}/${(model.auth as IAuthObject).userId}/statistics`,
       {
         method: "PUT",
@@ -273,6 +275,12 @@ class API {
       } else {
         console.error(response.status, response.statusText);
       }
+    }
+  }
+
+
+      }
+    } catch (err) {
     }
   }
 
@@ -317,9 +325,7 @@ class API {
     if (response.ok) {
       return (await response.json()) as ISettings;
     } else {
-      if (response.status === 401) {
-        const isValid: boolean = await this.getNewToken();
-        if (isValid) {
+    
           this.getSettings();
         } else {
           this.logOut();
@@ -334,18 +340,18 @@ class API {
   }
 
   public async updateSettings(statistic: ISettings) {
-    console.log(JSON.stringify(statistic));
+
     const response = await fetch(
       `${this.users}/${(model.auth as IAuthObject).userId}/settings`,
       {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${model.auth!.token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(statistic),
-      }
+    
+          headers: {
+            Authorization: `Bearer ${model.auth!.token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(statistic),
     );
     if (response.status === 401) {
       const isValid: boolean = await this.getNewToken();
@@ -353,10 +359,10 @@ class API {
         this.updateSettings(statistic);
       } else {
         this.logOut();
-      }
+        }
+    } catch (err) {
     }
   }
-
   private async getNewToken(): Promise<boolean> {
     const response: Response = await fetch(
       `${this.users}/${(model.auth as IAuthObject).userId}/tokens`,
