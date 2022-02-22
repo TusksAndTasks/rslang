@@ -1,4 +1,11 @@
-import { EPage, IAuthObject, ISprintStatObj, IWord, IWordData, IWordsData } from "../types/types";
+import {
+  EPage,
+  IAuthObject,
+  ISprintStatObj,
+  IWord,
+  IWordData,
+  IWordsData,
+} from "../types/types";
 
 export class Model {
   public numberOfPages = 30;
@@ -6,19 +13,21 @@ export class Model {
   private _activePage: string = EPage.main;
   private _previousPage: string | null = null;
   private _auth: IAuthObject | null = this.getAuthObjectFromLocalStorage();
-  private _electronBookPage: number = this.getElectronBookPageFromLocalStorage();
-  private _electronBookGroup: number = this.getElectronBookGroupFromLocalStorage();
+  private _electronBookPage: number =
+    this.getElectronBookPageFromLocalStorage();
+  private _electronBookGroup: number =
+    this.getElectronBookGroupFromLocalStorage();
   private _sprintTimer: number = 59;
   private _sprintStatData: ISprintStatObj = {
     correctWords: [],
     incorrectWords: [],
     learnedWords: 0,
-    maxStreak: 0
-};
+    maxStreak: 0,
+  };
   private _audiocallStatData: number = 0;
-  private _sprintWordsArray: Array<IWordData | IWord> = [] ;
-  private _audiocallWordsArray: Array<IWordData | IWord> = [] ;
-  private _sprintScore: string = '0';
+  private _sprintWordsArray: Array<IWordData | IWord> = [];
+  private _audiocallWordsArray: Array<IWordData | IWord> = [];
+  private _sprintScore: string = "0";
   private _sprintNewWords: number = 0;
   private _audiocallNewWords: number = 0;
   private _audiocallCurrent: IWord | null = null;
@@ -30,7 +39,7 @@ export class Model {
   }
 
   set audiocallBackupArray(words: IWord[]) {
-    this._audiocallBackupArray= words;
+    this._audiocallBackupArray = words;
   }
 
   get audiocallCurrent() {
@@ -56,7 +65,7 @@ export class Model {
   set previousPage(page: string | null) {
     this._previousPage = page;
   }
-  
+
   get sprintTimer() {
     return this._sprintTimer;
   }
@@ -73,11 +82,11 @@ export class Model {
     this._sprintStatData = stat;
   }
 
-  get sprintWordsArray(){
+  get sprintWordsArray() {
     return this._sprintWordsArray;
   }
 
-  set sprintWordsArray(arr: Array<IWordData | IWord>){
+  set sprintWordsArray(arr: Array<IWordData | IWord>) {
     this._sprintWordsArray = arr;
   }
 
@@ -89,7 +98,6 @@ export class Model {
     this._sprintNewWords = stat;
   }
 
-
   get audiocallNewWords() {
     return this._audiocallNewWords;
   }
@@ -98,12 +106,11 @@ export class Model {
     this._audiocallNewWords = stat;
   }
 
-
-  get audiocallWordsArray(){
+  get audiocallWordsArray() {
     return this._audiocallWordsArray;
   }
 
-  set audiocallWordsArray(arr: Array<IWordData | IWord>){
+  set audiocallWordsArray(arr: Array<IWordData | IWord>) {
     this._audiocallWordsArray = arr;
   }
 
@@ -115,20 +122,33 @@ export class Model {
     this._audiocallStatData = stat;
   }
 
-
-  get sprintScore(){
+  get sprintScore() {
     return this._sprintScore;
   }
 
-  set sprintScore(score: string){
+  set sprintScore(score: string) {
     this._sprintScore = score;
   }
 
- public updateSprintStatData(correctWord: IWordData | IWord | null = null, incorrectWord: IWordData | IWord | null = null, learnedWord: number = 0, streak: number = 0) {
-    if (correctWord) { this._sprintStatData.correctWords.push(correctWord) };
-    if (incorrectWord) { this._sprintStatData.incorrectWords.push(incorrectWord) };
-    if (learnedWord) { this._sprintStatData.learnedWords = learnedWord };
-    this._sprintStatData.maxStreak = streak > this._sprintStatData.maxStreak ? streak : this._sprintStatData.maxStreak
+  public updateSprintStatData(
+    correctWord: IWordData | IWord | null = null,
+    incorrectWord: IWordData | IWord | null = null,
+    learnedWord: number = 0,
+    streak: number = 0
+  ) {
+    if (correctWord) {
+      this._sprintStatData.correctWords.push(correctWord);
+    }
+    if (incorrectWord) {
+      this._sprintStatData.incorrectWords.push(incorrectWord);
+    }
+    if (learnedWord) {
+      this._sprintStatData.learnedWords = learnedWord;
+    }
+    this._sprintStatData.maxStreak =
+      streak > this._sprintStatData.maxStreak
+        ? streak
+        : this._sprintStatData.maxStreak;
   }
 
   get auth() {
@@ -145,7 +165,10 @@ export class Model {
 
   set electronBookPage(page: number) {
     this._electronBookPage = page;
-    localStorage.setItem('electronBookPage', JSON.stringify(this._electronBookPage));
+    localStorage.setItem(
+      "electronBookPage",
+      JSON.stringify(this._electronBookPage)
+    );
   }
 
   get electronBookGroup() {
@@ -154,28 +177,37 @@ export class Model {
 
   set electronBookGroup(group: number) {
     this._electronBookGroup = group;
-    localStorage.setItem('electronBookGroup', JSON.stringify(this._electronBookGroup));
+    localStorage.setItem(
+      "electronBookGroup",
+      JSON.stringify(this._electronBookGroup)
+    );
   }
 
-  private getAuthObjectFromLocalStorage(): IAuthObject | null {
-    if (localStorage.getItem('authObject')) {
-      return JSON.parse(localStorage.getItem('authObject') as string) as IAuthObject;
+  public getAuthObjectFromLocalStorage(): IAuthObject | null {
+    if (localStorage.getItem("authObject")) {
+      return JSON.parse(
+        localStorage.getItem("authObject") as string
+      ) as IAuthObject;
     }
 
     return null;
   }
 
   private getElectronBookPageFromLocalStorage(): number {
-    if (localStorage.getItem('electronBookPage')) {
-      return +JSON.parse(localStorage.getItem('electronBookPage') as string) as number;
+    if (localStorage.getItem("electronBookPage")) {
+      return +JSON.parse(
+        localStorage.getItem("electronBookPage") as string
+      ) as number;
     }
 
     return 0;
   }
 
   private getElectronBookGroupFromLocalStorage(): number {
-    if (localStorage.getItem('electronBookGroup')) {
-      return +JSON.parse(localStorage.getItem('electronBookGroup') as string) as number;
+    if (localStorage.getItem("electronBookGroup")) {
+      return +JSON.parse(
+        localStorage.getItem("electronBookGroup") as string
+      ) as number;
     }
 
     return 0;

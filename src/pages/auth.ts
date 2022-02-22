@@ -1,7 +1,6 @@
 import { model, view } from "../ts";
 import { api } from "../ts/api";
 import { EPage, IAuthObject, IUser } from "../types/types";
-import { ElectronBook } from "./electronBook";
 
 export class Auth {
   public getHTML(): string {
@@ -130,7 +129,11 @@ export class Auth {
       } else if (registrationPasswordInput.value.length < 8) {
         this.showError(registrationPasswordInput);
       } else {
-        this.registrateUser(registrationNameInput.value, registrationEmailInput.value, registrationPasswordInput.value);
+        this.registrateUser(
+          registrationNameInput.value,
+          registrationEmailInput.value,
+          registrationPasswordInput.value
+        );
         this.backToActivePage();
       }
     });
@@ -250,7 +253,7 @@ export class Auth {
     header.append(logoutBtn);
 
     logoutBtn.addEventListener("click", () => {
-      setTimeout(() => this.logoutUser(), 1000);  
+      setTimeout(() => this.logoutUser(), 1000);
     });
   }
 
@@ -274,13 +277,13 @@ export class Auth {
   }
 
   public logoutUser(): void {
-    localStorage.removeItem('authObject');
+    localStorage.removeItem("authObject");
 
     if (model.auth && model.electronBookGroup === 6) model.electronBookGroup--;
 
     model.auth = null;
     this.setLoginButton();
-    this.showAuthStatusMessage('Вы вышли из аккаунта', false);
+    this.showAuthStatusMessage("Вы вышли из аккаунта", false);
     view.renderContent(model.activePage);
   }
 }
