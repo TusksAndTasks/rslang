@@ -383,17 +383,19 @@ class API {
       localStorage.setItem("authObject", JSON.stringify(userObj));
       model.auth = userObj;
       token.init(
-        "Действие токена истекло. Получен новый токен, можете продолжать игру"
+        "Действие токена истекло. Получен новый токен, можете продолжать игру",
+        "На главную"
       );
       return true;
     } else return false;
   }
 
-  private logOut() {
+  public logOut() {
     console.warn("Рефреш токен невалиден - войдите снова");
-    const auth = new Auth();
-    auth.logoutUser();
-    token.init("Действие рефреш-токена истекло. Авторизуйтесь еще раз");
+    token.init(
+      "Действие рефреш-токена истекло. Авторизуйтесь еще раз",
+      "Войти"
+    );
   }
 }
 
