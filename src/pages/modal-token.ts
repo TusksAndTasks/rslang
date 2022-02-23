@@ -28,11 +28,12 @@ export class Token {
 
     btnBack.onclick = () => {
       if (nameButton === "На главную") {
+        view.renderContent(EPage.main);
+      } else {
         model.auth = null;
         const auth = new Auth();
         auth.logoutUser();
-      } else {
-        view.renderContent(EPage.main);
+        auth.init();
       }
     };
   }

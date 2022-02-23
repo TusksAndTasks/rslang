@@ -390,7 +390,7 @@ class API {
     } else return false;
   }
 
-  public logOut() {
+  private logOut() {
     console.warn("Рефреш токен невалиден - войдите снова");
     token.init(
       "Действие рефреш-токена истекло. Авторизуйтесь еще раз",
