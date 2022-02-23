@@ -152,30 +152,6 @@ export class Main {
     } else {
       let startDate = +(localStorage.getItem("date") as string);
       if (now.getTime() - startDate > 86400000) {
-        let setting = {
-          wordsPerDay: 1,
-          optional: {
-            learnedWords: model.electronBookLearnedWords,
-            dayStats: { test: {
-               learnedWords: 1,
-               optional: {
-                 sprint: {
-                   correctWords: 1,
-                   incorrectWords: 1,
-                   streak: 1,
-                   newWords: 1
-                 },
-                 audiocall: {
-                  correctWords: 1,
-                  incorrectWords: 1,
-                  streak: 1,
-                  newWords: 1
-                 }
-               }
-            }},
-            dayLearnWords: {test: 100},
-          },
-        };
           if (statisticsWords) {
             statisticsWords.optional.dayLearnWords[
               `${new Date(startDate).toLocaleDateString("ru-RU", {

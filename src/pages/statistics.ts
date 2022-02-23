@@ -167,13 +167,26 @@ export class Statistics {
         });
       }).then(() => {
         this.getPreviousStat();
+        let waves = document.querySelectorAll('#statistic_circle-wive-total');
+      
+        waves.forEach((wave) => {
+          wave.animate(
+            [{ top: "100%" }, { top: `${100 - +((wave as HTMLElement).dataset.total as string)}%` }],
+            {
+              duration: 2000,
+              fill: "forwards",
+            }
+          );
+        })
       });
   }
 
   private async getPreviousStat(){
     let globalStat = await api.getSettings();
+    if (globalStat){
     let keysArr = Object.keys((globalStat as ISettings).optional.dayStats);
     const statPage = document.querySelector('.statistics-auth') as HTMLElement;
+    
 
     if (keysArr.length > 1){
        
@@ -246,16 +259,6 @@ export class Statistics {
 
       })
     }
-    let waves = document.querySelectorAll('#statistic_circle-wive-total');
-      
-      waves.forEach((wave) => {
-        wave.animate(
-          [{ top: "100%" }, { top: `${100 - +((wave as HTMLElement).dataset.total as string)}%` }],
-          {
-            duration: 2000,
-            fill: "forwards",
-          }
-        );
-      })
   }
+}
 }
