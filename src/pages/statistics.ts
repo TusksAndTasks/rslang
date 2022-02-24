@@ -259,6 +259,17 @@ export class Statistics {
 
       })
     }
+    let waves = document.querySelectorAll('#statistic_circle-wive-total');
+      
+        waves.forEach((wave) => {
+          wave.animate(
+            [{ top: "100%" }, { top: `${100 - +((wave as HTMLElement).dataset.total as string)}%` }],
+            {
+              duration: 2000,
+              fill: "forwards",
+            }
+          );
+        })
   }
 }
 }
