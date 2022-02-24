@@ -1,4 +1,5 @@
 import { model } from ".";
+import { token } from "../pages/change-token";
 import {
   IAuthObject,
   INewWord,
@@ -100,6 +101,7 @@ class API {
 
     if (!response.ok) {
       console.error(response.status, response.statusText);
+      token.init();
     }
 
     const data = await response.json();
@@ -125,8 +127,12 @@ class API {
         body: JSON.stringify(word),
       }
     );
-
-    return await response.json();
+    if (response.ok) {
+      return await response.json();
+    } else {
+      token.init();
+      return null;
+    }
   };
 
   public deleteUserWord = async (
@@ -146,8 +152,12 @@ class API {
         body: JSON.stringify(word),
       }
     );
-
-    return response;
+    if (response.ok) {
+      return response;
+    } else {
+      token.init();
+      return null;
+    }
   };
 
   public updateUserWord = async (
@@ -168,7 +178,12 @@ class API {
       }
     );
 
-    return await response.json();
+    if (response.ok) {
+      return await response.json();
+    } else {
+      token.init();
+      return null;
+    }
   };
 
   public async createAggregatedWords(page: number) {
@@ -188,7 +203,8 @@ class API {
       );
       return await response.json();
     } catch (err) {
-      throw err;
+      token.init();
+      return null;
     }
   }
 
@@ -207,7 +223,8 @@ class API {
         }
       );
     } catch (err) {
-      throw err;
+      token.init();
+      return null;
     }
   }
 
@@ -225,7 +242,11 @@ class API {
     if (response.ok) {
       return (await response.json()) as IStatisticsObj;
     } else {
-      console.warn("Статистика отсутствует.Новая статисктика была создана.");
+      if (response.status === 401 || response.status === 403) {
+        token.init();
+      } else {
+        console.warn("Статистика отсутствует.Новая статисктика была создана.");
+      }
       return null;
     }
   }
@@ -244,9 +265,13 @@ class API {
     if (response.ok) {
       return (await response.json()) as ISettings;
     } else {
-      console.warn(
-        "Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня"
-      );
+      if (response.status === 401 || response.status === 403) {
+        token.init();
+      } else {
+        console.warn(
+          "Глобальная статистика отсутствует.Глобальная статистика создастся по истечение хотя бы одного игрового дня"
+        );
+      }
       return null;
     }
   }
@@ -266,7 +291,8 @@ class API {
         }
       );
     } catch (err) {
-      throw err;
+      token.init();
+      return null;
     }
   }
 }

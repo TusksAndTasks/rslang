@@ -2,7 +2,8 @@
   &__top {
     color: var(--black);
     justify-content: space-between;
-    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
 
   &__bottom {
@@ -53,4 +54,18 @@
     right: 20px;
     animation: bounceInOutRight 3s;
   }
+}
+
+.modal-token_wrapper {
+  height: 200px;
+  padding: 20px;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 40px;
+  align-items: center;
+}
+.modal-token {
+  color: #000;
 }
